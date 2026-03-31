@@ -1,0 +1,103 @@
+/*ШРИФТЫ*/
+@font-face {
+    font-family: Hero;
+    src: url('/web//fonts/ofont.ru_Hero.ttf');
+}
+
+.body {
+    font-family: Hero;
+}
+
+.navbarColor {
+    background-color: #4c58b6;
+    
+}
+#footer {
+    background-color: #deeaff;
+}
+.body {
+    background-color: #f6f7f8;
+}
+
+.logo {
+    border-radius: 150px;
+    height: 40px;
+    width: 40px;
+}
+
+/* Анимация полей при валидации */
+.is-valid {
+    animation: is-valid 1s ease 1;
+}
+@keyframes is-valid {
+    0%, 100%{
+        transform: translateX(0);
+    } 50% {
+        transform: translateX(-20px);
+    }
+}
+
+.is-invalid {
+    animation: is-invalid 1s ease 1;
+}
+@keyframes is-invalid {
+    0%,100% {
+        transform: translateX(0);
+    } 50% {
+        transform: translateX(20px);
+    }
+}
+
+/* Работа с кнопками */
+.register {
+    background-color: #528eff;
+    border-color: #528eff;
+    color: white;
+}
+.register:hover {
+    background-color: #5a84d3;
+    border-color: #5a84d3;
+    color: white;
+}
+.details {
+    background-color: #93afe2;
+    border-color: #93afe2;
+    color: white;
+}
+.details:hover {
+    background-color: #5a84d3;
+    border-color: #5a84d3;
+    color: white;
+}
+
+.btnAdmin {
+    color: white;
+    opacity: 0.5;
+}
+.btnAdmin:hover {
+    color: white;
+    opacity: 0.75;
+}
+
+.cssLog {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+}
+.cssLog:hover {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+}
+
+/* Работа с карточками номерв */
+.card-header {
+    padding: 10px;
+    border-bottom: none;
+}
+
+/* Работа с слайдером номеров */
+.carousel-inner {
+    border-radius: 10px;
+    overflow: hidden;
+}
