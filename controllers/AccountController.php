@@ -7,6 +7,9 @@ use app\models\AccountSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\Room;
+use app\models\WellnessProgram;
+use Yii;
 
 /**
  * AccountController implements the CRUD actions for Booking model.
@@ -22,7 +25,7 @@ class AccountController extends Controller
             parent::behaviors(),
             [
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
@@ -61,25 +64,59 @@ class AccountController extends Controller
     }
 
     /**
-     * Creates a new Booking model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
+     * Шаг 1: Форма ввода дат, количества гостей и комментария.
+     * @param int $room_id ID номера из каталога
      */
-    public function actionCreate()
+    public function actionCreate($room_id)
     {
-        $model = new Booking();
+        $room = Room::findOne($room_id);
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+        if (!$room) {
+            throw new NotFoundHttpException('Номер не найден.');
+        }
+
+        $model = new Booking();
+        $model->room_id = $room->id;
+
+        if ($model->load($this->request->post()) && $model->validate()) {
+            //Проверка доступности номера через метод в модели Booking
+            if (!Booking::isAviable($room->id, $model->arrival_date, $model->departure_date)) {
+                Yii::$app->session->setFlash('error', 'Номер уже забронирован на выбранные даты.');
+                return $this->render('create', [
+                    'model' => $model,
+                    'room' => $room,
+                ]);
             }
-        } else {
-            $model->loadDefaultValues();
+
+            //Сохраняем данные в сессию
+            Yii::$app->session->set('booking_step1', [
+                'room_id' => $room->id,
+                'arrival_date' => $model->arrival_date,
+                'departure_date' => $model->departure_date,
+                'guests_count' => $model->guests_count,
+                'comment' => $model->comment,
+            ]);
+
+            return $this->redirect(['account/confirm-program']);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'room' => $room,
         ]);
+    }
+
+    /**
+     * Шаг 2: Страница с модальным окном "Хотите выбрать программу?"
+     * Просто отображает представление, данные берутся из сессии.
+     */
+    public function actionConfirmProgram()
+    {
+        // Проверяем, что первый шаг пройден
+        if (!Yii::$app->session->get('booking_step1')) {
+            return $this->redirect(['catalog/index']);
+        }
+        return $this->render('confirm-program');
     }
 
     /**
