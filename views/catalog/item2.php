@@ -41,7 +41,7 @@ use yii\helpers\Url;
     </div>
     <div class="card-footer">
         <?= Yii::$app->user->identity?->isClient
-            ? Html::a('Забронировать', ['account/create', 'id' => $model->id], ['class' => 'btn register'])
+            ? Html::a('Забронировать', ['account/create', 'room_id' => $model->id], ['class' => 'btn register'])
             :'' ?>
         <?= Html::a('Подробнее', ['view', 'id' => $model->id], ['class' => 'btn details']) ?>
     </div>

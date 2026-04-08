@@ -30,12 +30,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'room_id',
+            [
+                'attribute' => 'room_id',
+                'value' => $model->room->roomType->name
+            ],
             'arrival_date',
             'departure_date',
             'contact_phone',
             'price',
-            'status_booking_id',
+            [
+                'attribute' => 'status_booking_id',
+                'value' => $model->statusBooking->title
+            ],
             'wellness_program_id',
             'route_id',
             'amount_residents',

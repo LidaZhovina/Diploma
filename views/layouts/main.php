@@ -103,7 +103,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
             </div>
             <div class="offcanvas-body">
-                <div class="list-group">
+                <div class="list-group ">
                     <a href="<?= Url::to(['/admin']) ?>" class="list-group-item list-group-item-action">Панель админа</a>
                     <a href="<?= Url::to(['/room/index']) ?>" class="list-group-item list-group-item-action">Номера</a>
                     <a href="<?= Url::to(['/wellness-program/index']) ?>" class="list-group-item list-group-item-action">Оздоровительные программы</a>

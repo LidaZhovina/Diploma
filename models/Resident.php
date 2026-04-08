@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "resident".
  *
  * @property int $id
- * @property int $user_id
+ * @property int|null $user_id
  * @property string $name
  * @property string $surname
  * @property string $patronymic
@@ -38,7 +38,8 @@ class Resident extends \yii\db\ActiveRecord
     {
         return [
             [['is_main_guest'], 'default', 'value' => 0],
-            [['user_id', 'name', 'surname', 'patronymic', 'birth_date'], 'required'],
+            [['user_id'], 'default', 'value' => null],
+            [['name', 'surname', 'patronymic', 'birth_date'], 'required'],
             [['user_id', 'is_main_guest'], 'integer'],
             [['birth_date', 'created_at'], 'safe'],
             [['name', 'surname', 'patronymic'], 'string', 'max' => 255],
@@ -82,5 +83,4 @@ class Resident extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
-
 }

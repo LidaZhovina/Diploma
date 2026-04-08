@@ -12,8 +12,9 @@ $this->title = 'Бронирование';
 
     <h1 class="text-center"><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
+    <?= $this->render('step1', [
         'model' => $model,
+        'room' => $room,
     ]) ?>
 
 </div>

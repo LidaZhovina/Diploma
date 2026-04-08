@@ -25,6 +25,12 @@
     width: 40px;
 }
 
+/* Дизайн бокового меню админа */
+.offcanvas-body .list-group-item {
+    border: none;
+    border-radius: 0;
+}
+
 /* Анимация полей при валидации */
 .is-valid {
     animation: is-valid 1s ease 1;

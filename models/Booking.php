@@ -14,8 +14,8 @@ use Yii;
  * @property string $contact_phone 
  * @property float $price
  * @property int $status_booking_id
- * @property int $wellness_program_id
- * @property int $route_id
+ * @property int|null $wellness_program_id
+ * @property int|null $route_id
  * @property int $amount_residents
  * @property string $comment
  *
@@ -30,12 +30,7 @@ class Booking extends \yii\db\ActiveRecord
     // Виртуальные поля для пошагового сбора данных
     public $guests = [];      // массив гостей (для третьего шага)
     public $guests_count;     // временное поле для количества гостей (из первого шага)
-    public $agreement;        // чекбокс согласия (если нужен)
 
-    public $arrival_date;
-    public $departure_date;
-    public $comment;
-    public $room_id;
 
     /**
      * {@inheritdoc}
@@ -52,16 +47,19 @@ class Booking extends \yii\db\ActiveRecord
     {
         $tomorrow = date('Y-m-d', strtotime('+1 day'));
         return [
-            [['room_id', 'arrival_date', 'departure_date', 'contact_phone', 'price', 'status_booking_id', 'wellness_program_id', 'route_id', 'amount_residents'], 'required'],
+            [['room_id', 'arrival_date', 'departure_date', 'contact_phone', 'price', 'status_booking_id', 'amount_residents'], 'required'],
             [['room_id', 'status_booking_id', 'wellness_program_id', 'route_id',], 'integer'],
             [['contact_phone'], 'string', 'max' => 20],
-            ['amount_residents','integer', 'max' => '5', 'message' => 'Максимально число гостей - 5 человек'],
+            ['amount_residents', 'integer', 'max' => '5', 'message' => 'Максимально число гостей - 5 человек'],
 
             // [['arrival_date', 'departure_date'], 'safe'],
             [['arrival_date', 'departure_date'], 'date', 'format' => 'php:Y-m-d'],
             ['arrival_date', 'compare', 'compareValue' => $tomorrow, 'operator' => '>=', 'message' => 'Дата заезда не может быть раньше ' . $tomorrow],
             ['departure_date', 'compare', 'compareAttribute' => 'arrival_date', 'operator' => '>', 'message' => 'Дата выезда должна быть позже даты заезда'],
-            
+
+            [['guests_count'], 'integer', 'min' => 1, 'max' => 5],
+            ['guests', 'validateGuests'],
+
             [['price'], 'number'],
             [['comment'], 'string'],
             [['room_id'], 'exist', 'skipOnError' => true, 'targetClass' => Room::class, 'targetAttribute' => ['room_id' => 'id']],
@@ -88,7 +86,6 @@ class Booking extends \yii\db\ActiveRecord
             'wellness_program_id' => 'Оздоровительные программы',
             'amount_residents' => 'Количество гостей',
             'comment' => 'Комментарий',
-            // 'agreement' => 'Я даю согласие на обработку персональных данных и подтверждаю ознакомление с пользовательским соглашением и политикой конфиденциальности ',
         ];
     }
 
@@ -141,5 +138,112 @@ class Booking extends \yii\db\ActiveRecord
     public function getWellnessProgram()
     {
         return $this->hasOne(WellnessProgram::class, ['id' => 'wellness_program_id']);
+    }
+
+    // ------------------ Методы ------------------
+    public static function getStatusId($alias)
+    {
+        $status = StatusBooking::findOne(['alias' => $alias]);
+        if (!$status) {
+            Yii::error("Статус с alias '$alias' не найден");
+            return null;
+        }
+        return $status->id;
+    }
+
+    public static function isAvailable($roomId, $arrival, $departure, $excludeBookingId = null)
+    {
+        $cancelledId = self::getStatusId('cancelled');
+        $query = self::find()->where(['room_id' => $roomId]);
+        if ($cancelledId !== null) {
+            $query->andWhere(['not in', 'status_booking_id', $cancelledId]);
+        }
+        $query->andWhere(['<', 'arrival_date', $departure])
+            ->andWhere(['>', 'departure_date', $arrival]);
+        if ($excludeBookingId) {
+            $query->andWhere(['!=', 'id', $excludeBookingId]);
+        }
+        return $query->count() == 0;
+    }
+
+    public function calculatePrice($room, $route = null)
+    {
+        $night = (new \DateTime($this->arrival_date))->diff(new \DateTime($this->departure_date))->days;
+        $price = $room->price_per_day * $night;
+
+        if ($route) {
+            $price += $route->price;
+        }
+
+        return $price;
+    }
+
+    public function validateGuests($attribute, $params)
+    {
+        if (count($this->guests) != $this->guests_count) {
+            $this->addError($attribute, 'Количество гостей не совпадает.');
+        }
+        foreach ($this->guests as $i => $guest) {
+            if (empty($guest['surname']) || empty($guest['name']) || empty($guest['birth_date'])) {
+                $this->addError($attribute, "У гостя №" . ($i + 1) . " не заполнены обязательные поля (фамилия, имя, дата рождения).");
+            }
+        }
+    }
+
+    public function saveWithGuests($guestData, $userId)
+    {
+        // $this->contact_phone = $contactPhone;
+        if (!$this->validate()) {
+            Yii::error('Ошибки валидации Booking: ' . print_r($this->errors, true));
+            Yii::$app->session->setFlash('error', 'Ошибка валидации: ' . print_r($this->errors, true));
+            return false;
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if (!$this->save()) {
+                throw new \Exception('Ошибка сохранения бронирования' . print_r($this->errors, true));
+            }
+
+            foreach ($guestData as $i => $guest) {
+                $resident = new Resident();
+                $resident->user_id = ($i == 0) ? $userId : null;
+                $resident->surname = $guest['surname'];
+                $resident->name = $guest['name'];
+                $resident->patronymic = $guest['patronymic'] ?? '';
+                $resident->birth_date = $guest['birth_date'];
+                $resident->is_main_guest = ($i == 0) ? 1 : 0;
+                if (!$resident->save()) {
+                    throw new \Exception('Ошибка сохранения гостя: ' . print_r($resident->errors, true));
+                }
+
+                $bookingUser = new BookingUser();
+                $bookingUser->booking_id = $this->id;
+                $bookingUser->resident_id = $resident->id;
+                if (!$bookingUser->save()) {
+                    throw new \Exception('Ошибка сохранения связи бронирования и гостя');
+                }
+            }
+            $transaction->commit();
+            return true;
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+            // Yii::error($e->getMessage(), __METHOD__);
+            // Yii::$app->session->setFlash('error', 'Ошибка: ' . $e->getMessage());
+            // return false;
+        }
+    }
+
+    public function confirm() // функция подтверждения бронирования. Меняет статус с "В обработке" на "Предстоящая поездка"
+    {
+        $this->status_booking_id = self::getStatusId('new');
+        return $this->save(false);
+    }
+
+    public function cancel() // функция отмены бронирования. Меняет статус на cancelled
+    {
+        $this->status_booking_id = self::getStatusId('cancelled');
+        return $this->save(false);
     }
 }

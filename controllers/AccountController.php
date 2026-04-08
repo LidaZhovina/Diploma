@@ -4,12 +4,15 @@ namespace app\controllers;
 
 use app\models\Booking;
 use app\models\AccountSearch;
+use app\models\BookingGuestsForm;
+use app\models\BookingStep1Form;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Room;
 use app\models\WellnessProgram;
 use Yii;
+use yii\helpers\VarDumper;
 
 /**
  * AccountController implements the CRUD actions for Booking model.
@@ -75,12 +78,12 @@ class AccountController extends Controller
             throw new NotFoundHttpException('Номер не найден.');
         }
 
-        $model = new Booking();
+        $model = new BookingStep1Form();
         $model->room_id = $room->id;
 
         if ($model->load($this->request->post()) && $model->validate()) {
             //Проверка доступности номера через метод в модели Booking
-            if (!Booking::isAviable($room->id, $model->arrival_date, $model->departure_date)) {
+            if (!Booking::isAvailable($room->id, $model->arrival_date, $model->departure_date)) {
                 Yii::$app->session->setFlash('error', 'Номер уже забронирован на выбранные даты.');
                 return $this->render('create', [
                     'model' => $model,
@@ -89,15 +92,9 @@ class AccountController extends Controller
             }
 
             //Сохраняем данные в сессию
-            Yii::$app->session->set('booking_step1', [
-                'room_id' => $room->id,
-                'arrival_date' => $model->arrival_date,
-                'departure_date' => $model->departure_date,
-                'guests_count' => $model->guests_count,
-                'comment' => $model->comment,
-            ]);
+            Yii::$app->session->set('booking_step1', $model->attributes);
 
-            return $this->redirect(['account/confirm-program']);
+            return $this->redirect(['account/guests-data']);
         }
 
         return $this->render('create', [
@@ -110,13 +107,165 @@ class AccountController extends Controller
      * Шаг 2: Страница с модальным окном "Хотите выбрать программу?"
      * Просто отображает представление, данные берутся из сессии.
      */
-    public function actionConfirmProgram()
+    // public function actionConfirmProgram()
+    // {
+    //     // Проверяем, что первый шаг пройден
+    //     if (!Yii::$app->session->get('booking_step1')) {
+    //         return $this->redirect(['catalog/index']);
+    //     }
+    //     return $this->render('confirm-program');
+    // }
+
+    /**
+     * Шаг 2а: Каталог оздоровительных программ (если пользователь ответил "Да")
+     */
+    public function actionSelectProgram()
     {
-        // Проверяем, что первый шаг пройден
-        if (!Yii::$app->session->get('booking_step1')) {
+        $step1 = Yii::$app->session->get('booking_step1');
+        if (!$step1) {
             return $this->redirect(['catalog/index']);
         }
-        return $this->render('confirm-program');
+
+        $programs = WellnessProgram::find()->all();
+        return $this->render('select-program', [
+            'programs' => $programs,
+        ]);
+    }
+
+    /**
+     * Шаг 2б: Сохраняем ID выбранной программы в сессию и переходим к форме гостей
+     * @param int $id ID программы
+     */
+    public function actionSetProgram($id)
+    {
+        $step1 = Yii::$app->session->get('booking_step1');
+        if (!$step1) {
+            return $this->redirect(['catalog/index']);
+        }
+
+        $program = WellnessProgram::findOne($id);
+        if (!$program) {
+            throw new NotFoundHttpException('Программа не найдена.');
+        }
+
+        Yii::$app->session->set('wellness_program_id', $id);
+        return $this->redirect(['account/guests-data']);
+    }
+
+
+    public function actionGuestsData()
+    {
+        // var_dump(Yii::$app->request->post());
+        // exit;
+        $step1 = Yii::$app->session->get('booking_step1');
+        if (!$step1) return $this->redirect(['catalog/index']);
+
+        $room = Room::findOne($step1['room_id']);
+        if (!$room) throw new NotFoundHttpException('Номер не найден.');
+
+        $model = new BookingGuestsForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            // $contactPhone = $step1['contact_phone'] ?? null;
+
+            $booking = new Booking();
+            $booking->room_id = $step1['room_id'];
+            $booking->contact_phone = $step1['contact_phone'];
+            $booking->arrival_date = $step1['arrival_date'];
+            $booking->departure_date = $step1['departure_date'];
+            $booking->amount_residents = $step1['guests_count']; // или amount_residents
+            $booking->comment = $step1['comment'];
+            $booking->wellness_program_id = Yii::$app->session->get('wellness_program_id') ?? null;
+            $booking->route_id = null; // или значение из сессии, если есть
+            $pendingId = Booking::getStatusId('pending');
+            if (!$pendingId) {
+                Yii::$app->session->setFlash('error', 'Ошибка конфигурации: статус "pending" не найден.');
+                return $this->render('guests-data', [
+                    'model' => $model,
+                    'room' => $room,
+                    'step1' => $step1,
+                ]);
+            }
+            $booking->status_booking_id = $pendingId;
+            $booking->price = $booking->calculatePrice($room);
+
+            // var_dump($booking->contact_phone); exit;
+
+            // if ($booking->saveWithGuests($model->guests, Yii::$app->user->id)) {
+            //     Yii::$app->session->remove('booking_step1');
+            //     Yii::$app->session->remove('wellness_program_id');
+            //     Yii::$app->session->setFlash('success', 'Бронирование создано.');
+            //     return $this->redirect(['account/index']);
+            // } else {
+            //     $errors = $booking->getErrors();
+            //     Yii::$app->session->setFlash('error', 'Ошибка сохранения бронирования:' . print_r($errors, true));
+            // }
+
+            try {
+                if ($booking->saveWithGuests($model->guests, Yii::$app->user->id)) {
+                    // успех
+                    Yii::$app->session->remove('booking_step1');
+                    Yii::$app->session->remove('wellness_program_id');
+                    Yii::$app->session->setFlash('success', 'Бронирование создано.');
+                    return $this->redirect(['account/index']);
+                } else {
+                    // Сюда не попадём, потому что при ошибке будет исключение
+                    Yii::$app->session->setFlash('error', 'Неизвестная ошибка');
+                }
+            } catch (\Exception $e) {
+                Yii::$app->session->setFlash('error', 'Ошибка: ' . $e->getMessage());
+                // Остаёмся на той же странице
+                return $this->render('guests-data', [
+                    'model' => $model,
+                    'room' => $room,
+                    'step1' => $step1,
+                ]);
+            }
+        }
+
+
+        return $this->render('guests-data', [
+            'model' => $model,
+            'room' => $room,
+            'step1' => $step1,
+        ]);
+    }
+
+    /**
+     * Отмена бронирования пользователем.
+     * @param int $id ID бронирования
+     */
+    public function actionCancelBooking($id)
+    {
+        $booking = Booking::findOne($id);
+        if (!$booking) {
+            throw new NotFoundHttpException('Бронирование не найдено.');
+        }
+
+        // Проверяем, что текущий пользователь – владелец бронирования
+        $userId = Yii::$app->user->id;
+        $isOwner = Booking::find()
+            ->joinWith('bookingUsers.resident')
+            ->where(['booking.id' => $id, 'resident.user_id' => $userId, 'resident.is_main_guest' => 1])
+            ->exists();
+
+        if (!$isOwner) {
+            Yii::$app->session->setFlash('error', 'У вас нет прав на отмену этого бронирования.');
+            return $this->redirect(['account/index']);
+        }
+
+        // Отменить можно только бронирования со статусом 'pending' или 'upcoming'
+        $pendingId = Booking::getStatusId('pending');
+        $upcomingId = Booking::getStatusId('upcoming');
+        if (in_array($booking->status_booking_id, [$pendingId, $upcomingId])) {
+            $booking->status_booking_id = Booking::getStatusId('cancelled');
+            $booking->save(false);
+            Yii::$app->session->setFlash('success', 'Бронирование отменено.');
+        } else {
+            Yii::$app->session->setFlash('error', 'Невозможно отменить бронирование с текущим статусом.');
+        }
+
+        return $this->redirect(['account/index']);
     }
 
     /**
