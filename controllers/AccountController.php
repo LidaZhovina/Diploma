@@ -94,7 +94,7 @@ class AccountController extends Controller
             //Сохраняем данные в сессию
             Yii::$app->session->set('booking_step1', $model->attributes);
 
-            return $this->redirect(['account/guests-data']);
+            return $this->redirect(['account/select-program']);
         }
 
         return $this->render('create', [
@@ -102,19 +102,6 @@ class AccountController extends Controller
             'room' => $room,
         ]);
     }
-
-    /**
-     * Шаг 2: Страница с модальным окном "Хотите выбрать программу?"
-     * Просто отображает представление, данные берутся из сессии.
-     */
-    // public function actionConfirmProgram()
-    // {
-    //     // Проверяем, что первый шаг пройден
-    //     if (!Yii::$app->session->get('booking_step1')) {
-    //         return $this->redirect(['catalog/index']);
-    //     }
-    //     return $this->render('confirm-program');
-    // }
 
     /**
      * Шаг 2а: Каталог оздоровительных программ (если пользователь ответил "Да")

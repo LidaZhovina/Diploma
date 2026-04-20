@@ -34,8 +34,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'room_id',
                 'value' => $model->room->roomType->name
             ],
-            'arrival_date',
-            'departure_date',
+            [
+                'attribute' => 'arrival_date',
+                'value' => Yii::$app->formatter->asDate($model->arrival_date, 'php:d.m.Y')
+            ],
+            [
+                'attribute' => 'departure_date',
+                'value' => Yii::$app->formatter->asDate($model->departure_date, 'php:d.m.Y')
+            ],
             'contact_phone',
             'price',
             [

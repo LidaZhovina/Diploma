@@ -107,3 +107,10 @@
     border-radius: 10px;
     overflow: hidden;
 }
+
+/* Работа с картинками */
+.lk-image {
+    height: 250px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
