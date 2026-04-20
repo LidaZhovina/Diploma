@@ -18,12 +18,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'status_booking_id')->dropDownList(StatusBooking::getItems(), ['prompt' => '---']) ?>
 
-    <?= $form->field($model, 'arrival_date')->textInput(['type' => 'date']) ?>
-
-    <!-- <?= $form->field($model, 'departure_date') ?>
-
-    <?= $form->field($model, 'price') ?> -->
-
     <?php // echo $form->field($model, 'status_booking_id') ?>
 
     <?php // echo $form->field($model, 'route_id') ?>

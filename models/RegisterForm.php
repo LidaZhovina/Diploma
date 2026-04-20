@@ -26,6 +26,11 @@ class RegisterForm extends Model
         return [
             [['email', 'password', 'surname', 'name'], 'required', 'message' => 'Данно поле обязательно для заполнения'],
             [['email', 'password', 'surname', 'name', 'patronymic'], 'string', 'max' => 255],
+            [['password'], 'string', 'min' => 6],
+            [['password'], 'match', 'pattern' => '/^[a-zA-Z0-9]+$/', 'message' => 'Ланинские буквы и цифры'],
+            [['password'], 'match', 'pattern' => '/\d+/', 'message' => 'Хотя-бы одна цифра'],
+            [['password'], 'match', 'pattern' => '/[a-zA-Z]+/', 'message' => 'Хотя-бы одна латинская буква'],
+            [['surname', 'name', 'patronymic'], 'match', 'pattern' => '/^[а-яё\s]+$/iu', 'message' => 'Символы Кирилицы'],
             [['email'], 'unique', 'targetClass' => User::class],
             ['email', 'email', 'message' => 'Почта должна иметь вид: example@index.com'],
         ];

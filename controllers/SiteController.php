@@ -9,7 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\RegisterForm;
-use app\models\Role;
+// use app\models\Role;
 use yii\helpers\VarDumper;
 
 class SiteController extends Controller
@@ -114,13 +114,17 @@ class SiteController extends Controller
      */
     public function actionRegister()
     {
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
         $model = new RegisterForm();
         if ($model->load(Yii::$app->request->post())) {
-        $user = $model->register(true);
+            $user = $model->register(true);
 
             if ($user != null) {
                 Yii::$app->session->setFlash('success', 'Вы успешно зарегестрировались!');
-                // Yii::$app->user->login($user, 3600*24*30);
+                Yii::$app->user->login($user, 3600*24*30);
                 return $this->goHome();
             } else {
                 VarDumper::dump($model->errors);
@@ -137,7 +141,7 @@ class SiteController extends Controller
         $model = new RegisterForm();
         if ($model->load(Yii::$app->request->post())) {
             $user = $model->register(false);
-            if($user != null ){
+            if ($user != null) {
                 Yii::$app->session->setFlash('success', 'Ресепшн успешно зарегестрирован!');
                 return $this->render('register', ['model' => new RegisterForm()]);
             }

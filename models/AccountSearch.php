@@ -5,6 +5,7 @@ namespace app\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Booking;
+use Yii;
 
 /**
  * AccountSearch represents the model behind the search form of `app\models\Booking`.
@@ -43,12 +44,18 @@ class AccountSearch extends Booking
      */
     public function search($params, $formName = null)
     {
-        $query = Booking::find();
+        $query = Booking::find()
+            ->joinWith(['bookingUsers.resident'])
+            ->where(['resident.user_id' => Yii::$app->user->id])
+            ->distinct();
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 3,
+            ],
         ]);
 
         $this->load($params, $formName);

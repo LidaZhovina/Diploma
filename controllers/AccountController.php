@@ -38,6 +38,19 @@ class AccountController extends Controller
         );
     }
 
+    public function beforeAction($action)
+    {
+        if (!parent::beforeAction($action)) {
+            return false;
+        }
+        if (!Yii::$app->user->identity?->isClient) {
+            return $this->redirect('/');
+        }
+
+
+        return true;
+    }
+
     /**
      * Lists all Booking models.
      *
