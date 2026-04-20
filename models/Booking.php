@@ -14,7 +14,6 @@ use Yii;
  * @property string $contact_phone 
  * @property float $price
  * @property int $status_booking_id
- * @property int|null $wellness_program_id
  * @property int|null $route_id
  * @property int $amount_residents
  * @property string $comment
@@ -23,7 +22,6 @@ use Yii;
  * @property Room $room
  * @property Route $route
  * @property StatusBooking $statusBooking
- * @property WellnessProgram $wellnessProgram
  */
 class Booking extends \yii\db\ActiveRecord
 {
@@ -48,7 +46,7 @@ class Booking extends \yii\db\ActiveRecord
         $tomorrow = date('Y-m-d', strtotime('+1 day'));
         return [
             [['room_id', 'arrival_date', 'departure_date', 'contact_phone', 'price', 'status_booking_id', 'amount_residents'], 'required'],
-            [['room_id', 'status_booking_id', 'wellness_program_id', 'route_id',], 'integer'],
+            [['room_id', 'status_booking_id', 'route_id',], 'integer'],
             [['contact_phone'], 'string', 'max' => 20],
             ['amount_residents', 'integer', 'max' => '5', 'message' => 'Максимально число гостей - 5 человек'],
 
@@ -63,9 +61,7 @@ class Booking extends \yii\db\ActiveRecord
             [['price'], 'number'],
             [['comment'], 'string'],
             [['room_id'], 'exist', 'skipOnError' => true, 'targetClass' => Room::class, 'targetAttribute' => ['room_id' => 'id']],
-            [['status_booking_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusBooking::class, 'targetAttribute' => ['status_booking_id' => 'id']],
-            [['wellness_program_id'], 'exist', 'skipOnError' => true, 'targetClass' => WellnessProgram::class, 'targetAttribute' => ['wellness_program_id' => 'id']],
-            [['route_id'], 'exist', 'skipOnError' => true, 'targetClass' => Route::class, 'targetAttribute' => ['route_id' => 'id']],
+            [['status_booking_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusBooking::class, 'targetAttribute' => ['status_booking_id' => 'id']],            [['route_id'], 'exist', 'skipOnError' => true, 'targetClass' => Route::class, 'targetAttribute' => ['route_id' => 'id']],
         ];
     }
 
@@ -83,7 +79,6 @@ class Booking extends \yii\db\ActiveRecord
             'contact_phone' => 'Контактный телефон',
             'price' => 'Цена',
             'status_booking_id' => 'Статус бронирования',
-            'wellness_program_id' => 'Оздоровительные программы',
             'amount_residents' => 'Количество гостей',
             'comment' => 'Комментарий',
         ];
@@ -128,16 +123,6 @@ class Booking extends \yii\db\ActiveRecord
     public function getStatusBooking()
     {
         return $this->hasOne(StatusBooking::class, ['id' => 'status_booking_id']);
-    }
-
-    /**
-     * Gets query for [[WellnessProgram]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getWellnessProgram()
-    {
-        return $this->hasOne(WellnessProgram::class, ['id' => 'wellness_program_id']);
     }
 
     // ------------------ Методы ------------------
@@ -190,7 +175,7 @@ class Booking extends \yii\db\ActiveRecord
         }
     }
 
-    public function saveWithGuests($guestData, $userId)
+    public function saveWithGuests($guestData, $userId, $guestPrograms)
     {
         // $this->contact_phone = $contactPhone;
         if (!$this->validate()) {
@@ -213,6 +198,7 @@ class Booking extends \yii\db\ActiveRecord
                 $resident->patronymic = $guest['patronymic'] ?? '';
                 $resident->birth_date = $guest['birth_date'];
                 $resident->is_main_guest = ($i == 0) ? 1 : 0;
+                $resident->wellness_program_id = $guestPrograms[$i] ?? null;
                 if (!$resident->save()) {
                     throw new \Exception('Ошибка сохранения гостя: ' . print_r($resident->errors, true));
                 }

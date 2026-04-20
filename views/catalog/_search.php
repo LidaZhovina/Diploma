@@ -54,7 +54,7 @@ use yii\bootstrap5\ActiveForm;
 
         <div class="form-group col-auto mb-3">
             <?= Html::submitButton('Найти', ['class' => 'btn register']) ?>
-            <?= Html::a('Сбросить', 'index', ['class' => 'btn btn-outline-secondary']) ?>
+            <?= Html::a('Сбросить', '/catalog', ['class' => 'btn btn-outline-secondary']) ?>
         </div>
     </div>
 

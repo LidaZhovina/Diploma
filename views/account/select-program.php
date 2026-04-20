@@ -1,31 +1,69 @@
 <?php
 
 use yii\bootstrap5\Html;
+use yii\bootstrap5\ActiveForm;
+
+/** @var int $guestsCount */
+/** @var app\models\WellnessProgram[] $programs */
 ?>
-<div class="row justify-content-center">
-    <div class="col-12 col-md-10 col-lg-8">
-        <div class="card my-3 w-100">
-            <div class="row g-0 h-100">
-                <?php foreach ($programs as $program): ?>
-                    <div class="col-md-4 d-flex align-items-stretch">
-                        <?php if ($program->imageUrl): ?>
-                            <img src="<?= $program->imageUrl ?>" class="card-img" alt="<?= Html::encode($program->title) ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                        <?php else: ?>
-                            <img src="/web/img/no-image.jpg" class="card-img" alt="Нет изображения" style="width: 100%; height: 100%; object-fit: cover;">
-                        <?php endif; ?>
-                    </div>
-                    <div class="col-md-8 d-flex flex-column">
-                        <div class="card-body d-flex flex-column h-100">
-                            <h4 class="card-title"><?= $program->title ?></h4>
-                            <div><strong>Длительность:</strong> <?= $program->duration ?></div>
-                            <div><strong>Описание:</strong> <?= $program->description ?></div>
-                            <div class="text-center mt-5">
-                                <?= Html::a('Выбрать', ['account/set-program', 'id' => $program->id], ['class' => 'btn register']) ?>
+
+<h2 class="text-center">Выбор оздоровительной программы для каждого гостя</h2>
+
+<?php $form = ActiveForm::begin(['id' => 'program-selection-form']); ?>
+
+<div class="card text-center">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs" id="guestTabs" role="tablist">
+            <?php for ($i = 0; $i < $guestsCount; $i++): ?>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link <?= $i === 0 ? 'active' : '' ?>"
+                        id="tab-guest-<?= $i ?>"
+                        data-bs-toggle="tab"
+                        data-bs-target="#guest-<?= $i ?>"
+                        type="button"
+                        role="tab">
+                        Гость <?= $i + 1 ?>
+                    </button>
+                </li>
+            <?php endfor; ?>
+        </ul>
+    </div>
+    <div class="card-body tab-content">
+        <?php for ($i = 0; $i < $guestsCount; $i++): ?>
+            <div class="tab-pane fade <?= $i === 0 ? 'show active' : '' ?>"
+                id="guest-<?= $i ?>"
+                role="tabpanel">
+                <h5>Выберите программу для Гостя <?= $i + 1 ?></h5>
+                <div class="row">
+                    <?php foreach ($programs as $program): ?>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100 d-flex flex-column">
+                                <div class="card-body d-flex flex-column flex-grow-1">
+                                    <h5 class="card-title fw-bold"><?= Html::encode($program->title) ?></h5>
+                                    <p class="card-text"><?= Html::encode($program->description) ?></p>
+                                    <div class="btn-group mt-auto d-flex justify-content-center" role="group">
+                                        <input type="radio" class="btn-check program-radio"
+                                            name="program[<?= $i ?>]"
+                                            value="<?= $program->id ?>"
+                                            id="program_<?= $i ?>_<?= $program->id ?>"
+                                            autocomplete="off"
+                                            <?= (Yii::$app->session->get('guest_programs')[$i] ?? null) == $program->id ? 'checked' : '' ?>>
+                                        <label class="btn btn-outline-primary w-100" for="program_<?= $i ?>_<?= $program->id ?>">
+                                            Выбрать
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </div>
             </div>
-        </div>
+        <?php endfor; ?>
     </div>
 </div>
+
+<div class="mt-3 text-center">
+    <?= Html::submitButton('Далее', ['class' => 'btn btn-primary btn-lg']) ?>
+</div>
+
+<?php ActiveForm::end(); ?>

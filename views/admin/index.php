@@ -1,6 +1,7 @@
 <?php
 
 use app\models\Booking;
+use yii\bootstrap5\LinkPager;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -34,10 +35,11 @@ $this->title = 'Панель Администратора';
 
             <?= ListView::widget([
                 'dataProvider' => $dataProvider,
+                'pager' => [
+                    'class' => LinkPager::class
+                ],
                 'itemOptions' => ['class' => 'item'],
-                'itemView' => function ($model, $key, $index, $widget) {
-                    return Html::a(Html::encode($model->id), ['view', 'id' => $model->id]);
-                },
+                'itemView' => 'item',
             ]) ?>
 
             <?php Pjax::end(); ?>

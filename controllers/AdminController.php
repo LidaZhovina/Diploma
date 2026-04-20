@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Booking;
 use app\models\AdminSearch;
+use app\models\StatusBooking;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -94,6 +95,24 @@ class AdminController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    /* Смена статуса */
+
+    public function actionChangeStatus($id, $alias)
+    {
+        $model = $this->findModel($id);
+
+        if ($this->request->isPost) {
+            $model->status_booking_id = StatusBooking::getStatusId($alias);
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('warning', 'Статус обновлён!');
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+
+        return $this->redirect('/admin');
     }
 
     /**

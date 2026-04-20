@@ -62,4 +62,8 @@ class StatusBooking extends \yii\db\ActiveRecord
        ->indexBy('id') 
        ->column(); 
    }
+
+   public static function getStatusId(string $alias): int {
+    return static::findOne(['alias' => $alias])->id;
+   }
 }

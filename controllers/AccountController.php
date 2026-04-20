@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Room;
+use app\models\StatusBooking;
 use app\models\WellnessProgram;
 use Yii;
 use yii\helpers\VarDumper;
@@ -112,10 +113,27 @@ class AccountController extends Controller
         if (!$step1) {
             return $this->redirect(['catalog/index']);
         }
+        $guestsCount = $step1['guests_count'];
 
-        $programs = WellnessProgram::find()->all();
+        // Если форма отправлена (выбраны программы)
+        if (Yii::$app->request->isPost) {
+            $selectedPrograms = Yii::$app->request->post('program', []);
+            // Проверяем, что выбраны программы для всех гостей
+            if (count($selectedPrograms) != $guestsCount) {
+                Yii::$app->session->setFlash('error', 'Пожалуйста, выберите программу для каждого гостя.');
+                return $this->render('select-program', [
+                    'guestsCount' => $guestsCount,
+                    'programs' => WellnessProgram::find()->all(),
+                ]);
+            }
+            // Сохраняем выбранные программы в сессию (индекс 0 для первого гостя, 1 для второго...)
+            Yii::$app->session->set('guest_programs', $selectedPrograms);
+            return $this->redirect(['account/guests-data']);
+        }
+
         return $this->render('select-program', [
-            'programs' => $programs,
+            'guestsCount' => $guestsCount,
+            'programs' => WellnessProgram::find()->all(),
         ]);
     }
 
@@ -162,7 +180,6 @@ class AccountController extends Controller
             $booking->departure_date = $step1['departure_date'];
             $booking->amount_residents = $step1['guests_count']; // или amount_residents
             $booking->comment = $step1['comment'];
-            $booking->wellness_program_id = Yii::$app->session->get('wellness_program_id') ?? null;
             $booking->route_id = null; // или значение из сессии, если есть
             $pendingId = Booking::getStatusId('pending');
             if (!$pendingId) {
@@ -188,11 +205,17 @@ class AccountController extends Controller
             //     Yii::$app->session->setFlash('error', 'Ошибка сохранения бронирования:' . print_r($errors, true));
             // }
 
+            $guestPrograms = Yii::$app->session->get('guest_programs', []);
+            if (count($guestPrograms) != $step1['guests_count']) {
+                Yii::$app->session->setFlash('error', 'Не выбраны программы для всех гостей.');
+                return $this->redirect(['account/select-program']);
+            }
+
             try {
-                if ($booking->saveWithGuests($model->guests, Yii::$app->user->id)) {
+                if ($booking->saveWithGuests($model->guests, Yii::$app->user->id, $guestPrograms)) {
                     // успех
                     Yii::$app->session->remove('booking_step1');
-                    Yii::$app->session->remove('wellness_program_id');
+                    Yii::$app->session->remove('guest_programs');
                     Yii::$app->session->setFlash('success', 'Бронирование создано.');
                     return $this->redirect(['account/index']);
                 } else {
@@ -253,6 +276,24 @@ class AccountController extends Controller
         }
 
         return $this->redirect(['account/index']);
+    }
+
+    /* Смена статуса */
+
+    public function actionChangeStatus($id, $alias)
+    {
+        $model = $this->findModel($id);
+
+        if ($this->request->isPost) {
+            $model->status_booking_id = StatusBooking::getStatusId($alias);
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('warning', 'Статус обновлён!');
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+
+        return $this->redirect('/admin');
     }
 
     /**

@@ -6,30 +6,20 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var app\models\Booking $model */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Bookings', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = "Детали бронирования:";
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="booking-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <!-- <p class="text-end">
+        <?= Html::a('Назад', ['index', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    </p> -->
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+    <h1 class="my-3 text-center"><?= Html::encode($this->title) ?></h1>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
             [
                 'attribute' => 'room_id',
                 'value' => $model->room->roomType->name
@@ -48,10 +38,55 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'status_booking_id',
                 'value' => $model->statusBooking->title
             ],
-            'wellness_program_id',
-            'route_id',
+            [
+                'attribute' => 'route_id',
+                'label' => 'Маршрут',
+                'value' => function ($model) {
+                    if ($model->route_id && $model->route) {
+                        return $model->route->name;
+                    }
+                    return null;
+                },
+                'visible' => !empty($model->route_id),
+            ],
             'amount_residents',
             'comment:ntext',
+            // [
+            //     'label' => 'Гости и их программы',
+            //     'format' => 'raw',
+            //     'value' => function ($model) {
+            //         $output = '<div class="row">';
+            //         foreach ($model->bookingUsers as $bookingUser) {
+            //             $resident = $bookingUser->resident;
+            //             $programTitle = $resident->wellnessProgram ? $resident->wellnessProgram->title : 'Не выбрана';
+            //             $output .= '<div class="col-md-6 col-lg-4 mb-3">';
+            //             $output .= '<div class="card h-100">';
+            //             $output .= '<div class="card-body">';
+            //             $output .= '<h6 class="card-title">' . Html::encode($resident->surname . ' ' . $resident->name . ' ' . $resident->patronymic) . '</h6>';
+            //             $output .= '<p class="card-text"><strong>Оздоровительная программа:</strong> ' . Html::encode($programTitle) . '</p>';
+            //             $output .= '</div></div></div>';
+            //         }
+            //         $output .= '</div>';
+            //         return $output;
+            //     }
+            // ],
+            [
+                'label' => 'Гости и их программы',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $output = '<div class="list-group">';
+                    foreach ($model->bookingUsers as $bookingUser) {
+                        $resident = $bookingUser->resident;
+                        $programTitle = $resident->wellnessProgram ? $resident->wellnessProgram->title : 'Не выбрана';
+                        $output .= '<div class="d-flex w-100 justify-content-between">';
+                        $output .= '<h6 class="mb-1">' . Html::encode($resident->surname . ' ' . $resident->name . ' ' . $resident->patronymic) . '</h6>';
+                        $output .= '</div>';
+                        $output .= '<p class="mb-1"><strong>Программа:</strong> ' . Html::encode($programTitle) . '</p>';
+                    }
+                    $output .= '</div>';
+                    return $output;
+                }
+            ]
         ],
     ]) ?>
 

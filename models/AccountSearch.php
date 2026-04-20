@@ -17,7 +17,7 @@ class AccountSearch extends Booking
     public function rules()
     {
         return [
-            [['id', 'room_id', 'status_booking_id', 'wellness_program_id', 'route_id', 'amount_residents'], 'integer'],
+            [['id', 'room_id', 'status_booking_id', 'route_id', 'amount_residents'], 'integer'],
             [['arrival_date', 'departure_date', 'contact_phone', 'comment'], 'safe'],
             [['price'], 'number'],
         ];
@@ -67,7 +67,6 @@ class AccountSearch extends Booking
             'departure_date' => $this->departure_date,
             'price' => $this->price,
             'status_booking_id' => $this->status_booking_id,
-            'wellness_program_id' => $this->wellness_program_id,
             'route_id' => $this->route_id,
             'amount_residents' => $this->amount_residents,
         ]);

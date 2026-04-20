@@ -22,13 +22,18 @@ use yii\bootstrap5\Html;
 
 
         <div class="mt-3">
-            <?= Html::a('Подробнее', ['account/view', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Подробнее', ['admin/view', 'id' => $model->id,], ['class' => 'btn btn-primary']) ?>
+
             <?= $model->statusBooking->alias === 'pending'
-                ? Html::a('Отменить поездку', ['account/view', 'id' => $model->id, 'alias' => 'cancelled'], ['class' => 'btn btn-outline-danger', 'data-method' => 'post'])
-                :'' ?>
+                ? Html::a('Подтвердить поездку', ['change-status', 'id' => $model->id, 'alias' => 'new'], ['class' => 'btn btn-outline-primary', 'data-method' => 'post'])
+                : '' ?>
+            <!-- Кнопки смены статуса для ресепшн -->
             <?= $model->statusBooking->alias === 'new'
-                ? Html::a('Отменить поездку', ['account/view', 'id' => $model->id, 'alias' => 'cancelled'], ['class' => 'btn btn-outline-danger', 'data-method' => 'post'])
-                :'' ?>
+                ? Html::a('Активировать поездку', ['change-status', 'id' => $model->id, 'alias' => 'active'], ['class' => 'btn btn-outline-primary', 'data-method' => 'post'])
+                : '' ?>
+            <?= $model->statusBooking->alias === 'active'
+                ? Html::a('Закрыть поездку', ['change-status', 'id' => $model->id, 'alias' => 'past'], ['class' => 'btn btn-outline-primary', 'data-method' => 'post'])
+                : '' ?>
         </div>
     </div>
 </div>

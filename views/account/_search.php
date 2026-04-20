@@ -26,8 +26,6 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'status_booking_id') ?>
 
-    <?php // echo $form->field($model, 'wellness_program_id') ?>
-
     <?php // echo $form->field($model, 'route_id') ?>
 
     <?php // echo $form->field($model, 'amount_residents') ?>

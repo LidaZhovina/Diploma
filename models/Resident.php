@@ -12,12 +12,14 @@ use Yii;
  * @property string $name
  * @property string $surname
  * @property string $patronymic
+ * @property int|null $wellness_program_id 
  * @property string $birth_date
  * @property int $is_main_guest главный гость в бронировании
  * @property string $created_at
  *
  * @property BookingUser[] $bookingUsers
  * @property User $user
+ * @property WellnessProgram $wellnessProgram 
  */
 class Resident extends \yii\db\ActiveRecord
 {
@@ -44,6 +46,7 @@ class Resident extends \yii\db\ActiveRecord
             [['birth_date', 'created_at'], 'safe'],
             [['name', 'surname', 'patronymic'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['wellness_program_id'], 'exist', 'skipOnError' => true, 'targetClass' => WellnessProgram::class, 'targetAttribute' => ['wellness_program_id' => 'id']],
         ];
     }
 
@@ -58,6 +61,7 @@ class Resident extends \yii\db\ActiveRecord
             'name' => 'Name',
             'surname' => 'Surname',
             'patronymic' => 'Patronymic',
+            'wellness_program_id' => 'Wellness Program ID', 
             'birth_date' => 'Birth Date',
             'is_main_guest' => 'Is Main Guest',
             'created_at' => 'Created At',
@@ -83,4 +87,14 @@ class Resident extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
+
+    /** 
+    * Gets query for [[WellnessProgram]]. 
+    * 
+    * @return \yii\db\ActiveQuery 
+    */ 
+   public function getWellnessProgram() 
+   { 
+       return $this->hasOne(WellnessProgram::class, ['id' => 'wellness_program_id']); 
+   } 
 }
