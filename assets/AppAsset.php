@@ -25,7 +25,7 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
         'js/room.js',
-        'js/modalWindow.js'
+        'js/modalWindow.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

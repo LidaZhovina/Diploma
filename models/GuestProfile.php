@@ -32,11 +32,12 @@ class GuestProfile extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'phone', 'birth_date', 'passport_series', 'passport_number'], 'required'],
+            [['passport_series', 'passport_number'], 'required', 'message' => 'Данные поля обязательны для заполнения'],
             [['user_id'], 'integer'],
             [['birth_date'], 'safe'],
-            [['phone', 'passport_number'], 'string', 'max' => 20],
-            [['passport_series'], 'string', 'max' => 10],
+            [['phone', 'passport_series', 'passport_number'], 'string', 'max' => 20],
+            ['passport_series', 'match', 'pattern' => '/^\d{4}$/', 'message' => 'Серия паспорта должна состоять из 4 цифр'],
+            ['passport_number', 'match', 'pattern' => '/^\d{6}$/', 'message' => 'Номер паспорта должен состоять из 6 цифр'],
             [['user_id'], 'unique'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -50,10 +51,10 @@ class GuestProfile extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'phone' => 'Phone',
+            'phone' => 'Телефон',
             'birth_date' => 'Birth Date',
-            'passport_series' => 'Passport Series',
-            'passport_number' => 'Passport Number',
+            'passport_series' => 'Серия паспорта',
+            'passport_number' => 'Номер паспорта',
         ];
     }
 

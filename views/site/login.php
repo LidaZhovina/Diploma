@@ -44,7 +44,7 @@ $this->title = 'Авторизация';
             <?php ActiveForm::end(); ?>
 
             <div style="color:#999;">
-                <strong>admin@admin.ru/admin</strong> , <strong>demo@demo.demo/demo</strong>.<br>
+                <strong>admin@admin.ru/admin</strong> , <strong>demo@demo.demo/demo</strong>, <strong>reception@dog.ru/reception5</strong>.<br>
             </div>
 
         </div>

@@ -76,10 +76,13 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav '],
                 'items' => [
+                    Yii::$app->user->identity?->isReception
+                        ? ['label' => 'Кабинет Менеджера', 'url' => ['/reseption']]
+                        : '',
                     Yii::$app->user->identity?->isClient
                         ? ['label' => 'Личный кабинет', 'url' => ['/account']]
                         : '',
-                    Yii::$app->user->identity?->isClient
+                    Yii::$app->user->identity?->isClient | Yii::$app->user->identity?->isReception
                         ? Html::beginForm(['/site/logout'])
                         . Html::submitButton(
                             'Выход (' . Yii::$app->user->identity->email . ')',
@@ -96,6 +99,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         ?>
     </header>
 
+    <!-- Администратор -->
     <?php if (Yii::$app->user->identity?->isAdmin): ?>
         <div class="offcanvas offcanvas-end" tabindex="-1" id="adminOffcanvas" aria-labelledby="adminOffcanvasLabel">
             <div class="offcanvas-header">

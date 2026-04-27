@@ -8,6 +8,9 @@ use yii\bootstrap5\Html;
         <h5 class="card-title fw-bold"><?= $model->statusBooking->title ?></h5>
         <p>Детали бронирования:</p>
         <div>
+            <span class="fw-bold text-secondary">Номер:</span> <?= $model->room->roomType->name ?>
+        </div>
+        <div>
             <span class="fw-bold text-secondary">Цена:</span> <?= $model->price ?> руб
         </div>
         <div>
@@ -19,6 +22,17 @@ use yii\bootstrap5\Html;
         <div>
             <span class="fw-bold text-secondary">Количество гостей:</span> <?= $model->amount_residents ?>
         </div>
+        <div>
+            <span class="fw-bold text-secondary">Гости:</span>
+            <ul class="mb-0">
+                <?php foreach ($model->bookingUsers as $bookingUser): ?>
+                    <?php $resident = $bookingUser->resident; ?>
+                    <li>
+                        <?= $resident->surname . ' ' . $resident->name . ($resident->patronymic ? ' ' . $resident->patronymic : '') ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
 
 
         <div class="mt-3">
@@ -26,13 +40,6 @@ use yii\bootstrap5\Html;
 
             <?= $model->statusBooking->alias === 'pending'
                 ? Html::a('Подтвердить поездку', ['change-status', 'id' => $model->id, 'alias' => 'new'], ['class' => 'btn btn-outline-primary', 'data-method' => 'post'])
-                : '' ?>
-            <!-- Кнопки смены статуса для ресепшн -->
-            <?= $model->statusBooking->alias === 'new'
-                ? Html::a('Активировать поездку', ['change-status', 'id' => $model->id, 'alias' => 'active'], ['class' => 'btn btn-outline-primary', 'data-method' => 'post'])
-                : '' ?>
-            <?= $model->statusBooking->alias === 'active'
-                ? Html::a('Закрыть поездку', ['change-status', 'id' => $model->id, 'alias' => 'past'], ['class' => 'btn btn-outline-primary', 'data-method' => 'post'])
                 : '' ?>
         </div>
     </div>

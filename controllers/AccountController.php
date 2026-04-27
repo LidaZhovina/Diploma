@@ -43,6 +43,11 @@ class AccountController extends Controller
         if (!parent::beforeAction($action)) {
             return false;
         }
+        $publicActions = ['display-image'];
+        if (in_array($action->id, $publicActions)) {
+            return true;
+        }
+
         if (!Yii::$app->user->identity?->isClient) {
             return $this->redirect('/');
         }
@@ -205,6 +210,7 @@ class AccountController extends Controller
             }
             $booking->status_booking_id = $pendingId;
             $booking->price = $booking->calculatePrice($room);
+            $prepayment = $booking->price * 0.10; // 10% от итоговой суммы
 
             // var_dump($booking->contact_phone); exit;
 
