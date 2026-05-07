@@ -2,10 +2,11 @@
 
 /** @var yii\web\View $this */
 /** @var yii\bootstrap5\ActiveForm $form */
-/** @var app\models\ContactForm $model */
+/** @var app\models\RegisterForm $model */
 
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
+use yii\web\JqueryAsset;
 
 $this->title = 'Регистрация';
 ?>
@@ -27,10 +28,15 @@ $this->title = 'Регистрация';
 
             <?= $form->field($model, 'patronymic') ?>
 
+            <?= $form->field($model, 'rules')->checkbox([
+                'class' => 'form-check-input',
+                'template' => "<div class=\"form-check\">{input} {label}\n{error}</div>",
+            ]) ?>
 
-            <div class="form-group d-flex justify-content-between">
-                <?= Html::submitButton('Зарегестрироваться', ['class' => 'btn register', 'name' => 'register-button']) ?>
-                <?= Html::a('Авторизация',['login'], ['class' => 'btn register', 'name' => 'register-button']) ?>
+
+            <div class="form-group d-flex justify-content-between mt-3">
+                <?= Html::submitButton('Зарегестрироваться', ['class' => 'btn register l', 'name' => 'register-button']) ?>
+                <?= Html::a('Авторизация', ['login'], ['class' => 'btn register', 'name' => 'register-button']) ?>
             </div>
 
             <?php ActiveForm::end(); ?>
@@ -40,3 +46,6 @@ $this->title = 'Регистрация';
 
 
 </div>
+
+<?php
+$this->registerJsFile("web/js/register.js", ['depends' => JqueryAsset::class]);

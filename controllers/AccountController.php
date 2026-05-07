@@ -6,10 +6,13 @@ use app\models\Booking;
 use app\models\AccountSearch;
 use app\models\BookingGuestsForm;
 use app\models\BookingStep1Form;
+use app\models\Resident;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Room;
+use app\models\Route;
+use app\models\RouteResident;
 use app\models\StatusBooking;
 use app\models\WellnessProgram;
 use Yii;
@@ -66,9 +69,57 @@ class AccountController extends Controller
         $searchModel = new AccountSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+        $userId = Yii::$app->user->id;
+
+        $bookingIds = Booking::find()
+            ->joinWith('bookingUsers.resident')
+            ->where(['resident.user_id' => $userId, 'resident.is_main_guest' => 1])
+            ->select('booking.id')
+            ->column();
+        // Получаем всех resident_id, связанных с этими бронированиями (всех гостей)
+        $residentIds = (new \yii\db\Query())
+            ->select('resident_id')
+            ->from('booking_user')
+            ->where(['booking_id' => $bookingIds])
+            ->column();
+        $residentIds = array_unique($residentIds);
+
+
+        // Забронированные маршруты (уже записан)
+        $routeResidents = RouteResident::find()
+            ->with(['route', 'resident'])
+            ->where(['resident_id' => $residentIds])
+            ->all();
+
+        // Группируем по route_id
+        $bookedRoutesGrouped = [];
+        $bookedRouteIds = [];
+        foreach ($routeResidents as $rr) {
+            $routeId = $rr->route_id;
+            $bookedRouteIds[] = $routeId;
+            if (!isset($bookedRoutesGrouped[$routeId])) {
+                $bookedRoutesGrouped[$routeId] = [
+                    'route' => $rr->route,
+                    'residents' => []
+                ];
+            }
+            $bookedRoutesGrouped[$routeId]['residents'][] = [
+                'id' => $rr->resident_id,
+                'name' => $rr->resident->surname . ' ' . $rr->resident->name
+            ];
+        }
+        $bookedRouteIds = array_unique($bookedRouteIds);
+
+        // Доступные маршруты – те, на которые нет записей
+        $availableRoutes = Route::find()
+            ->where(['not in', 'id', $bookedRouteIds])
+            ->all();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'bookedRoutesGrouped' => $bookedRoutesGrouped,
+            'availableRoutes' => $availableRoutes,
         ]);
     }
 
@@ -298,7 +349,6 @@ class AccountController extends Controller
     }
 
     /* Смена статуса */
-
     public function actionChangeStatus($id, $alias)
     {
         $model = $this->findModel($id);
@@ -313,6 +363,122 @@ class AccountController extends Controller
         }
 
         return $this->redirect('/admin');
+    }
+
+    /* Запись на маршрут */
+    public function actionBookRoute($id)
+    {
+        // 1. Находим маршрут
+        $route = Route::findOne($id);
+        if (!$route) {
+            Yii::$app->session->setFlash('error', 'Маршрут не найден.');
+            return $this->redirect(['index']);
+        }
+
+        $userId = Yii::$app->user->id;
+
+        // 2. Находим активное бронирование пользователя (ищем по user_id через Residents)
+        $resident = Resident::findOne(['user_id' => $userId]);
+        if (!$resident) {
+            Yii::$app->session->setFlash('error', 'Ваш профиль гостя не найден.');
+            return $this->redirect(['index']);
+        }
+
+        // 3. Находим бронирование, где этот гость является главным или просто связан
+        $booking = Booking::find()
+            ->innerJoin('booking_user', 'booking.id = booking_user.booking_id')
+            ->where(['booking_user.resident_id' => $resident->id])
+            ->andWhere(['in', 'booking.status_booking_id', [Booking::getStatusId('new'), Booking::getStatusId('active')]])
+            ->one();
+        if (!$booking) {
+            Yii::$app->session->setFlash('error', 'Нет активного бронирования.');
+            return $this->redirect(['index']);
+        }
+
+        // 4. Все гости из этого бронирования
+        $residents = [];
+        foreach ($booking->bookingUsers as $bu) {
+            $residents[] = $bu->resident;
+        }
+
+        // Обработка POST-запроса (когда форма выбора гостей отправлена)
+        if (empty($residents)) {
+            Yii::$app->session->setFlash('error', 'Нет гостей для записи.');
+            return $this->redirect(['index']);
+        }
+
+        if (Yii::$app->request->isPost) {
+            $selectedIds = Yii::$app->request->post('resident_ids', []);
+            if (empty($selectedIds)) {
+                Yii::$app->session->setFlash('error', 'Не выбран ни один гость.');
+                return $this->redirect(['index']);
+            }
+
+            $validIds = array_intersect($selectedIds, array_column($residents, 'id'));
+            if (count($selectedIds) !== count($validIds)) {
+                Yii::$app->session->setFlash('error', 'Выбраны некорректные гости.');
+                return $this->redirect(['index']);
+            }
+
+            // Проверка свободных мест
+            $currentCount = RouteResident::find()->where(['route_id' => $route->id])->count();
+            if ($currentCount + count($selectedIds) > $route->number_participant) {
+                Yii::$app->session->setFlash('error', 'Недостаточно свободных мест на маршруте.');
+                return $this->redirect(['index']);
+            }
+
+            // Сохраняем записи
+            $success = true;
+            foreach ($selectedIds as $rid) {
+                $rr = new RouteResident();
+                $rr->route_id = $route->id;
+                $rr->resident_id = $rid;
+                if (!$rr->save()) {
+                    $success = false;
+                    break;
+                }
+            }
+            if ($success) {
+                Yii::$app->session->setFlash('success', 'Гости успешно записаны на маршрут.');
+            } else {
+                Yii::$app->session->setFlash('error', 'Ошибка при записи.');
+            }
+            return $this->redirect(['index']);
+        }
+
+        // 5. Если гостей несколько — показываем форму выбора
+        if (count($residents) > 1) {
+            return $this->render('choose-guests', [
+                'route' => $route,
+                'residents' => $residents,
+            ]);
+        }
+
+        // 6. Если гость один — пытаемся записать
+        $currentCount = RouteResident::find()->where(['route_id' => $route->id])->count();
+        if ($currentCount >= $route->number_participant) {
+            Yii::$app->session->setFlash('error', 'Мест нет.');
+            return $this->redirect(['index']);
+        }
+
+        $rr = new RouteResident();
+        $rr->route_id = $route->id;
+        $rr->resident_id = $residents[0]->id;
+        if ($rr->save()) {
+            Yii::$app->session->setFlash('success', 'Записан.');
+        } else {
+            Yii::$app->session->setFlash('error', 'Ошибка.');
+        }
+        return $this->redirect(['index']);
+    }
+
+    /* Отмена записи на маршрут */
+    public function actionCancelRoute($route_id, $resident_id)
+    {
+        $rr = RouteResident::findOne(['route_id' => $route_id, 'resident_id' => $resident_id]);
+        $rr && $rr->delete(); // короткая запись
+        Yii::$app->session->setFlash('success', 'Отменено.');
+        return $this->redirect(['index']);
     }
 
     /**

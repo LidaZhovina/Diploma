@@ -11,8 +11,8 @@ use app\models\Booking;
  */
 class AdminSearch extends Booking
 {
-     public $wellness_program_id;
-     public $route_id;
+    public $wellness_program_id;
+    public $route_id;
 
     /**
      * {@inheritdoc}
@@ -44,7 +44,12 @@ class AdminSearch extends Booking
      */
     public function search($params)
     {
-        $query = Booking::find();
+        $query = Booking::find()
+            ->joinWith(['bookingUsers.resident'])
+            ->groupBy('booking.id')
+            ->where(['in', 'booking.status_booking_id', [
+                Booking::getStatusId('pending'),
+            ]]);;
 
         // add conditions that should always apply here
 

@@ -3,10 +3,6 @@
 use yii\bootstrap5\Html;
 ?>
 <div class="card mb-3">
-    <!-- <img src="/web/img/LK.jpg" class="lk-image" alt="...">
-    <div class="card-img-overlay d-flex align-items-center justify-content-center text-align-center">
-        <h5 class="text-white"><?= Yii::$app->formatter->asDate($model->arrival_date, 'php:d.m.Y') . " - " . Yii::$app->formatter->asDate($model->departure_date, 'php:d.m.Y') ?></h5>
-    </div> -->
     <div style="position: relative;">
         <img src="/web/img/LK.jpg" class="lk-image w-100" alt="...">
         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white; text-shadow: 1px 1px 2px black; width: 100%;">
@@ -46,7 +42,7 @@ use yii\bootstrap5\Html;
                 ? Html::a('Заселить', ['check-in', 'id' => $model->id], ['class' => 'btn btn-outline-primary'])
                 : '' ?>
             <?= $model->statusBooking->alias === 'active'
-                ? Html::a('Закрыть поездку', ['change-status', 'id' => $model->id, 'alias' => 'past'], ['class' => 'btn btn-outline-primary', 'data-method' => 'post'])
+                ? Html::a('Закрыть поездку', ['check-out', 'id' => $model->id, 'alias' => 'past'], ['class' => 'btn btn-outline-primary', 'data-method' => 'post'])
                 : '' ?>
         </div>
     </div>

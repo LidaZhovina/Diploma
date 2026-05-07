@@ -16,6 +16,7 @@ class RegisterForm extends Model
     public $surname;
     public $password;
     public $patronymic;
+    public $rules;
 
 
     /**
@@ -33,6 +34,8 @@ class RegisterForm extends Model
             [['surname', 'name', 'patronymic'], 'match', 'pattern' => '/^[а-яё\s]+$/iu', 'message' => 'Символы Кирилицы'],
             [['email'], 'unique', 'targetClass' => User::class],
             ['email', 'email', 'message' => 'Почта должна иметь вид: example@index.com'],
+            [['rules'], 'boolean'],
+            [['rules'], 'required', 'requiredValue' => 1, 'message' => 'Заполните согласие с обработкой....'],
         ];
     }
 
@@ -47,6 +50,7 @@ class RegisterForm extends Model
             'surname' => 'Фамилия',
             'name' => 'Имя',
             'patronymic' => 'Отчество',
+            'rules' => 'Я даю согласие на обработку персональных данных и подтверждаю ознакомление с пользовательским соглашением и политикой конфиденциальности',
         ];
     }
 

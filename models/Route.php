@@ -20,9 +20,9 @@ use Yii;
  * @property int $price
  * @property string $created_at
  *
- * @property Booking[] $bookings
  * @property Level $level
  * @property RouteImage $routeImage
+ * @property RouteResident[] $routeResidents 
  */
 class Route extends \yii\db\ActiveRecord
 {
@@ -111,4 +111,15 @@ class Route extends \yii\db\ActiveRecord
        $image = $this->routeImage; 
        return $image ? Yii::getAlias('@web/' . $image->image) : null; 
    } 
+
+   /**
+    * Gets query for [[RouteResidents]].
+    *
+    * @return \yii\db\ActiveQuery
+    */
+   public function getRouteResidents()
+   {
+       return $this->hasMany(RouteResident::class, ['route_id' => 'id']);
+   }
+
 }

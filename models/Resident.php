@@ -79,6 +79,16 @@ class Resident extends \yii\db\ActiveRecord
     }
 
     /**
+    * Gets query for [[RouteResidents]]. 
+    * 
+    * @return \yii\db\ActiveQuery 
+    */ 
+   public function getRouteResidents() 
+   { 
+       return $this->hasMany(RouteResident::class, ['resident_id' => 'id']); 
+   } 
+
+    /**
      * Gets query for [[User]].
      *
      * @return \yii\db\ActiveQuery

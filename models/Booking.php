@@ -14,18 +14,16 @@ use Yii;
  * @property string $contact_phone 
  * @property float $price
  * @property int $status_booking_id
- * @property int|null $route_id
  * @property int $amount_residents
  * @property string $comment
  *
  * @property BookingUser[] $bookingUsers
  * @property Room $room
- * @property Route $route
  * @property StatusBooking $statusBooking
  */
 class Booking extends \yii\db\ActiveRecord
 {
-    // Виртуальные поля для пошагового сбора данных
+    // Поля для пошагового сбора данных
     public $guests = [];      // массив гостей (для третьего шага)
     public $guests_count;     // временное поле для количества гостей (из первого шага)
 
@@ -46,7 +44,7 @@ class Booking extends \yii\db\ActiveRecord
         $tomorrow = date('Y-m-d', strtotime('+1 day'));
         return [
             [['room_id', 'arrival_date', 'departure_date', 'contact_phone', 'price', 'status_booking_id', 'amount_residents'], 'required'],
-            [['room_id', 'status_booking_id', 'route_id',], 'integer'],
+            [['room_id', 'status_booking_id',], 'integer'],
             [['contact_phone'], 'string', 'max' => 20],
             ['amount_residents', 'integer', 'max' => '5', 'message' => 'Максимально число гостей - 5 человек'],
 
@@ -61,7 +59,7 @@ class Booking extends \yii\db\ActiveRecord
             [['price'], 'number'],
             [['comment'], 'string'],
             [['room_id'], 'exist', 'skipOnError' => true, 'targetClass' => Room::class, 'targetAttribute' => ['room_id' => 'id']],
-            [['status_booking_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusBooking::class, 'targetAttribute' => ['status_booking_id' => 'id']],            [['route_id'], 'exist', 'skipOnError' => true, 'targetClass' => Route::class, 'targetAttribute' => ['route_id' => 'id']],
+            [['status_booking_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusBooking::class, 'targetAttribute' => ['status_booking_id' => 'id']],            
         ];
     }
 
@@ -73,7 +71,6 @@ class Booking extends \yii\db\ActiveRecord
         return [
             'id' => '№',
             'room_id' => 'Номер',
-            'route_id' => 'Маршрут',
             'arrival_date' => 'Дата заселения',
             'departure_date' => 'Дата выселения',
             'contact_phone' => 'Контактный телефон',
@@ -105,15 +102,6 @@ class Booking extends \yii\db\ActiveRecord
         return $this->hasOne(Room::class, ['id' => 'room_id']);
     }
 
-    /**
-     * Gets query for [[Route]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getRoute()
-    {
-        return $this->hasOne(Route::class, ['id' => 'route_id']);
-    }
 
     /**
      * Gets query for [[StatusBooking]].
@@ -156,9 +144,9 @@ class Booking extends \yii\db\ActiveRecord
         $night = (new \DateTime($this->arrival_date))->diff(new \DateTime($this->departure_date))->days;
         $price = $room->price_per_day * $night;
 
-        if ($route) {
-            $price += $route->price;
-        }
+        // if ($route) {
+        //     $price += $route->price;
+        // }
 
         return $price;
     }

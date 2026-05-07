@@ -148,7 +148,38 @@ class ReseptionController extends Controller
 
         return $this->render('check-in', compact('booking', 'residents', 'profiles'));
     }
-    
+
+    public function actionCheckOut($id)
+    {
+        $booking = Booking::findOne($id);
+        if (!$booking || $booking->status_booking_id != Booking::getStatusId('active')) {
+            Yii::$app->session->setFlash('error', 'Бронирование не активно или не найдено.');
+            return $this->redirect(['index']);
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+        $success = true;
+
+        $booking->status_booking_id = Booking::getStatusId('past');
+        if (!$booking->save(false)) {
+            $success = false;
+        } else {
+            $room = $booking->room;
+            $room->status_room_id = StatusRoom::getStatusId('unbound');
+            if (!$room->save(false)) {
+                $success = false;
+            }
+        }
+
+        if ($success) {
+            $transaction->commit();
+            Yii::$app->session->setFlash('success', 'Гость выселен, поездка закрыта.');
+        } else {
+            $transaction->rollBack();
+            Yii::$app->session->setFlash('error', 'Ошибка при выселении.');
+        }
+        return $this->redirect(['index']);
+    }
 
     /**
      * Creates a new Booking model.

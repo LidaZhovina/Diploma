@@ -24,8 +24,8 @@ class AppAsset extends AssetBundle
         'css/style.css',
     ];
     public $js = [
+        'js/register.js',
         'js/room.js',
-        'js/modalWindow.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

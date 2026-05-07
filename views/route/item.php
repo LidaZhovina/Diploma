@@ -1,4 +1,5 @@
 <?php
+/** @var app\models\Route $model */
 
 use yii\helpers\Html;
 ?>
