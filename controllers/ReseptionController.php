@@ -148,6 +148,7 @@ class ReseptionController extends Controller
 
         return $this->render('check-in', compact('booking', 'residents', 'profiles'));
     }
+    
 
     /**
      * Creates a new Booking model.
