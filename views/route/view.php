@@ -16,27 +16,27 @@ $this->title = $model->name;
     <h1 class="text-center"><?= Html::encode($this->title) ?></h1>
 
     <p class="text-end">
-        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-        <?= Html::a('Назад', ['index', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Yii::$app->user->identity?->isAdmin
+            ? Html::a('Удалить', ['delete', 'id' => $model->id], [
+                'class' => 'btn btn-danger',
+                'data' => [
+                    'confirm' => 'Are you sure you want to delete this item?',
+                    'method' => 'post',
+                ],
+            ])
+            : '' ?>
+        <?= Yii::$app->user->identity?->isAdmin
+            ? Html::a('Назад', ['index', 'id' => $model->id], ['class' => 'btn btn-primary'])
+            : '' ?>
+        <?= Yii::$app->user->identity?->isClient
+        ? Html::a('Назад', ['account/index', 'id' => $model->id], ['class' => 'btn btn-primary'])
+        :'' ?>
     </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'name',
-            [
-                'attribute' => 'price',
-                'value' => $model->price . "₽",
-            ], 
-            'description:ntext',
-            'length',
+            // 'id',
             [
                 'attribute' => 'date_start',
                 'value' => Yii::$app->formatter->asDate($model->date_start, 'php:d.m.Y')
@@ -45,13 +45,23 @@ $this->title = $model->name;
                 'attribute' => 'time_start',
                 'value' => Yii::$app->formatter->asTime($model->time_start, 'php:H:i')
             ],
-            'duration',
-            'outfit:ntext',
-            'number_participant',
+            [
+                'attribute' => 'price',
+                'value' => $model->price . "₽",
+            ],
             [
                 'attribute' => 'level_id',
                 'value' => $model->level->title
             ],
+            'number_participant',
+            [
+                'attribute' =>' Свободные места',
+                'value' => $model->number_participant - $model->getRouteResidents()->count()
+            ],
+            'length',
+            'duration',
+            'outfit:ntext',
+            'description:ntext',
             [
                 'attribute' => 'created_at',
                 'value' => Yii::$app->formatter->asDatetime($model->created_at, 'php:d.m.Y H:i')

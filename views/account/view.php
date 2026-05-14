@@ -10,12 +10,12 @@ $this->title = "Детали бронирования:";
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="booking-view">
-
-    <!-- <p class="text-end">
-        <?= Html::a('Назад', ['index', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-    </p> -->
-
     <h1 class="my-3 text-center"><?= Html::encode($this->title) ?></h1>
+
+    <p class="text-end">
+        <?= Html::a('Назад', ['index', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    </p>
+
 
     <?= DetailView::widget([
         'model' => $model,
@@ -34,6 +34,10 @@ $this->title = "Детали бронирования:";
             ],
             'contact_phone',
             'price',
+            [
+                'attribute' => 'pay_type',
+                'value' => $model->payType->title
+            ],
             [
                 'attribute' => 'status_booking_id',
                 'value' => $model->statusBooking->title

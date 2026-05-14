@@ -82,6 +82,15 @@ class RouteController extends Controller
         if (!parent::beforeAction($action)) {
             return false;
         }
+
+        if ($action->id === 'view') {
+            // Если хотите только авторизованных:
+            if (Yii::$app->user->isGuest) {
+                return $this->redirect(['/site/login']);
+            }
+            return true;
+        }
+
         if (!Yii::$app->user->identity?->isAdmin) {
             return $this->redirect('/');
         }

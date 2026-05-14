@@ -11,12 +11,33 @@ class BookingGuestsForm extends Model
     // public $patronymic;
     // public $birth_date;
     // public $agreement;
+    public $pay_type;
     public $guests = [];
+    public $email;
+    public $send_receipt = false;
 
     public function rules()
     {
         return [
+            [['pay_type'], 'required'],
+            [['pay_type'], 'integer'],
             ['guests', 'validateGuests'],
+            [['email'], 'email'],
+            [['send_receipt'], 'boolean'],
+            [['email'], 'required', 'when' => function ($model) {
+                return $model->send_receipt == true;
+            }, 'whenClient' => "function (attribute, value) {
+                return $('#send_receipt_checkbox').is(':checked');
+            }"],
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'pay_type' => 'Способ оплаты',
+            'guests' => 'Дата рождения',
+            'email' => 'Адрес электронной почты',
         ];
     }
 

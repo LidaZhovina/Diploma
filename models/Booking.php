@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\VarDumper;
 
 /**
  * This is the model class for table "booking".
@@ -15,9 +16,13 @@ use Yii;
  * @property float $price
  * @property int $status_booking_id
  * @property int $amount_residents
+ * @property int $pay_type_id 
+ * @property int $payment_status
  * @property string $comment
  *
  * @property BookingUser[] $bookingUsers
+ * @property PayType $payType 
+ * @property PaymentStatus $paymentStatus
  * @property Room $room
  * @property StatusBooking $statusBooking
  */
@@ -43,7 +48,7 @@ class Booking extends \yii\db\ActiveRecord
     {
         $tomorrow = date('Y-m-d', strtotime('+1 day'));
         return [
-            [['room_id', 'arrival_date', 'departure_date', 'contact_phone', 'price', 'status_booking_id', 'amount_residents'], 'required'],
+            [['room_id', 'arrival_date', 'departure_date', 'contact_phone', 'pay_type_id', 'price', 'status_booking_id', 'amount_residents', 'payment_amount',], 'required'],
             [['room_id', 'status_booking_id',], 'integer'],
             [['contact_phone'], 'string', 'max' => 20],
             ['amount_residents', 'integer', 'max' => '5', 'message' => 'Максимально число гостей - 5 человек'],
@@ -56,10 +61,12 @@ class Booking extends \yii\db\ActiveRecord
             [['guests_count'], 'integer', 'min' => 1, 'max' => 5],
             ['guests', 'validateGuests'],
 
-            [['price'], 'number'],
+            [['price', 'payment_amount',], 'number'],
             [['comment'], 'string'],
             [['room_id'], 'exist', 'skipOnError' => true, 'targetClass' => Room::class, 'targetAttribute' => ['room_id' => 'id']],
-            [['status_booking_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusBooking::class, 'targetAttribute' => ['status_booking_id' => 'id']],            
+            [['status_booking_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusBooking::class, 'targetAttribute' => ['status_booking_id' => 'id']],
+            [['pay_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => PayType::class, 'targetAttribute' => ['pay_type_id' => 'id']],
+            [['payment_status'], 'exist', 'skipOnError' => true, 'targetClass' => PaymentStatus::class, 'targetAttribute' => ['payment_status' => 'id']],
         ];
     }
 
@@ -75,9 +82,12 @@ class Booking extends \yii\db\ActiveRecord
             'departure_date' => 'Дата выселения',
             'contact_phone' => 'Контактный телефон',
             'price' => 'Цена',
+            'pay_type' => 'Способ оплаты',
+            'payment_amount' => 'Предоплата',
+            'payment_status' => 'Статус оплаты',
             'status_booking_id' => 'Статус бронирования',
             'amount_residents' => 'Количество гостей',
-            'comment' => 'Комментарий',
+            'comment' => 'Пожелания',
         ];
     }
 
@@ -90,6 +100,26 @@ class Booking extends \yii\db\ActiveRecord
     public function getBookingUsers()
     {
         return $this->hasMany(BookingUser::class, ['booking_id' => 'id']);
+    }
+
+    /** 
+     * Gets query for [[PayType]]. 
+     * 
+     * @return \yii\db\ActiveQuery 
+     */
+    public function getPayType()
+    {
+        return $this->hasOne(PayType::class, ['id' => 'pay_type_id']);
+    }
+
+    /**
+     * Gets query for [[PaymentStatus]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPaymentStatus()
+    {
+        return $this->hasOne(PaymentStatus::class, ['id' => 'payment_status']);
     }
 
     /**
@@ -219,5 +249,21 @@ class Booking extends \yii\db\ActiveRecord
     {
         $this->status_booking_id = self::getStatusId('cancelled');
         return $this->save(false);
+    }
+
+    public static function sendMail($data)
+    {
+        Yii::$app->mailer->htmlLayout = "@app/mail/layouts/html";
+
+        // var_dump($data); exit;
+
+        return Yii::$app->mailer
+            ->compose('mail', [
+                "data" => $data
+            ])
+            ->setFrom("lida.zhovina@mail.ru")
+            ->setTo("lida.zhovina@mail.ru")
+            ->setSubject('Предоплата по заказу')
+            ->send();
     }
 }

@@ -113,4 +113,10 @@ class Room extends \yii\db\ActiveRecord
     {
         return $this->hasOne(StatusRoom::class, ['id' => 'status_room_id']);
     }
+
+    public function getImageUrl() 
+   { 
+       $image = $this->roomImages; 
+       return $image ? Yii::getAlias('@web/' . $image->image) : null; 
+   }
 }

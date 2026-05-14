@@ -38,6 +38,7 @@ class BookingStep1Form extends Model
             'guests_count' => 'Количество гостей',
             'contact_phone' => 'Контактный телефон',
             'comment' => 'Комментарий',
+            'pay_type_id' => 'Способ оплаты',
         ];
     }
 }

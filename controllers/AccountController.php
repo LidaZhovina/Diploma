@@ -6,6 +6,7 @@ use app\models\Booking;
 use app\models\AccountSearch;
 use app\models\BookingGuestsForm;
 use app\models\BookingStep1Form;
+use app\models\PaymentStatus;
 use app\models\Resident;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -247,9 +248,9 @@ class AccountController extends Controller
             $booking->contact_phone = $step1['contact_phone'];
             $booking->arrival_date = $step1['arrival_date'];
             $booking->departure_date = $step1['departure_date'];
-            $booking->amount_residents = $step1['guests_count']; // или amount_residents
+            $booking->amount_residents = $step1['guests_count'];
+            $booking->pay_type_id = $model->pay_type;
             $booking->comment = $step1['comment'];
-            $booking->route_id = null; // или значение из сессии, если есть
             $pendingId = Booking::getStatusId('pending');
             if (!$pendingId) {
                 Yii::$app->session->setFlash('error', 'Ошибка конфигурации: статус "pending" не найден.');
@@ -261,7 +262,8 @@ class AccountController extends Controller
             }
             $booking->status_booking_id = $pendingId;
             $booking->price = $booking->calculatePrice($room);
-            $prepayment = $booking->price * 0.10; // 10% от итоговой суммы
+            $prepayment = $booking->price * 0.30; // 30% от итоговой суммы
+            $booking->payment_amount = $prepayment;
 
             // var_dump($booking->contact_phone); exit;
 
@@ -281,15 +283,35 @@ class AccountController extends Controller
                 return $this->redirect(['account/select-program']);
             }
 
+            // Устанавливаем предоплату (30% от итоговой цены)
+            $booking->payment_status = PaymentStatus::getStatusId('pending');
+            $booking->pay_type_id = $model->pay_type;
+
             try {
                 if ($booking->saveWithGuests($model->guests, Yii::$app->user->id, $guestPrograms)) {
                     // успех
                     Yii::$app->session->remove('booking_step1');
                     Yii::$app->session->remove('guest_programs');
-                    Yii::$app->session->setFlash('success', 'Бронирование создано.');
-                    return $this->redirect(['account/index']);
+
+                    $booking->save(false);
+
+                    // Сохраняем ID бронирования в сессию для страницы оплаты
+                    Yii::$app->session->set('booking_id', $booking->id);
+
+                    // В зависимости от способа оплаты перенаправляем
+                    if ($model->pay_type == '1') {
+                        return $this->redirect(['account/payment']);
+                    } elseif ($model->pay_type == '2') {
+                        // Например, на страницу оплаты картой (пока заглушка)
+                        return $this->redirect(['account/payment-sbp']);
+                    } elseif ($model->pay_type == '3') {
+                        // Например, на страницу оплаты картой (пока заглушка)
+                        return $this->redirect(['account/payment-card']);
+                    } else {
+                        // Если способ не распознан, можно в ЛК или с ошибкой
+                        return $this->redirect(['account/index']);
+                    }
                 } else {
-                    // Сюда не попадём, потому что при ошибке будет исключение
                     Yii::$app->session->setFlash('error', 'Неизвестная ошибка');
                 }
             } catch (\Exception $e) {
@@ -309,6 +331,66 @@ class AccountController extends Controller
             'room' => $room,
             'step1' => $step1,
         ]);
+    }
+
+    /**
+     * Страница оплаты по QR-коду
+     */
+    public function actionPayment()
+    {
+        $bookingId = Yii::$app->session->get('booking_id');
+        if (!$bookingId) {
+            return $this->redirect(['index']);
+        }
+
+        $booking = Booking::findOne($bookingId);
+        if (!$booking) {
+            Yii::$app->session->remove('booking_id');
+            return $this->redirect(['index']);
+        }
+
+        // Если уже оплачено – сразу в ЛК
+        if ($booking->payment_status == PaymentStatus::getStatusId('paid')) {
+            Yii::$app->session->remove('booking_id');
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('qrCode', ['booking' => $booking]);
+    }
+
+    /**
+     * AJAX-проверка статуса оплаты
+     * @param int $id ID бронирования
+     * @return \yii\web\Response (JSON)
+     */
+    public function actionCheckPaymentStatus($id)
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $booking = Booking::findOne($id);
+        if (!$booking) {
+            return ['paid' => false, 'error' => 'Бронирование не найдено'];
+        }
+        return ['paid' => ($booking->payment_status === PaymentStatus::getStatusId('paid'))];
+    }
+
+    /**
+     * Подтверждение оплаты (меняет статус на "оплачено")
+     * @param int $id ID бронирования
+     */
+    public function actionConfirmPayment($id)
+    {
+        $booking = Booking::findOne($id);
+        if (!$booking) {
+            throw new NotFoundHttpException('Бронирование не найдено.');
+        }
+
+        $booking->payment_status = PaymentStatus::getStatusId('paid');
+        $booking->save(false);
+
+        Yii::$app->session->remove('booking_id');
+        Yii::$app->session->setFlash('success', 'Оплата прошла успешно!');
+        // Yii::$app->session->setFlash('success', 'Бронирование создано.');
+        return $this->redirect(['account/index']);
     }
 
     /**
@@ -439,7 +521,7 @@ class AccountController extends Controller
                 }
             }
             if ($success) {
-                Yii::$app->session->setFlash('success', 'Гости успешно записаны на маршрут.');
+                Yii::$app->session->setFlash('success', 'Успешная запись маршрут.');
             } else {
                 Yii::$app->session->setFlash('error', 'Ошибка при записи.');
             }
@@ -479,6 +561,22 @@ class AccountController extends Controller
         $rr && $rr->delete(); // короткая запись
         Yii::$app->session->setFlash('success', 'Отменено.');
         return $this->redirect(['index']);
+    }
+
+    /* Отправка почты */
+    public function actionMail()
+    {
+        $data = "text mail";
+
+        $res = Booking::sendMail($data);
+
+        if ($res) {
+            Yii::$app->session->setFlash("success", "Письмо успешно отправлено!");
+        } else {
+            Yii::$app->session->setFlash("error", "Ошибка отправки письма!");
+        }
+
+        return $this->redirect("/account");
     }
 
     /**

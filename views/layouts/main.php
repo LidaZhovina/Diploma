@@ -36,7 +36,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     <header id="header">
         <?php
         NavBar::begin([
-            'brandLabel' => '<img src=/img/logo.jpg alt=logo class="logo"> Сайт',
+            'brandLabel' => '<img src=/img/logo.jpg alt=logo class="logo"> Танхой',
             'brandUrl' => Yii::$app->homeUrl,
             'options' => ['class' => 'navbar-expand-md navbarColor navbar-dark fixed-top']
         ]);

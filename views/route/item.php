@@ -14,7 +14,17 @@ use yii\helpers\Html;
     <div class="card-body">
         <h5 class="card-title"><?= $model->name ?></h5>
         <div>
+            <span class="fw-bold">Дата и время начала: </span> 
+            <?= Yii::$app->formatter->asDate($model->date_start, 'php:d.m.Y') . ' ' . Yii::$app->formatter->asTime($model->time_start, 'php:H:i') ?>
+        </div>
+        <div>
             <span class="fw-bold">Сложность: </span> <?= $model->level->title ?>
+        </div>
+        <div>
+            <span class="fw-bold">Количество участников: </span> <?= $model->number_participant ?>
+        </div>
+        <div>
+            <span class="fw-bold">Свободных мест: </span> <?= $model->number_participant - $model->getRouteResidents()->count() ?>
         </div>
     </div>
     <div class="card-footer">

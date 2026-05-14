@@ -46,8 +46,6 @@ $this->title = $model->id;
             ],
             'contact_phone',
             'price',
-            'wellness_program_id',
-            'route_id',
             'amount_residents',
             'comment:ntext',
         ],

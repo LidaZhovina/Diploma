@@ -43,7 +43,7 @@ use yii\web\JqueryAsset;
 
     <div class="form-group d-flex justify-content-between">
         <?= Html::submitButton('Заселить', ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Отмена', ['index'], ['class' => 'btn btn-outline-secondary']) ?>
+        <?= Html::a('Назад', ['index'], ['class' => 'btn btn-outline-secondary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

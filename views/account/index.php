@@ -35,6 +35,7 @@ $this->title = 'Личный кабинет';
                 <!-- Вкладка бронирований -->
                 <div class="tab-pane fade show active" id="bookings" role="tabpanel">
                     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+                    <?= Html::a('Отправить письмо', ['mail'], ['class' => 'btn btn-outline-info']) ?>
                     <?= ListView::widget([
                         'dataProvider' => $dataProvider,
                         'pager' => ['class' => LinkPager::class],
