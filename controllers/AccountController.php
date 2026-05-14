@@ -294,6 +294,7 @@ class AccountController extends Controller
                     Yii::$app->session->remove('guest_programs');
 
                     $booking->save(false);
+                    
 
                     // Сохраняем ID бронирования в сессию для страницы оплаты
                     Yii::$app->session->set('booking_id', $booking->id);

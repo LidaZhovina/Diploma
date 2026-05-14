@@ -34,12 +34,7 @@ $config = [
             'useFileTransport' => false,
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'scheme' => 'smtps',
-                'host' => 'smtp.mail.ru',
-                'username' => 'lida.zhovina@mail.ru',
-                'password' => '9FktDRVPrIYlgTAy8KNR',
-                'port' => 465,
-                'options' => ['ssl' => true],
+                
             ],
         ],
         'log' => [

@@ -22,12 +22,7 @@ use yii\bootstrap5\Html;
 <p>Стоимость проживания: <?= (new \DateTime($step1['arrival_date']))->diff(new \DateTime($step1['departure_date']))->days * $room->price_per_day ?> руб.</p>
 
 <?= $form->field($model, 'email')->textInput(['type' => 'email', 'placeholder' => 'example@mail.ru']) ?>
-<?= $form->field($model, 'send_receipt')->checkbox([
-    'id' => 'send_receipt_checkbox',
-    'label' => 'Отправить чек на указанный email'
-]) ?>
 
 <?= Html::submitButton('Оплатить', ['class' => 'btn btn-success']) ?>
 <?php ActiveForm::end();
-// <?= $form->field($model, 'pay_type_id')->dropDownList(PayType::getItems(), ['prompt' => 'Выберите способ оплаты'])
 ?>
