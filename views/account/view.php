@@ -21,6 +21,16 @@ $this->title = "Детали бронирования:";
         'model' => $model,
         'attributes' => [
             [
+                'attribute' => 'status_booking_id',
+                'value' => $model->statusBooking->title
+            ],
+            [
+                'label' => 'Причина отмены',
+                'visible' => (bool)$model?->reason,
+                'format' => 'html',
+                'value' => $model?->reason ? nl2br($model->reason->comment): '',
+            ],
+            [
                 'attribute' => 'room_id',
                 'value' => $model->room->roomType->name
             ],
@@ -33,14 +43,21 @@ $this->title = "Детали бронирования:";
                 'value' => Yii::$app->formatter->asDate($model->departure_date, 'php:d.m.Y')
             ],
             'contact_phone',
-            'price',
+            [
+                'attribute' => 'price',
+                'value' => $model->price . ' руб'
+            ],
+            [
+                'attribute' => 'payment',
+                'value' => $model->payment_amount . ' руб'
+            ],
             [
                 'attribute' => 'pay_type',
                 'value' => $model->payType->title
             ],
             [
-                'attribute' => 'status_booking_id',
-                'value' => $model->statusBooking->title
+                'attribute' => 'payment_status',
+                'value' => $model->paymentStatus->alias
             ],
             [
                 'attribute' => 'route_id',

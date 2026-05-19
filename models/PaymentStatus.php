@@ -63,5 +63,3 @@ class PaymentStatus extends \yii\db\ActiveRecord
         return static::findOne(['title' => $alias])->id;
     }
 }
-
-// бронирование сохранилось, но меня не перекинуло на страницу с qr-кодом, почему?

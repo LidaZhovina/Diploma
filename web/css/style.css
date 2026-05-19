@@ -94,6 +94,15 @@
     padding: 0.5rem 1rem;
 }
 
+.pay {
+    background-color: #6ab0de ;
+    color: white;
+}
+.pay:hover {
+    background-color: #498ebc ;
+    color: white;
+}
+
 /* Работа с карточками номерв */
 .card-header {
     padding: 10px;
@@ -127,4 +136,13 @@
     left: 0;
     width: 100%;
     height: 60%;
+}
+
+/* работа с вкладками */
+.nav-underline .nav-link:not(.active) {
+    color: #707579;
+}
+
+.nav-underline .nav-link:not(.active):hover {
+    color: #4b4f53;
 }

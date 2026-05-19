@@ -13,6 +13,7 @@ class AdminSearch extends Booking
 {
     public $wellness_program_id;
     public $route_id;
+    public $status_alias;
 
     /**
      * {@inheritdoc}
@@ -46,12 +47,15 @@ class AdminSearch extends Booking
     {
         $query = Booking::find()
             ->joinWith(['bookingUsers.resident'])
-            ->groupBy('booking.id')
-            ->where(['in', 'booking.status_booking_id', [
-                Booking::getStatusId('pending'),
-            ]]);;
+            ->groupBy('booking.id');
 
-        // add conditions that should always apply here
+        // Если статус не получен, показываем по умолчанию бронирования "В обработке"
+        $alias = $this->status_alias ?: 'pending';
+        $statusId = Booking::getStatusId($alias);
+
+        if($statusId) {
+            $query->andWhere(['booking.status_booking_id' => $statusId]);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

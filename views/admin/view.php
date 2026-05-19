@@ -6,22 +6,15 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var app\models\Booking $model */
 
-$this->title = $model->id;
+$this->title = "Детали бронирования:";
 
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="booking-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1 class="my-3 text-center"><?= Html::encode($this->title) ?></h1>
 
     <p class="text-end">
-        <!-- <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?> -->
         <?= Html::a('Назад', ['index', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
     </p>
 
@@ -31,6 +24,12 @@ $this->title = $model->id;
             [
                 'attribute' => 'status_booking_id',
                 'value' => $model->statusBooking->title
+            ],
+            [
+                'label' => 'Причина отмены',
+                'visible' => (bool)$model?->reason,
+                'format' => 'html',
+                'value' => $model?->reason ? nl2br($model->reason->comment): '',
             ],
             [
                 'attribute' => 'room_id',
@@ -45,8 +44,43 @@ $this->title = $model->id;
                 'value' => Yii::$app->formatter->asDate($model->departure_date, 'php:d.m.Y')
             ],
             'contact_phone',
-            'price',
+            [
+                'attribute' => 'price',
+                'value' => $model->price . ' руб'
+            ],
+            [
+                'attribute' => 'payment',
+                'value' => $model->payment_amount . ' руб'
+            ],
             'amount_residents',
+            [
+                'attribute' => 'route_id',
+                'label' => 'Маршрут',
+                'value' => function ($model) {
+                    if ($model->route_id && $model->route) {
+                        return $model->route->name;
+                    }
+                    return null;
+                },
+                'visible' => !empty($model->route_id),
+            ],
+            [
+                'label' => 'Гости и их программы',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $output = '<div class="list-group">';
+                    foreach ($model->bookingUsers as $bookingUser) {
+                        $resident = $bookingUser->resident;
+                        $programTitle = $resident->wellnessProgram ? $resident->wellnessProgram->title : 'Не выбрана';
+                        $output .= '<div class="d-flex w-100 justify-content-between">';
+                        $output .= '<h6 class="mb-1">' . Html::encode($resident->surname . ' ' . $resident->name . ' ' . $resident->patronymic) . '</h6>';
+                        $output .= '</div>';
+                        $output .= '<p class="mb-1"><strong>Программа:</strong> ' . Html::encode($programTitle) . '</p>';
+                    }
+                    $output .= '</div>';
+                    return $output;
+                }
+            ],
             'comment:ntext',
         ],
     ]) ?>

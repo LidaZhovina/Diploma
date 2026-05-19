@@ -11,18 +11,28 @@ $this->title = "Детали бронирования:";
 ?>
 <div class="booking-view">
 
-    <!-- <p class="text-end">
-        <?= Html::a('Назад', ['index', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-    </p> -->
-
     <h1 class="my-3 text-center"><?= Html::encode($this->title) ?></h1>
+    
+    <p class="text-end">
+        <?= Html::a('Назад', ['index', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             [
+                'attribute' => 'status_booking_id',
+                'value' => $model->statusBooking->title
+            ],
+            [
                 'attribute' => 'room_id',
                 'value' => $model->room->roomType->name
+            ],
+            [
+                'label' => 'Причина отмены',
+                'visible' => (bool)$model?->reason,
+                'format' => 'html',
+                'value' => $model?->reason ? nl2br($model->reason->comment): '',
             ],
             [
                 'attribute' => 'arrival_date',
@@ -33,10 +43,13 @@ $this->title = "Детали бронирования:";
                 'value' => Yii::$app->formatter->asDate($model->departure_date, 'php:d.m.Y')
             ],
             'contact_phone',
-            'price',
             [
-                'attribute' => 'status_booking_id',
-                'value' => $model->statusBooking->title
+                'attribute' => 'price',
+                'value' => $model->price . ' руб'
+            ],
+            [
+                'attribute' => 'payment',
+                'value' => $model->payment_amount . ' руб'
             ],
             [
                 'attribute' => 'route_id',

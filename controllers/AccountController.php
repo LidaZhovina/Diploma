@@ -175,7 +175,7 @@ class AccountController extends Controller
     }
 
     /**
-     * Шаг 2а: Каталог оздоровительных программ (если пользователь ответил "Да")
+     * Шаг 2а: Каталог оздоровительных программ
      */
     public function actionSelectProgram()
     {
@@ -211,7 +211,7 @@ class AccountController extends Controller
      * Шаг 2б: Сохраняем ID выбранной программы в сессию и переходим к форме гостей
      * @param int $id ID программы
      */
-    public function actionSetProgram($id)
+    /* public function actionSetProgram($id)
     {
         $step1 = Yii::$app->session->get('booking_step1');
         if (!$step1) {
@@ -226,6 +226,7 @@ class AccountController extends Controller
         Yii::$app->session->set('wellness_program_id', $id);
         return $this->redirect(['account/guests-data']);
     }
+    */
 
 
     public function actionGuestsData()
@@ -294,7 +295,6 @@ class AccountController extends Controller
                     Yii::$app->session->remove('guest_programs');
 
                     $booking->save(false);
-                    
 
                     // Сохраняем ID бронирования в сессию для страницы оплаты
                     Yii::$app->session->set('booking_id', $booking->id);
@@ -302,9 +302,6 @@ class AccountController extends Controller
                     // В зависимости от способа оплаты перенаправляем
                     if ($model->pay_type == '1') {
                         return $this->redirect(['account/payment']);
-                    } elseif ($model->pay_type == '2') {
-                        // Например, на страницу оплаты картой (пока заглушка)
-                        return $this->redirect(['account/payment-sbp']);
                     } elseif ($model->pay_type == '3') {
                         // Например, на страницу оплаты картой (пока заглушка)
                         return $this->redirect(['account/payment-card']);
@@ -337,7 +334,32 @@ class AccountController extends Controller
     /**
      * Страница оплаты по QR-коду
      */
-    public function actionPayment()
+    public function actionPayment($id = null)
+    {
+        $bookingId = $id ?: Yii::$app->session->get('booking_id');
+        if (!$bookingId) {
+            return $this->redirect(['index']);
+        }
+
+        $booking = Booking::findOne($bookingId);
+        if (!$booking) {
+            Yii::$app->session->remove('booking_id');
+            return $this->redirect(['index']);
+        }
+
+        // Если уже оплачено – сразу в ЛК
+        if ($booking->payment_status == PaymentStatus::getStatusId('paid')) {
+            Yii::$app->session->remove('booking_id');
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('qrCode', ['booking' => $booking]);
+    }
+
+    /**
+     * Страница оплаты по данным карты
+     */
+    public function actionPaymentCard()
     {
         $bookingId = Yii::$app->session->get('booking_id');
         if (!$bookingId) {
@@ -356,7 +378,7 @@ class AccountController extends Controller
             return $this->redirect(['index']);
         }
 
-        return $this->render('qrCode', ['booking' => $booking]);
+        return $this->render('card', ['booking' => $booking]);
     }
 
     /**
@@ -388,10 +410,34 @@ class AccountController extends Controller
         $booking->payment_status = PaymentStatus::getStatusId('paid');
         $booking->save(false);
 
+        // Формируем данные для письма
+        $mailData = [
+            'bookingId' => $booking->id,
+            'arrival_date' => Yii::$app->formatter->asDate($booking->arrival_date, 'php:d.m.Y'),
+            'departure_date' => Yii::$app->formatter->asDate($booking->departure_date, 'php:d.m.Y'),
+            'room_type' => $booking->room->roomType->name,
+            'room_number' => $booking->room->number,
+            'guests' => [],
+            'total_price' => $booking->price,
+            'payment' => $booking->payment_amount,
+        ];
+
+        foreach ($booking->bookingUsers as $bu) {
+            $resident = $bu->resident;
+            $mailData['guests'][] = [
+                'name' => $resident->surname . ' ' . $resident->name . ($resident->patronymic ? ' ' . $resident->patronymic : ''),
+                'birth_date' => Yii::$app->formatter->asDate($resident->birth_date, 'php:d.m.Y'),
+                'wellness_program' => $resident->wellnessProgram ? $resident->wellnessProgram->title : 'Не выбрана',
+            ];
+        }
+
+        // Отправляем чек
+        Booking::sendMail($mailData);
+
         Yii::$app->session->remove('booking_id');
         Yii::$app->session->setFlash('success', 'Оплата прошла успешно!');
         // Yii::$app->session->setFlash('success', 'Бронирование создано.');
-        return $this->redirect(['account/index']);
+        return $this->redirect(['account/view', 'id' => $booking->id]);
     }
 
     /**

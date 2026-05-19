@@ -14,14 +14,12 @@ use yii\bootstrap5\Html;
         <?= Html::activeTextInput($model, "guests[$i][name]", ['class' => 'form-control mb-2', 'placeholder' => 'Имя']) ?>
         <?= Html::activeTextInput($model, "guests[$i][patronymic]", ['class' => 'form-control mb-2', 'placeholder' => 'Отчество']) ?>
         <!-- <?= Html::activeTextInput($model, "guests[$i][birth_date]", ['class' => 'form-control', 'type' => 'date']) ?> -->
-        <?= $form->field($model, "guests[$i][birth_date]")->textInput(['type' => 'date']) ?>
+         <?= $form->field($model, "guests[$i][birth_date]")->textInput(['type' => 'date']) ?>
     </div>
 <?php endfor; ?>
 <?= $form->field($model, 'pay_type')->dropDownList(PayType::getItems(), ['prompt' => 'Выберите способ оплаты']) ?>
 
 <p>Стоимость проживания: <?= (new \DateTime($step1['arrival_date']))->diff(new \DateTime($step1['departure_date']))->days * $room->price_per_day ?> руб.</p>
-
-<?= $form->field($model, 'email')->textInput(['type' => 'email', 'placeholder' => 'example@mail.ru']) ?>
 
 <?= Html::submitButton('Оплатить', ['class' => 'btn btn-success']) ?>
 <?php ActiveForm::end();

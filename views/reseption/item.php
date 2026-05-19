@@ -44,6 +44,9 @@ use yii\bootstrap5\Html;
             <?= $model->statusBooking->alias === 'active'
                 ? Html::a('Закрыть поездку', ['check-out', 'id' => $model->id, 'alias' => 'past'], ['class' => 'btn btn-outline-primary', 'data-method' => 'post'])
                 : '' ?>
+            <?= $model->statusBooking->alias === 'new'
+                ? Html::a('Отменить поездку', ['reason', 'id' => $model->id, 'alias' => 'cancelled'], ['class' => 'btn btn-outline-danger', 'data-method' => 'post'])
+                : '' ?>
         </div>
     </div>
 </div>

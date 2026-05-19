@@ -41,6 +41,7 @@ class AdminController extends Controller
     public function actionIndex()
     {
         $searchModel = new AdminSearch();
+        $searchModel->status_alias = Yii::$app->request->get('status', 'pending');
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [

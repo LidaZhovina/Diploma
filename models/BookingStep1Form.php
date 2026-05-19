@@ -26,7 +26,7 @@ class BookingStep1Form extends Model
             
             ['comment', 'string'],
 
-            // ['contact_phone', 'match', 'pattern' => '/^\+7\([0-9]{3}\)[0-9]{3}-[0-9]{2}-[0-9]{2}$/', 'message' => 'Номер телефона должен быть в формате +7(999)999-99-99'],
+           [['contact_phone'], 'match', 'pattern' => '/^8\([\d]{3}\)[\d]{3}(\-[\d]{2}){2}$/', 'message' => '8(XXX)XXX-XX-XX'],
         ];
     }
 

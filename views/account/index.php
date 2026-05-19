@@ -22,7 +22,7 @@ $this->title = 'Личный кабинет';
             <h1 class="text-center"><?= Html::encode($this->title) ?></h1>
 
             <!-- Вкладки -->
-            <ul class="nav nav-tabs" id="accountTabs" role="tablist">
+            <ul class="nav nav-underline" id="accountTabs" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="bookings-tab" data-bs-toggle="tab" data-bs-target="#bookings" type="button" role="tab">Мои бронирования</button>
                 </li>
@@ -35,7 +35,6 @@ $this->title = 'Личный кабинет';
                 <!-- Вкладка бронирований -->
                 <div class="tab-pane fade show active" id="bookings" role="tabpanel">
                     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
-                    <?= Html::a('Отправить письмо', ['mail'], ['class' => 'btn btn-outline-info']) ?>
                     <?= ListView::widget([
                         'dataProvider' => $dataProvider,
                         'pager' => ['class' => LinkPager::class],

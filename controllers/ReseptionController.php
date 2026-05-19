@@ -4,12 +4,14 @@ namespace app\controllers;
 
 use app\models\Booking;
 use app\models\GuestProfile;
+use app\models\Reason;
 use app\models\ReseptionSearch;
 use app\models\StatusRoom;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\VarDumper;
 
 /**
  * ReseptionController implements the CRUD actions for Booking model.
@@ -80,7 +82,7 @@ class ReseptionController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
-
+    /** Заселение гостей */
     public function actionCheckIn($id)
     {
         $booking = Booking::findOne($id);
@@ -149,6 +151,7 @@ class ReseptionController extends Controller
         return $this->render('check-in', compact('booking', 'residents', 'profiles'));
     }
 
+    /** Выселение гостей */
     public function actionCheckOut($id)
     {
         $booking = Booking::findOne($id);
@@ -179,6 +182,30 @@ class ReseptionController extends Controller
             Yii::$app->session->setFlash('error', 'Ошибка при выселении.');
         }
         return $this->redirect(['index']);
+    }
+
+    /** Причина отмены */
+    public function actionReason($id)
+    {
+        $booking = $this->findModel($id);
+        $model = new Reason();
+        $model->booking_id = $id;
+
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $booking->status_booking_id = Booking::getStatusId('cancelled');
+
+            if ($model->save() && $booking->save()) {
+                Yii::$app->session->setFlash('warning', 'Причина записана');
+                return $this->redirect(['view', 'id' => $model->booking_id]);
+            } else {
+                VarDumper::dump($model->errors);
+                die;
+            }
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**

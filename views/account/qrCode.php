@@ -47,8 +47,8 @@ $this->registerJs("
                     clearInterval(checkInterval);
                     
                     // Показываем сообщение и редиректим
-                    alert('Оплата подтверждена!');
-                    window.location.href = '" . Url::to(['booking/view', 'id' => $bookingId]) . "';
+                    // alert('Оплата подтверждена!');
+                    window.location.href = '" . Url::to(['account/view', 'id' => $bookingId]) . "';
                 }
             },
             error: function() {
