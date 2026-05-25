@@ -16,7 +16,7 @@ $bookingId = $booking->id;
                     <h3 class="text-center">Оплата бронирования №<?= $booking->id ?></h3>
                 </div>
                 <div class="card-body text-center">
-                    <p><strong>Сумма предоплаты (30%):</strong> <?= $booking->payment_amount ?> руб.</p>
+                    <p><strong>Сумма предоплаты (30%):</strong> <?= $booking->payment_amount ?> ₽</p>
                     <p>Остаток оплатите при заезде.</p>
                     <div id="qrcode" class="d-flex justify-content-center mb-3"></div>
                     <p>Отсканируйте QR-код камерой телефона или <strong><?= Html::a('перейдите по ссылке', $confirmUrl) ?></strong> для подтверждения оплаты.</p>

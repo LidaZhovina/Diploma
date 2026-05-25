@@ -16,6 +16,7 @@ use app\models\Route;
 use app\models\RouteResident;
 use app\models\StatusBooking;
 use app\models\WellnessProgram;
+use app\models\CardPaymentForm;
 use Yii;
 use yii\helpers\VarDumper;
 
@@ -303,10 +304,9 @@ class AccountController extends Controller
                     if ($model->pay_type == '1') {
                         return $this->redirect(['account/payment']);
                     } elseif ($model->pay_type == '3') {
-                        // Например, на страницу оплаты картой (пока заглушка)
                         return $this->redirect(['account/payment-card']);
                     } else {
-                        // Если способ не распознан, можно в ЛК или с ошибкой
+                        // Если способ не распознан, отправляем в ЛК
                         return $this->redirect(['account/index']);
                     }
                 } else {
@@ -359,9 +359,9 @@ class AccountController extends Controller
     /**
      * Страница оплаты по данным карты
      */
-    public function actionPaymentCard()
+    public function actionPaymentCard($id = null)
     {
-        $bookingId = Yii::$app->session->get('booking_id');
+        $bookingId = $id ?: Yii::$app->session->get('booking_id');
         if (!$bookingId) {
             return $this->redirect(['index']);
         }
@@ -378,7 +378,16 @@ class AccountController extends Controller
             return $this->redirect(['index']);
         }
 
-        return $this->render('card', ['booking' => $booking]);
+        $model = new CardPaymentForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            // Валидация прошла – перенаправляем на confirm-payment
+            return $this->redirect(['account/confirm-payment', 'id' => $booking->id]);
+        }
+
+        return $this->render('card', [
+            'booking' => $booking,
+            'model' => $model,
+        ]);
     }
 
     /**

@@ -1,0 +1,233 @@
+.card-preview {
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 25px;
+    font-family: monospace;
+    background: linear-gradient(135deg, #3B4593 0%, #669CFF 100%);
+    color: white;
+    min-height: 200px;
+    max-width: 350px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-logo-img {
+    height: 30px;
+}
+
+.card-number-preview {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    text-align: center;
+    margin: 15px 0;
+}
+
+.card-details-row {
+    margin: 10px 0;
+    padding-left: 15px;
+    padding-right: 15px;
+    gap: 120px;
+}
+
+.card-detail-item .card-label,
+.card-detail-item .card-value {
+    display: block;
+}
+
+.card-detail-item .card-value {
+    margin-top: 4px;
+    font-weight: bold;
+}
+
+.card-detail-item {
+    text-align: center;
+}
+
+.card-footer-preview {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-holder-preview {
+    padding-left: 15px;
+    text-align: left;
+}
+
+.card-logo-img {
+    height: 40px;
+    width: auto;
+}
+
+.card-label {
+    font-size: 0.7rem;
+    opacity: 0.8;
+}
+
+.card-value {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/* ================================================================
+   СТРАНИЦА И ОБЁРТКА
+   ================================================================ */
+
+body {
+    background: #F6F7F8;
+}
+
+.payment-page-container {
+    margin-bottom: 48px;
+}
+
+/* ================================================================
+   КАРТОЧКА-ОБЁРТКА ФОРМЫ
+   ================================================================ */
+
+.payment-card {
+    border: none !important;
+    border-radius: 16px !important;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(59, 69, 147, 0.10);
+}
+
+.payment-card-header {
+    background: #3B4593 !important;
+    color: #fff !important;
+    border-bottom: none;
+    padding: 20px 24px;
+}
+
+.payment-card-header h2 {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+    color: #fff;
+}
+
+.payment-card-body {
+    background: #fff;
+    padding: 28px 32px;
+}
+
+/* ================================================================
+   БЛОК СУММЫ
+   ================================================================ */
+
+.payment-amount-block {
+    background: #EEF2FF;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #3B4593;
+    font-weight: 500;
+    margin-bottom: 24px;
+}
+
+.payment-amount-note {
+    font-weight: 400;
+    opacity: 0.75;
+}
+
+/* ================================================================
+   ПОЛЯ ФОРМЫ
+   ================================================================ */
+
+.card-form .form-control {
+    height: 44px;
+    border-radius: 8px;
+    border: 1.5px solid #D0D5E8;
+    background: #F6F7F8;
+    font-size: 15px;
+    padding: 0 12px;
+    transition: border-color .15s, background .15s, box-shadow .15s;
+}
+
+.card-form .form-control:focus {
+    border-color: #669CFF;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(102, 156, 255, 0.18);
+    outline: none;
+}
+
+.card-form .form-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 5px;
+}
+
+/* ================================================================
+   КНОПКА ОПЛАТЫ
+   ================================================================ */
+
+.btn-payment {
+    width: 100%;
+    height: 48px;
+    border-radius: 10px;
+    border: none;
+    background: #669CFF;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    margin-top: 4px;
+    transition: background .15s;
+    cursor: pointer;
+}
+
+.btn-payment:hover,
+.btn-payment:focus {
+    background: #3B4593;
+    color: #fff;
+}
+
+.btn-payment:active {
+    background: #2e3875;
+    color: #fff;
+}
+
+/* ================================================================
+   АДАПТИВ — 390px
+   ================================================================ */
+
+@media (max-width: 480px) {
+
+    .payment-page-container {
+        margin-top: 0;
+        margin-bottom: 32px;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .payment-card-body {
+        padding: 16px;
+    }
+
+    /* Карта сжимается на всю ширину, убираем max-width 350px */
+    .card-preview {
+        max-width: 100%;
+    }
+
+    .card-number-preview {
+        font-size: 1.1rem;
+        letter-spacing: 1.5px;
+    }
+
+    /* gap между срок/cvv на маленьком экране */
+    .card-details-row {
+        gap: 40px;
+    }
+
+    .card-form .form-control {
+        font-size: 16px;
+    }
+
+    .btn-payment {
+        height: 52px;
+        font-size: 17px;
+    }
+}

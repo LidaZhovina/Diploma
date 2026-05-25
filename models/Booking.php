@@ -18,11 +18,13 @@ use yii\helpers\VarDumper;
  * @property int $amount_residents
  * @property int $pay_type_id 
  * @property int $payment_status
+ * @property float $payment_amount 
  * @property string $comment
  *
  * @property BookingUser[] $bookingUsers
  * @property PayType $payType 
  * @property PaymentStatus $paymentStatus
+ * @property Reason $reason 
  * @property Room $room
  * @property StatusBooking $statusBooking
  */
@@ -81,7 +83,8 @@ class Booking extends \yii\db\ActiveRecord
             'arrival_date' => 'Дата заселения',
             'departure_date' => 'Дата выселения',
             'contact_phone' => 'Контактный телефон',
-            'price' => 'Цена',
+            'price' => 'Полная стоимость',
+            'payment' => 'Предоплата',
             'pay_type' => 'Способ оплаты',
             'payment_amount' => 'Предоплата',
             'payment_status' => 'Статус оплаты',
@@ -120,6 +123,16 @@ class Booking extends \yii\db\ActiveRecord
     public function getPaymentStatus()
     {
         return $this->hasOne(PaymentStatus::class, ['id' => 'payment_status']);
+    }
+
+    /**
+     * Gets query for [[Reason]]. 
+     * 
+     * @return \yii\db\ActiveQuery 
+     */
+    public function getReason()
+    {
+        return $this->hasOne(Reason::class, ['booking_id' => 'id']);
     }
 
     /**
@@ -174,9 +187,6 @@ class Booking extends \yii\db\ActiveRecord
         $night = (new \DateTime($this->arrival_date))->diff(new \DateTime($this->departure_date))->days;
         $price = $room->price_per_day * $night;
 
-        // if ($route) {
-        //     $price += $route->price;
-        // }
 
         return $price;
     }
@@ -195,7 +205,6 @@ class Booking extends \yii\db\ActiveRecord
 
     public function saveWithGuests($guestData, $userId, $guestPrograms)
     {
-        // $this->contact_phone = $contactPhone;
         if (!$this->validate()) {
             Yii::error('Ошибки валидации Booking: ' . print_r($this->errors, true));
             Yii::$app->session->setFlash('error', 'Ошибка валидации: ' . print_r($this->errors, true));
@@ -237,18 +246,6 @@ class Booking extends \yii\db\ActiveRecord
             // Yii::$app->session->setFlash('error', 'Ошибка: ' . $e->getMessage());
             // return false;
         }
-    }
-
-    public function confirm() // функция подтверждения бронирования. Меняет статус с "В обработке" на "Предстоящая поездка"
-    {
-        $this->status_booking_id = self::getStatusId('new');
-        return $this->save(false);
-    }
-
-    public function cancel() // функция отмены бронирования. Меняет статус на cancelled
-    {
-        $this->status_booking_id = self::getStatusId('cancelled');
-        return $this->save(false);
     }
 
     public static function sendMail($data)

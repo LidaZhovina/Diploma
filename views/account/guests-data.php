@@ -19,7 +19,7 @@ use yii\bootstrap5\Html;
 <?php endfor; ?>
 <?= $form->field($model, 'pay_type')->dropDownList(PayType::getItems(), ['prompt' => 'Выберите способ оплаты']) ?>
 
-<p>Стоимость проживания: <?= (new \DateTime($step1['arrival_date']))->diff(new \DateTime($step1['departure_date']))->days * $room->price_per_day ?> руб.</p>
+<p>Стоимость проживания: <?= (new \DateTime($step1['arrival_date']))->diff(new \DateTime($step1['departure_date']))->days * $room->price_per_day ?> ₽</p>
 
 <?= Html::submitButton('Оплатить', ['class' => 'btn btn-success']) ?>
 <?php ActiveForm::end();

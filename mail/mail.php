@@ -69,6 +69,7 @@
 <body>
     <div class="container">
         <div class="header">
+            <img src=/img/logo.jpg alt=logo class="logo"> Танхой
             <h2>Чек об оплате бронирования №<?= $data['bookingId'] ?></h2>
             <p><?= date("d.m.Y H:i") ?></p>
         </div>
