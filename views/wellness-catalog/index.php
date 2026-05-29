@@ -11,24 +11,25 @@ use yii\widgets\Pjax;
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Оздоровительные программы';
-
+$this->registerCssFile('@web/css/catalog.css');
 ?>
-<div class="wellness-program-index">
-    <div class="row justify-content-center">
-        <div class="col-12 col-md-10 col-lg-8">
+<div class="wellness-program-index container">
 
-            <h1 class="text-center"><?= Html::encode($this->title) ?></h1>
 
-            <?php Pjax::begin(); ?>
+    <h1><?= Html::encode($this->title) ?></h1>
+    <p class="wellness-page-sub">Восстановите здоровье и силы на берегу Байкала</p>
 
-            <?= ListView::widget([
-                'dataProvider' => $dataProvider,
-                'itemOptions' => ['class' => 'item'],
-                'itemView' => 'item',
-            ]) ?>
+    <?php Pjax::begin(); ?>
 
-            <?php Pjax::end(); ?>
+    <?= ListView::widget([
+        'dataProvider' => $dataProvider,
+        'options'      => ['tag' => 'div', 'class' => 'wellness-list'],
+        'itemOptions'  => ['tag' => 'div'],
+        'itemView' => 'item',
+        'layout'       => "{items}\n{pager}",
+    ]) ?>
 
-        </div>
-    </div>
+    <?php Pjax::end(); ?>
+
+
 </div>

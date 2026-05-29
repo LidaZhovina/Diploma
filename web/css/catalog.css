@@ -1,0 +1,415 @@
+/* ================================================================
+   СТРАНИЦА КАТАЛОГА
+   ================================================================ */
+.room-index, .wellness-program-index {
+    padding: 10px 10px 48px !important;
+}
+
+.room-index h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #3B4593;
+    margin-bottom: 4px;
+}
+
+.catalog-subtitle {
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 24px;
+}
+
+.btn {
+    --bs-btn-padding-y: 0.600rem !important;
+}
+
+/* ================================================================
+   ФОРМА ПОИСКА
+   ================================================================ */
+
+.room-search {
+    background: #fff;
+    border-radius: 14px;
+    padding: 18px 24px;
+    margin-bottom: 28px;
+    box-shadow: 0 2px 12px rgba(59, 69, 147, .07);
+}
+
+.room-search .form-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #3B4593;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    margin-bottom: 5px;
+}
+
+.room-search .form-control,
+.room-search .form-select {
+    height: 38px;
+    border-radius: 8px;
+    border: 1.5px solid #D0D5E8;
+    background: #F6F7F8;
+    font-size: 13px;
+    font-family: 'Montserrat', sans-serif;
+    padding: 0 10px;
+    transition: border-color .15s;
+}
+
+.room-search .form-control:focus,
+.room-search .form-select:focus {
+    border-color: #669CFF;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(102,156,255,.15);
+}
+
+/* Кнопки поиска */
+.room-search .btn.register {
+    height: 38px;
+    padding: 0 22px;
+    border-radius: 8px;
+    border: none;
+    background: #669CFF;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.room-search .btn.register:hover {
+    background: #3B4593;
+}
+
+.room-search .btn-outline-secondary {
+    height: 38px;
+    border-radius: 8px;
+    border: 1.5px solid #D0D5E8;
+    background: transparent;
+    color: #888;
+    font-size: 13px;
+}
+
+/* Счётчик гостей */
+.btn-number-minus,
+.btn-number-plus {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    background: #EEF2FF !important;
+    border: 1.5px solid #D0D5E8 !important;
+    color: #3B4593 !important;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.btn-number-minus:hover,
+.btn-number-plus:hover {
+    background: #669CFF !important;
+    border-color: #669CFF !important;
+    color: #fff !important;
+}
+
+.field-number-guests {
+    text-align: center;
+    max-width: 60px;
+}
+
+/* ================================================================
+   КАРТОЧКИ НОМЕРОВ
+   ================================================================ */
+
+.room-card {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(59, 69, 147, .08);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    transition: box-shadow .2s, transform .2s;
+    border: none;
+}
+
+.room-card:hover {
+    box-shadow: 0 6px 24px rgba(59, 69, 147, .15);
+    transform: translateY(-3px);
+}
+
+/* Фото */
+.room-img-wrap {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.room-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Бейдж цены */
+.price-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #3B4593;
+    color: #fff;
+    border-radius: 20px;
+    padding: 5px 13px;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.price-badge span {
+    font-weight: 400;
+    font-size: 11px;
+    opacity: .85;
+}
+
+/* Тело */
+.room-card .card-body {
+    padding: 16px 18px;
+    flex: 1;
+}
+
+.room-card .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 10px;
+}
+
+.room-features {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.room-feat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #555;
+}
+
+.feat-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    background: #EEF2FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 11px;
+    color: #3B4593;
+    font-weight: 700;
+}
+
+/* Футер */
+.room-card .card-footer {
+    padding: 12px 18px 16px;
+    background: transparent;
+    border-top: none;
+    display: flex;
+    gap: 10px;
+}
+
+.room-card .btn.register {
+    flex: 1;
+    height: 40px;
+    border-radius: 9px;
+    border: none;
+    background: #669CFF;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background .15s;
+}
+
+.room-card .btn.register:hover {
+    background: #3B4593;
+    color: #fff;
+}
+
+.room-card .btn.details {
+    flex: 1;
+    height: 40px;
+    border-radius: 9px;
+    border: 1.5px solid #669CFF;
+    background: transparent;
+    color: #669CFF;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all .15s;
+}
+
+.room-card .btn.details:hover {
+    background: #EEF2FF;
+    color: #3B4593;
+    border-color: #3B4593;
+}
+
+/* ================================================================
+   СТРАНИЦА ОЗДОРОВИТЕЛЬНЫХ ПРОГРАММ
+   ================================================================ */
+
+.wellness-program-index {
+    padding: 0 0 48px;
+}
+
+.wellness-program-index h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #3B4593;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.wellness-page-sub {
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+/* Список программ */
+.wellness-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Карточка программы */
+.wellness-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(59, 69, 147, .08);
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    transition: box-shadow .2s, transform .2s;
+    border: none;
+}
+
+.wellness-card:hover {
+    box-shadow: 0 6px 24px rgba(59, 69, 147, .14);
+    transform: translateY(-2px);
+}
+
+/* Фото */
+.wellness-img-wrap {
+    position: relative;
+    min-height: 200px;
+    overflow: hidden;
+}
+
+.wellness-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.wellness-duration-badge {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: #3B4593;
+    color: #fff;
+    border-radius: 20px;
+    padding: 4px 13px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Тело */
+.wellness-body {
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.wellness-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 10px;
+}
+
+.wellness-desc {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.7;
+    flex: 1;
+    margin-bottom: 20px;
+}
+
+.wellness-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.wellness-meta {
+    font-size: 13px;
+    color: #999;
+}
+
+.wellness-meta span {
+    color: #3B4593;
+    font-weight: 600;
+}
+
+.btn-wellness {
+    height: 40px;
+    padding: 0 22px;
+    border-radius: 9px;
+    border: none;
+    background: #669CFF;
+    color: #fff !important;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-wellness:hover {
+    background: #3B4593;
+    color: #fff !important;
+}
+
+/* ================================================================
+   АДАПТИВ
+   ================================================================ */
+
+@media (max-width: 768px) {
+    .room-search {
+        padding: 14px 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wellness-card {
+        grid-template-columns: 1fr;
+    }
+
+    .wellness-img-wrap {
+        height: 200px;
+    }
+
+    .wellness-body {
+        padding: 18px 20px;
+    }
+}

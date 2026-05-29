@@ -18,9 +18,11 @@ use Yii;
  * @property int $number_participant
  * @property int $level_id
  * @property int $price
+ * @property float $stars 
  * @property string $created_at
  *
  * @property Level $level
+ * @property Raiting[] $raitings 
  * @property RouteImage $routeImage
  * @property RouteResident[] $routeResidents 
  */
@@ -47,6 +49,7 @@ class Route extends \yii\db\ActiveRecord
             [['length', 'number_participant', 'level_id', 'price'], 'integer'],
             [['date_start', 'time_start', 'created_at'], 'safe'],
             [['name'], 'string', 'max' => 255],
+            [['stars'], 'number'],
             [['duration'], 'string', 'max' => 25],
             [['level_id'], 'exist', 'skipOnError' => true, 'targetClass' => Level::class, 'targetAttribute' => ['level_id' => 'id']],
         ];
@@ -70,6 +73,7 @@ class Route extends \yii\db\ActiveRecord
             'level_id' => 'Сложность',
             'created_at' => 'Дата создания',
             'price' => 'Цена',
+            'stars' => 'Рейтинг',
         ];
     }
 
@@ -94,6 +98,16 @@ class Route extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Raitings]]. 
+     * 
+     * @return \yii\db\ActiveQuery 
+     */
+    public function getRaitings()
+    {
+        return $this->hasMany(Raiting::class, ['route_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[RouteImage]].
      *
      * @return \yii\db\ActiveQuery
@@ -104,22 +118,21 @@ class Route extends \yii\db\ActiveRecord
     }
 
     /** 
-    * Получить путь к изображению (для удобства в представлениях) 
-    */ 
-   public function getImageUrl() 
-   { 
-       $image = $this->routeImage; 
-       return $image ? Yii::getAlias('@web/' . $image->image) : null; 
-   } 
+     * Получить путь к изображению (для удобства в представлениях) 
+     */
+    public function getImageUrl()
+    {
+        $image = $this->routeImage;
+        return $image ? Yii::getAlias('@web/' . $image->image) : null;
+    }
 
-   /**
-    * Gets query for [[RouteResidents]].
-    *
-    * @return \yii\db\ActiveQuery
-    */
-   public function getRouteResidents()
-   {
-       return $this->hasMany(RouteResident::class, ['route_id' => 'id']);
-   }
-
+    /**
+     * Gets query for [[RouteResidents]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRouteResidents()
+    {
+        return $this->hasMany(RouteResident::class, ['route_id' => 'id']);
+    }
 }

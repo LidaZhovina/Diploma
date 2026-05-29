@@ -1,0 +1,251 @@
+/* ================================================================
+   ОБЩАЯ ОБЁРТКА
+   ================================================================ */
+
+.auth-page {
+    min-height: calc(100vh - 58px);
+    display: flex;
+    align-items: center;
+    padding: 32px 16px;
+}
+
+.auth-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(59, 69, 147, 0.13);
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
+    align-items: stretch;          
+}
+
+/* ================================================================
+   ЛЕВАЯ СИНЯЯ ПАНЕЛЬ
+   ================================================================ */
+
+.auth-left {
+    background: url('/img/baikal2.jpg') center / cover no-repeat;
+    position: relative;
+    padding: 48px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #fff;
+}
+
+/* Затемняющий оверлей поверх фото */
+.auth-left::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+}
+
+/* Текст поверх оверлея */
+.auth-left-title,
+.auth-left-sub,
+.auth-badge {
+    position: relative;
+    z-index: 1;
+}
+.auth-left-title {
+    font-size: 26px;               
+    font-weight: 800;              
+    margin-bottom: 12px;
+    line-height: 1.3;
+}
+
+.auth-left-sub {
+    font-size: 15px;               
+    font-weight: 500;             
+    opacity: .9;                   
+    line-height: 1.7;
+    margin-bottom: 24px;
+}
+
+.auth-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    width: fit-content;
+}
+
+/* ================================================================
+   ПРАВАЯ ПАНЕЛЬ С ФОРМОЙ
+   ================================================================ */
+
+.auth-right {
+    background: #fff;
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.auth-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #3B4593;
+    margin-bottom: 4px;
+}
+
+.auth-subtitle {
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 28px;
+}
+
+/* ================================================================
+   ФИКСИРУЕМ ВЫСОТУ — ошибки не двигают layout
+   ================================================================ */
+
+/* Каждое поле резервирует место под ошибку */
+.auth-right .field-loginform-email,
+.auth-right .field-loginform-password,
+.auth-right .field-registerform-email,
+.auth-right .field-registerform-password,
+.auth-right .field-registerform-surname,
+.auth-right .field-registerform-name,
+.auth-right .field-registerform-patronymic {
+    min-height: 72px;   /* высота label + input + строка ошибки */
+}
+
+/* Ошибка не сдвигает соседние элементы */
+.auth-right .invalid-feedback {
+    position: absolute;
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+.auth-right .mb-3 {
+    position: relative;
+    margin-bottom: 10px !important;
+}
+
+/* Обе колонки одной высоты */
+.auth-wrap {
+    align-items: stretch;
+}
+
+.auth-left,
+.auth-right {
+    min-height: 100%;
+}
+
+/* ================================================================
+   БЕЙДЖИ — темнее, но в палитре
+   ================================================================ */
+
+.auth-badge {
+    background: rgba(30, 40, 110, 0.40);  /* было rgba(255,255,255,0.15) */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    width: fit-content;
+    position: relative;
+    z-index: 1;
+}
+
+/* ================================================================
+   ПОЛЯ — стиль v3, только нижняя граница
+   ================================================================ */
+
+.auth-right .form-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #3B4593;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    margin-bottom: 6px;
+}
+
+.auth-right .form-control {
+    border: none;
+    border-bottom: 2px solid #D0D5E8;
+    border-radius: 0;
+    background: transparent;
+    padding: 6px 4px;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    transition: border-color .15s;
+    box-shadow: none !important;
+}
+
+.auth-right .form-control:focus {
+    border-color: #669CFF;
+    background: transparent;
+    box-shadow: none;
+}
+
+/* ================================================================
+   КНОПКА — стиль v2
+   ================================================================ */
+
+.auth-right .btn-auth {
+    width: 100%;
+    height: 46px;
+    border-radius: 9px;
+    border: none;
+    background: #669CFF;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background .15s;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.auth-right .btn-auth:hover {
+    background: #3B4593;
+    color: #fff;
+}
+
+/* ================================================================
+   ССЫЛКА-ПЕРЕХОД (Нет аккаунта? / Уже есть аккаунт?)
+   ================================================================ */
+
+.auth-switch {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 13px;
+    color: #888;
+}
+
+.auth-switch a {
+    color: #669CFF;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-switch a:hover {
+    color: #3B4593;
+}
+
+/* ================================================================
+   АДАПТИВ
+   ================================================================ */
+
+@media (max-width: 768px) {
+    .auth-wrap {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-left {
+        padding: 28px 24px;
+    }
+
+    .auth-left-title { font-size: 18px; }
+
+    .auth-right {
+        padding: 28px 24px;
+    }
+}

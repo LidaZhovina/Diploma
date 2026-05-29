@@ -18,6 +18,7 @@ $this->title = 'Личный кабинет';
 <div class="booking-index">
     <div class="row justify-content-center">
         <div class="col-12 col-md-10 col-lg-8">
+            
 
             <h1 class="text-center"><?= Html::encode($this->title) ?></h1>
 

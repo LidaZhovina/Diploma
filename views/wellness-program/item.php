@@ -1,21 +1,33 @@
 <?php
 
-use yii\helpers\Html;
+use yii\bootstrap5\Html;
 ?>
-<div class="card my-3 w-100">
-    <div class="card-header">
-        <?php if ($model->imageUrl): ?>
-            <img src="<?= $model->imageUrl ?>" class="card-img" alt="<?= Html::encode($model->title) ?>" style="max-height: 300px; max-weight: 300px; object-fit: cover;">
-        <?php else: ?>
-            <img src="/web/img/no-image.jpg" class="card-img-top" alt="Нет изображения">
-        <?php endif; ?>
-    </div>
-    <div class="card-body">
-        <h5 class="card-title"><?= $model->title ?></h5>
 
+<div class="wellness-card">
+
+    <div class="wellness-img-wrap">
+        <?php if ($model->imageUrl): ?>
+            <img src="<?= $model->imageUrl ?>"
+                alt="<?= Html::encode($model->title) ?>">
+        <?php else: ?>
+            <img src="/img/no-image.jpg" alt="Нет изображения">
+        <?php endif; ?>
+        <div class="wellness-duration-badge">
+            <?= Html::encode($model->duration) ?>
+        </div>
     </div>
-    <div class="card-footer">
-        <!-- <?= Html::a('Записаться', ['index', 'id' => $model->id], ['class' => 'btn register']) ?> -->
-        <?= Html::a('Подробнее', ['view', 'id' => $model->id], ['class' => 'btn register']) ?>
+
+    <div class="wellness-body">
+        <div>
+            <div class="wellness-title"><?= Html::encode($model->title) ?></div>
+            <div class="wellness-desc"><?= Html::encode($model->description) ?></div>
+        </div>
+        <div class="wellness-footer">
+            <div class="wellness-meta">
+                Длительность: <span><?= Html::encode($model->duration) ?></span>
+            </div>
+            <?= Html::a('Подробнее', ['view', 'id' => $model->id], ['class' => 'btn-wellness']) ?>
+        </div>
     </div>
+
 </div>

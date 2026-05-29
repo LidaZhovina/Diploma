@@ -5,7 +5,8 @@
 }
 
 .body {
-    font-family: Hero;
+    /* font-family: Hero; */
+    font-family: 'Montserrat', sans-serif;
     background-color: #f6f7f8;
 }
 
@@ -83,7 +84,7 @@
     opacity: 0.75;
 }
 
-.cssLog {
+/* .cssLog {
     color: white;
     text-decoration: none;
     padding: 0.5rem 1rem;
@@ -92,7 +93,7 @@
     color: white;
     text-decoration: none;
     padding: 0.5rem 1rem;
-}
+} */
 
 .pay {
     background-color: #6ab0de ;
@@ -101,18 +102,6 @@
 .pay:hover {
     background-color: #498ebc ;
     color: white;
-}
-
-/* Работа с карточками номерв */
-.card-header {
-    padding: 10px;
-    border-bottom: none;
-}
-
-/* Работа с слайдером номеров */
-.carousel-inner {
-    border-radius: 10px;
-    overflow: hidden;
 }
 
 /* Работа с картинками */

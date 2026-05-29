@@ -24,8 +24,6 @@ use yii\helpers\Url;
     <?= $form->field($model, 'comment')->textarea(['rows' => 6]) ?>
 
     <div class="form-group">
-        <!-- <?= Html::submitButton('Далее', ['class' => 'btn register']) ?> -->
-        <!-- Кнопка-триггер модального окна -->
         <?= Html::submitButton('Далее', ['class' => 'btn register', 'data-bs-toggle'=>"modal", 'data-bs-target'=>"#exampleModal"]) ?>
     </div>
 

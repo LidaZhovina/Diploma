@@ -19,6 +19,7 @@ use yii\web\IdentityInterface;
  * @property string $auth_key
  *
  * @property GuestProfile $guestProfile
+ * @property Raiting[] $raitings 
  * @property Resident[] $residents
  * @property Role $role
  */
@@ -84,6 +85,16 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasMany(Resident::class, ['user_id' => 'id']);
     }
 
+    /** 
+     * Gets query for [[Raitings]]. 
+     * 
+     * @return \yii\db\ActiveQuery 
+     */
+    public function getRaitings()
+    {
+        return $this->hasMany(Raiting::class, ['user_id' => 'id']);
+    }
+
     /**
      * Gets query for [[Role]].
      *
@@ -119,21 +130,26 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->auth_key === $authKey;
     }
 
-    public static function findByLogin($login): User | null {
+    public static function findByLogin($login): User | null
+    {
         return static::findOne(['email' => $login]);
     }
 
-    public function validatePassword($password): bool {
+    public function validatePassword($password): bool
+    {
         return Yii::$app->security->validatePassword($password, $this->password);
     }
 
-    public function getIsAdmin() {
+    public function getIsAdmin()
+    {
         return $this->role_id === 1;
     }
-    public function getIsClient() {
+    public function getIsClient()
+    {
         return $this->role_id === 2;
     }
-    public function getIsReception() {
+    public function getIsReception()
+    {
         return $this->role_id === 3;
     }
 }

@@ -3,7 +3,6 @@
 /** @var yii\web\View $this */
 /** @var string $content */
 
-// use Yii;
 use app\assets\AppAsset;
 use app\widgets\Alert;
 use yii\bootstrap5\Breadcrumbs;
@@ -37,51 +36,43 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         <?php
         NavBar::begin([
             'brandLabel' => '<img src=/img/logo.jpg alt=logo class="logo"> Танхой',
-            'brandUrl' => Yii::$app->homeUrl,
-            'options' => ['class' => 'navbar-expand-md navbarColor navbar-dark fixed-top']
+            'brandUrl'   => Yii::$app->homeUrl,
+            'options'    => ['class' => 'navbar-expand-md navbar-site navbar-light fixed-top'],
         ]);
 
-        // Левая группа (основные ссылки)
         echo Nav::widget([
             'options' => ['class' => 'navbar-nav me-auto'],
-            'items' => [
-                ['label' => 'Номера', 'url' => ['/catalog']],
+            'items'   => [
+                ['label' => 'Номера',                  'url' => ['/catalog']],
                 ['label' => 'Оздоровительные программы', 'url' => ['/wellness-catalog']],
-            ]
+            ],
         ]);
 
-        // Кнопка для администратора (открывает меню)
         if (Yii::$app->user->identity?->isAdmin) {
             echo Html::a('Панель Администратора', '#', [
-                'class' => 'nav-link ms-auto btnAdmin',
-                'data-bs-toggle' => 'offcanvas',
-                'data-bs-target' => '#adminOffcanvas',
-                'aria-controls' => 'adminOffcanvas',
+                'class'           => 'nav-link ms-auto btnAdmin',
+                'data-bs-toggle'  => 'offcanvas',
+                'data-bs-target'  => '#adminOffcanvas',
+                'aria-controls'   => 'adminOffcanvas',
             ]);
         }
 
-        // Для гостей: ссылки регистрации и авторизации
         if (Yii::$app->user->isGuest) {
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav'],
-                'items' => [
+                'items'   => [
                     ['label' => 'Регистрация', 'url' => ['/site/register']],
                     ['label' => 'Авторизация', 'url' => ['/site/login']],
-                    Yii::$app->user->identity?->isClient
-                        ? ['label' => 'Личный кабинет', 'url' => ['/account']]
-                        : '',
-                ]
+                ],
             ]);
         } else {
             echo Nav::widget([
-                'options' => ['class' => 'navbar-nav '],
-                'items' => [
+                'options' => ['class' => 'navbar-nav'],
+                'items'   => [
                     Yii::$app->user->identity?->isReception
-                        ? ['label' => 'Кабинет Менеджера', 'url' => ['/reseption']]
-                        : '',
+                        ? ['label' => 'Кабинет Менеджера', 'url' => ['/reseption']] : '',
                     Yii::$app->user->identity?->isClient
-                        ? ['label' => 'Личный кабинет', 'url' => ['/account']]
-                        : '',
+                        ? ['label' => 'Личный кабинет',   'url' => ['/account']]   : '',
                     Yii::$app->user->identity?->isClient | Yii::$app->user->identity?->isReception
                         ? Html::beginForm(['/site/logout'])
                         . Html::submitButton(
@@ -89,9 +80,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                             ['class' => 'nav-link btn btn-link logout']
                         )
                         . Html::endForm()
-                        : ''
-
-                ]
+                        : '',
+                ],
             ]);
         }
 
@@ -99,7 +89,6 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         ?>
     </header>
 
-    <!-- Администратор -->
     <?php if (Yii::$app->user->identity?->isAdmin): ?>
         <div class="offcanvas offcanvas-end" tabindex="-1" id="adminOffcanvas" aria-labelledby="adminOffcanvasLabel">
             <div class="offcanvas-header">
@@ -107,7 +96,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
             </div>
             <div class="offcanvas-body">
-                <div class="list-group ">
+                <div class="list-group">
                     <a href="<?= Url::to(['/admin']) ?>" class="list-group-item list-group-item-action">Панель админа</a>
                     <a href="<?= Url::to(['/room/index']) ?>" class="list-group-item list-group-item-action">Номера</a>
                     <a href="<?= Url::to(['/wellness-program/index']) ?>" class="list-group-item list-group-item-action">Оздоровительные программы</a>
@@ -122,23 +111,24 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         </div>
     <?php endif; ?>
 
-    <main id="main" class="flex-shrink-0" role="main">
-        <div class="container">
-            <?php if (!empty($this->params['breadcrumbs'])): ?>
+    <main id="main" class="flex-shrink-0" role="main" style="padding-top: 58px;">
+        <?php if (!empty($this->params['breadcrumbs'])): ?>
+            <div class="container">
                 <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
-            <?php endif ?>
-            <?= Alert::widget() ?>
-            <?= $content ?>
-        </div>
+            </div>
+        <?php endif ?>
+        <?= Alert::widget() ?>
+        <?= $content ?>
     </main>
 
-    <footer id="footer" class="mt-auto py-3 ">
+    <footer id="footer" class="mt-auto py-3">
         <div class="container">
             <div class="row text-muted">
                 <div class="col-md-6 text-center text-md-start">&copy; Сайт <?= date('Y') ?></div>
-                <div class="col-md-6 text-center text-md-start">Информация, размещенная на сайте, носит справочный характер 
+                <div class="col-md-6 text-center text-md-start">
+                    Информация, размещенная на сайте, носит справочный характер
                     (не может использоваться для постановки диагноза, не заменяет приём врача)
-                     и не является публичной офертой, определяемой положениями Статьи 437 ГК РФ.</div>
+                    и не является публичной офертой, определяемой положениями Статьи 437 ГК РФ. </div>
             </div>
         </div>
     </footer>

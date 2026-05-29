@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Level;
+use app\models\Raiting;
 use app\models\Route;
 use app\models\RouteImage;
 use Yii;
@@ -62,6 +63,7 @@ class RouteController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    
 
     /**
      * Displays a single Route model.
@@ -71,8 +73,22 @@ class RouteController extends Controller
      */
     public function actionView($id)
     {
+        $model = Route::findOne($id);
+        if (!$model) {
+            throw new NotFoundHttpException('Маршрут не найден');
+        }
+
+        // Получаем текущую оценку пользователя (если авторизован)
+        $userRating = null;
+        if (!Yii::$app->user->isGuest) {
+            $userRating = Raiting::find()
+                ->where(['route_id' => $model->id, 'user_id' => Yii::$app->user->id])
+                ->select('stars')
+                ->scalar();
+        }
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'userRating' => $userRating,
         ]);
     }
 

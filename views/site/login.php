@@ -9,44 +9,39 @@ use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 
 $this->title = 'Авторизация';
+$this->registerCssFile('@web/css/auth.css')
 ?>
-<div class="site-login">
-    <h1 class="text-center"><?= Html::encode($this->title) ?></h1>
+<div class="auth-page">
+    <div class="auth-wrap">
 
-    <div class="row justify-content-center">
-        <div class="col-lg-5">
+        <div class="auth-left">
+            <div class="auth-left-title">Санаторий «Танхой»</div>
+            <div class="auth-left-sub">Мы рады видеть вас снова!</div>
+            <div class="auth-badge">Лечебные программы</div>
+            <div class="auth-badge">Чистый воздух Байкала</div>
+            <div class="auth-badge">Маршруты и прогулки</div>
+        </div>
 
-            <?php $form = ActiveForm::begin([
-                'id' => 'login-form',
-                'fieldConfig' => [
-                    'template' => "{label}\n{input}\n{error}",
-                    'labelOptions' => ['class' => 'col-lg-1 col-form-label mr-lg-3'],
-                    'inputOptions' => ['class' => 'col-lg-3 form-control'],
-                    'errorOptions' => ['class' => 'col-lg-7 invalid-feedback'],
-                ],
-            ]); ?>
+        <div class="auth-right">
+            <div class="auth-title">Войти</div>
+            <div class="auth-subtitle">Введите данные вашего аккаунта</div>
 
-            <?= $form->field($model, 'email')->textInput(['autofocus' => true]) ?>
+            <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 
-            <?= $form->field($model, 'password')->passwordInput() ?>
-
+            <?= $form->field($model, 'email')->textInput(['autofocus' => true, 'placeholder' => 'example@mail.ru']) ?>
+            <?= $form->field($model, 'password')->passwordInput(['placeholder' => '••••••••']) ?>
             <?= $form->field($model, 'rememberMe')->checkbox([
-                'template' => "<div class=\"custom-control custom-checkbox\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
+                'template' => "<div class=\"form-check\">{input} {label}</div>\n{error}",
             ]) ?>
 
-            <div class="form-group">
-                <div class="d-flex justify-content-between">
-                    <?= Html::submitButton('Войти', ['class' => 'btn register', 'name' => 'login-button']) ?>
-                    <?= Html::a('Регистрация', ['register'], ['class' => 'btn register', 'name' => 'login-button']) ?>
-                </div>
-            </div>
+            <?= Html::submitButton('Войти →', ['class' => 'btn btn-auth']) ?>
 
             <?php ActiveForm::end(); ?>
 
-            <div style="color:#999;">
-                <strong>admin@admin.ru/admin</strong> , <strong>demo@demo.demo/demo</strong>, <strong>reception@dog.ru/reception5</strong>.<br>
+            <div class="auth-switch">
+                Нет аккаунта? <?= Html::a('Регистрация', ['register']) ?>
             </div>
-
         </div>
+
     </div>
 </div>

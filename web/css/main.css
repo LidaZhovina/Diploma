@@ -1,0 +1,769 @@
+/* ================================================================
+   ОБЩЕЕ
+   ================================================================ */
+
+.site-index {
+    background: #F6F7F8;
+}
+
+.page-section {
+    padding: 72px 60px;
+}
+
+.bg-white { background: #fff; }
+.bg-light  { background: #F6F7F8; }
+
+.section-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #222;
+    margin-bottom: 32px;
+    line-height: 1.2;
+}
+
+.section-title em {
+    font-style: normal;
+    color: #3B4593;
+}
+
+/* ================================================================
+   HERO
+   ================================================================ */
+
+.hero-section {
+    position: relative;
+    height: 560px;
+    background: url('/img/123456.jpg') center / cover no-repeat;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 80px;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(20, 25, 70, 0.80) 0%,
+        rgba(20, 25, 70, 0.40) 60%,
+        transparent 100%
+    );
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 80px;
+    max-width: 620px;
+}
+
+.hero-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #B4E5F8;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    display: block;
+}
+
+.hero-title {
+    font-size: 52px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    text-shadow: 0 2px 12px rgba(0,0,0,.25);
+}
+
+.hero-title em {
+    font-style: normal;
+    color: #B4E5F8;
+}
+
+a.btn.btn-hero,
+.btn.btn-hero {
+    display: inline-flex;
+    align-items: center;
+    padding: 14px 36px;
+    background: #669CFF !important;
+    color: #fff !important;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    border: none !important;
+    transition: background .15s, transform .15s;
+    box-shadow: 0 4px 16px rgba(102,156,255,.4);
+}
+
+a.btn.btn-hero:hover,
+.btn.btn-hero:hover {
+    background: #3B4593 !important;
+    color: #fff !important;
+    transform: translateY(-1px);
+}
+
+.hsb-field {
+    padding: 16px 20px;
+    border-right: 1px solid #E8ECFF;
+    cursor: pointer;
+    transition: background .15s;
+}
+
+.hsb-field:hover {
+    background: #F6F7FF;
+}
+
+.hsb-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #3B4593;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.hsb-val {
+    font-size: 14px;
+    color: #888;
+    font-weight: 500;
+}
+
+.hsb-btn {
+    background: #669CFF;
+    color: #fff;
+    border: none;
+    padding: 0 32px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Montserrat', sans-serif;
+    transition: background .15s;
+}
+
+.hsb-btn:hover {
+    background: #3B4593;
+}
+
+/* ================================================================
+   О НАС
+   ================================================================ */
+
+.about-section {
+    padding: 100px 80px 72px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 72px;
+    align-items: center;
+    background: #fff;
+}
+
+.about-tag {
+    font-size: 11px;
+    font-weight: 700;
+    color: #669CFF;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.about-title {
+    font-size: 36px;
+    font-weight: 800;
+    color: #222;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.about-title em {
+    font-style: normal;
+    color: #3B4593;
+}
+
+.about-text {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 36px;
+}
+
+.about-stats {
+    display: flex;
+    gap: 16px;
+}
+
+.stat-circle {
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    background: #EEF2FF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.stat-num {
+    font-size: 20px;
+    font-weight: 800;
+    color: #3B4593;
+    line-height: 1;
+}
+
+.stat-lbl {
+    font-size: 10px;
+    color: #888;
+    font-weight: 500;
+    margin-top: 4px;
+}
+
+.about-img-wrap {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 380px;
+    background: linear-gradient(145deg, #B4E5F8, #669CFF);
+}
+
+.about-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ================================================================
+   ПОПУЛЯРНЫЕ НОМЕРА
+   ================================================================ */
+
+.rooms-section {
+    padding: 72px 80px;
+    background: #F6F7F8;
+}
+
+.rooms-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+/* Большая карточка слева */
+.room-card-big {
+    border-radius: 20px;
+    overflow: hidden;
+    height: 400px;
+    position: relative;
+    background: linear-gradient(145deg, #3B4593, #669CFF);
+    cursor: pointer;
+}
+
+.room-card-big img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.room-big-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(transparent 40%, rgba(20, 25, 70, .80));
+}
+
+.room-big-body {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    z-index: 1;
+    color: #fff;
+}
+
+.room-promo-badge {
+    display: inline-block;
+    background: #669CFF;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.room-big-name {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.room-big-price {
+    font-size: 26px;
+    font-weight: 800;
+}
+
+.room-big-price span {
+    font-size: 14px;
+    font-weight: 400;
+    opacity: .75;
+}
+
+/* Малые карточки справа */
+.rooms-small-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.room-card-sm {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(59, 69, 147, .08);
+    cursor: pointer;
+    transition: box-shadow .2s, transform .2s;
+}
+
+.room-card-sm:hover {
+    box-shadow: 0 6px 20px rgba(59, 69, 147, .14);
+    transform: translateY(-2px);
+}
+
+.room-sm-img {
+    height: 130px;
+    background: linear-gradient(135deg, #B4E5F8, #669CFF);
+    overflow: hidden;
+}
+
+.room-sm-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.room-sm-body {
+    padding: 12px 14px;
+}
+
+.room-sm-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 4px;
+}
+
+.room-sm-price {
+    font-size: 16px;
+    font-weight: 800;
+    color: #3B4593;
+}
+
+.room-sm-price span {
+    font-size: 11px;
+    color: #999;
+    font-weight: 400;
+}
+
+.rooms-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.rooms-count {
+    font-size: 14px;
+    color: #888;
+}
+
+.btn-all-rooms {
+    height: 44px;
+    padding: 0 28px;
+    border-radius: 22px;
+    background: #3B4593;
+    color: #fff;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    transition: background .15s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-all-rooms:hover {
+    background: #669CFF;
+    color: #fff;
+}
+
+/* Блок маршрутов (белый фон) – все стили уже были описаны ранее */
+.routes-section { padding: 72px 80px; background: #fff; }
+.routes-header { margin-bottom: 32px; }
+.routes-tag { font-size: 11px; font-weight: 700; color: #669CFF; letter-spacing: 2px; text-transform: uppercase; }
+.routes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr;
+    gap: 16px;
+    align-items: stretch;
+}
+.route-col-1 { display: flex; flex-direction: column; gap: 16px; }
+.routes-title { font-size: 34px; font-weight: 800; color: #3B4593; line-height: 1.15; }
+.routes-title em { font-style: normal; color: #669CFF; }
+.route-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    flex: 1;
+    min-height: 220px;
+    background: linear-gradient(135deg, #EEF2FF, #D9E4FF);
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+}
+.route-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(59,69,147,.2); }
+.route-card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.route-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(transparent 30%, rgba(59,69,147,.85));
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+}
+.route-card-name { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+.route-card-desc { font-size: 13px; color: rgba(255,255,255,.85); line-height: 1.5; }
+.route-card-level {
+    display: inline-block;
+    background: rgba(102,156,255,.25);
+    border: 1px solid rgba(102,156,255,.6);
+    color: #B4E5F8;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    width: fit-content;
+}
+.route-card-tall { min-height: 480px; }
+.route-card-medium { min-height: 280px; }
+.route-col-3 { display: flex; flex-direction: column; gap: 16px; }
+.route-more-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    background: #F6F7F8;
+    border: 1.5px solid #E2E6EC;
+    border-radius: 16px;
+    color: #3B4593;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all .15s;
+}
+.route-more-btn:hover { background: #669CFF; border-color: #669CFF; color: #fff; }
+.route-more-arrow {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(59,69,147,.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+.route-more-btn:hover .route-more-arrow { background: rgba(255,255,255,.2); color: #fff; }
+.route-placeholder {
+    background: #F6F7F8;
+    border: 1.5px dashed #D9DEE5;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 14px;
+}
+@media (max-width: 992px) {
+    .routes-section { padding: 40px 24px; }
+    .routes-grid { grid-template-columns: 1fr; gap: 24px; }
+    .route-card-tall, .route-card-medium { min-height: 260px; }
+}
+
+/* ================================================================
+   ОТЗЫВЫ
+   ================================================================ */
+
+.reviews-section {
+    padding: 72px 80px;
+    background: #F6F7F8;
+}
+
+.reviews-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 32px;
+}
+
+.reviews-header .section-title {
+    margin-bottom: 0;
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.review-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    box-shadow: 0 2px 12px rgba(59, 69, 147, .07);
+    transition: box-shadow .2s;
+}
+
+.review-card:hover {
+    box-shadow: 0 6px 24px rgba(59, 69, 147, .12);
+}
+
+.review-quote {
+    font-size: 64px;
+    font-weight: 900;
+    color: #EEF2FF;
+    position: absolute;
+    top: 10px;
+    right: 18px;
+    line-height: 1;
+    font-family: Georgia, serif;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 1;
+}
+
+.review-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #EEF2FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    color: #3B4593;
+    flex-shrink: 0;
+}
+
+.review-name {
+    font-weight: 700;
+    font-size: 14px;
+    color: #222;
+}
+
+.review-date {
+    font-size: 11px;
+    color: #999;
+    margin-top: 2px;
+}
+
+.review-stars {
+    color: #669CFF;
+    font-size: 14px;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+}
+
+.review-text {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* ================================================================
+   КАК ДОБРАТЬСЯ
+   ================================================================ */
+
+.map-section {
+    padding: 72px 80px;
+    background: #fff;
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 72px;
+    align-items: center;
+}
+
+.route-address {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 24px;
+}
+
+.route-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.transport-card {
+    background: #F6F7F8;
+    border-radius: 12px;
+    padding: 16px 20px;
+    border-left: 3px solid #669CFF;
+}
+
+.route-card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #3B4593;
+    margin-bottom: 6px;
+}
+
+.route-card-text {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+}
+
+.map-wrap {
+    border-radius: 20px;
+    overflow: hidden;
+    height: 340px;
+    background: #EEF2FF;
+}
+
+/* ================================================================
+   NAVBAR
+   ================================================================ */
+
+.navbar-site {
+    background: #fff !important;
+    border-bottom: 3px solid #669CFF;
+    box-shadow: 0 2px 12px rgba(76, 88, 182, 0.08);
+    padding: 0 24px;
+    min-height: 58px;
+}
+
+/* Логотип и название */
+.navbar-site .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #3B4593 !important;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: .4px;
+}
+
+/* Ссылки */
+.navbar-site .nav-link {
+    color: #444 !important;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 6px 12px !important;
+    transition: color .15s;
+}
+
+.navbar-site .nav-link:hover {
+    color: #3B4593 !important;
+}
+
+/* Кнопка бургера на мобильных */
+.navbar-site .navbar-toggler {
+    border-color: rgba(59, 69, 147, 0.3);
+}
+
+.navbar-site .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(59,69,147,0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* ================================================================
+   АДАПТИВ
+   ================================================================ */
+
+@media (max-width: 1024px) {
+    .page-section,
+    .about-section,
+    .rooms-section,
+    .benefits-section,
+    .reviews-section,
+    .map-section { padding: 56px 40px; }
+
+    .hero-content { padding: 0 40px; }
+    .hero-title   { font-size: 40px; }
+
+    .rooms-layout          { grid-template-columns: 1fr; }
+    .room-card-big         { height: 280px; }
+    .benefits-section      { grid-template-columns: 1fr; }
+    .benefits-img-wrap     { height: 260px; }
+}
+
+@media (max-width: 768px) {
+    .page-section,
+    .about-section,
+    .rooms-section,
+    .benefits-section,
+    .reviews-section,
+    .map-section { padding: 48px 20px; }
+
+    .hero-section  { height: 420px; padding-bottom: 60px; }
+    .hero-content  { padding: 0 24px; }
+    .hero-title    { font-size: 30px; }
+    .hero-label    { font-size: 11px; }
+
+    .hero-search-bar {
+        display: none;
+    }
+
+    .about-section {
+        grid-template-columns: 1fr;
+        gap: 36px;
+    }
+
+    .about-img-wrap { height: 240px; }
+
+    .rooms-small-grid   { grid-template-columns: 1fr 1fr; }
+    .reviews-grid       { grid-template-columns: 1fr; }
+
+    .map-section {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .map-wrap { height: 240px; }
+
+    .section-title { font-size: 24px; }
+    .about-title   { font-size: 26px; }
+}
+
+@media (max-width: 480px) {
+    .hero-title            { font-size: 24px; }
+    .rooms-small-grid      { grid-template-columns: 1fr; }
+    .benefits-grid         { grid-template-columns: 1fr; }
+    .stat-circle           { width: 76px; height: 76px; }
+}

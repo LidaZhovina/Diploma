@@ -9,6 +9,8 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\RegisterForm;
+use app\models\Room;
+use app\models\Route;
 // use app\models\Role;
 use yii\helpers\VarDumper;
 
@@ -63,7 +65,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $rooms = Room::find()
+            ->with(['roomType', 'roomImages'])
+            ->limit(4)
+            ->orderBy(['id' => SORT_DESC])
+            ->all();
+
+        $routes = Route::find()
+            ->with(['routeImage', 'level'])
+            ->limit(3)
+            ->orderBy(['id' => SORT_DESC])
+            ->all();
+        return $this->render('index', ['rooms' => $rooms, 'routes' => $routes,]);
     }
 
     /**
@@ -124,7 +137,7 @@ class SiteController extends Controller
 
             if ($user != null) {
                 Yii::$app->session->setFlash('success', 'Вы успешно зарегестрировались!');
-                Yii::$app->user->login($user, 3600*24*30);
+                Yii::$app->user->login($user, 3600 * 24 * 30);
                 return $this->goHome();
             } else {
                 VarDumper::dump($model->errors);

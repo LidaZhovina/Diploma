@@ -36,7 +36,7 @@ use yii\bootstrap5\ActiveForm;
                 // 'type' => 'number',
                 'class' => 'form-control field-number-guests',
                 'min' => 1,           // минимальное значение
-                'max' => 5,           // максимальное значение
+                'max' => 3,           // максимальное значение
                 'step' => 1,
                 'value' => 1,          // значение по умолчанию
                 'readonly' => true,

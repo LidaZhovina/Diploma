@@ -42,6 +42,20 @@ $config = [
                 'options' => ['ssl' => true],
             ],
         ],
+        'assetManager' => [
+            'bundles' => [
+                'yii\bootstrap\BootstrapAsset' => [
+                    'class' => 'yii\bootstrap5\BootstrapAsset',
+                ],
+                'yii\bootstrap\BootstrapPluginAsset' => [
+                    'class' => 'yii\bootstrap5\BootstrapPluginAsset',
+                ],
+                'yii\bootstrap\BootstrapThemeAsset' => [
+                    'sourcePath' => null,
+                    'css' => [],
+                ],
+            ],
+        ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -52,14 +66,13 @@ $config = [
             ],
         ],
         'db' => $db,
-        
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [
-            ],
+            'rules' => [],
         ],
-        
+
     ],
     'params' => $params,
 ];

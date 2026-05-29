@@ -29,7 +29,7 @@ $this->title = 'Панель Администратора';
             </p> -->
 
             <!-- Вкладки статусов -->
-            <ul class="nav nav-underline mb-3" id="statusTabs">
+            <ul class="nav nav-underline mb-3 justify-content-center" id="statusTabs">
                 <li class="nav-item">
                     <?= Html::a('В обработке', ['index', 'status' => 'pending'], [
                         'class' => 'nav-link ' . ($searchModel->status_alias == 'pending' ? 'active' : ''),

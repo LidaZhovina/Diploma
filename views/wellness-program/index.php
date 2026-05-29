@@ -10,6 +10,7 @@ use yii\widgets\ListView;
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Оздоровительные программы';
+$this->registerCssFile('@web/css/catalog.css');
 ?>
 <div class="wellness-program-index">
     <div class="row justify-content-center">
@@ -18,15 +19,15 @@ $this->title = 'Оздоровительные программы';
             <h1 class="text-center"><?= Html::encode($this->title) ?></h1>
 
             <p class="d-flex justify-content-between">
-                <?= Html::a('Создать программу', ['create'], ['class' => 'btn register']) ?>
-                <?= Html::a('Панель Администратора', ['admin/index'], ['class' => 'btn register']) ?>
+                <?= Html::a('Создать программу', ['create'], ['class' => 'btn-wellness']) ?>
+                <?= Html::a('Панель Администратора', ['admin/index'], ['class' => 'btn-wellness']) ?>
             </p>
 
 
             <?= ListView::widget([
                 'dataProvider' => $dataProvider,
                 'itemOptions' => ['class' => 'item'],
-                'itemView' => 'item2',
+                'itemView' => 'item',
             ]) ?>
 
 

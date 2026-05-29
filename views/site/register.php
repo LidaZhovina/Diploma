@@ -9,42 +9,45 @@ use yii\bootstrap5\Html;
 use yii\web\JqueryAsset;
 
 $this->title = 'Регистрация';
+$this->registerCssFile('@web/css/auth.css')
 ?>
-<div class="site-register">
-    <h1 class="text-center"><?= Html::encode($this->title) ?></h1>
+<div class="auth-page">
+    <div class="auth-wrap">
 
-    <div class="row justify-content-center">
-        <div class="col-lg-5">
+        <div class="auth-left">
+            <div class="auth-left-title">Добро пожаловать!</div>
+            <div class="auth-left-sub">Создайте аккаунт и получите доступ к бронированию номеров и оздоровительных программ.</div>
+            <div class="auth-badge">Берег Байкала</div>
+            <div class="auth-badge">Маршруты и прогулки</div>
+            <div class="auth-badge">Оздоровление</div>
+        </div>
+
+        <div class="auth-right">
+            <h1 class="auth-title"><?= Html::encode($this->title)?></h1>
+            <div class="auth-subtitle">Заполните данные для создания аккаунта</div>
 
             <?php $form = ActiveForm::begin(['id' => 'register-form']); ?>
 
-            <?= $form->field($model, 'email')->textInput(['autofocus' => true]) ?>
-
-            <?= $form->field($model, 'password')->passwordInput() ?>
-
-            <?= $form->field($model, 'surname') ?>
-
-            <?= $form->field($model, 'name') ?>
-
-            <?= $form->field($model, 'patronymic') ?>
-
+            <?= $form->field($model, 'email')->textInput(['autofocus' => true, 'placeholder' => 'example@mail.ru']) ?>
+            <?= $form->field($model, 'password')->passwordInput(['placeholder' => '••••••••']) ?>
+            <?= $form->field($model, 'surname')->textInput(['placeholder' => 'Иванов']) ?>
+            <?= $form->field($model, 'name')->textInput(['placeholder' => 'Иван']) ?>
+            <?= $form->field($model, 'patronymic')->textInput(['placeholder' => 'Иванович']) ?>
             <?= $form->field($model, 'rules')->checkbox([
-                'class' => 'form-check-input',
+                'class'    => 'form-check-input',
                 'template' => "<div class=\"form-check\">{input} {label}\n{error}</div>",
             ]) ?>
 
-
-            <div class="form-group d-flex justify-content-between mt-3">
-                <?= Html::submitButton('Зарегестрироваться', ['class' => 'btn register l', 'name' => 'register-button']) ?>
-                <?= Html::a('Авторизация', ['login'], ['class' => 'btn register', 'name' => 'register-button']) ?>
-            </div>
+            <?= Html::submitButton('Зарегистрироваться →', ['class' => 'btn btn-auth']) ?>
 
             <?php ActiveForm::end(); ?>
 
+            <div class="auth-switch">
+                Уже есть аккаунт? <?= Html::a('Войти', ['login']) ?>
+            </div>
         </div>
+
     </div>
-
-
 </div>
 
 <?php

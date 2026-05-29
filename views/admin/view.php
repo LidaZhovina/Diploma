@@ -10,7 +10,7 @@ $this->title = "Детали бронирования:";
 
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="booking-view">
+<div class="booking-view contatiner">
 
     <h1 class="my-3 text-center"><?= Html::encode($this->title) ?></h1>
 
