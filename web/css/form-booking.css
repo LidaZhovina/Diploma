@@ -1,0 +1,448 @@
+/* ================================================================
+   BOOKING — общие стили для всех шагов бронирования
+   ================================================================ */
+
+.booking-page {
+    padding: 28px 0 60px;
+}
+
+.booking-wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+/* ── Шапка шага ── */
+.bk-header {
+    margin-bottom: 20px;
+}
+
+.bk-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #3B4593;
+    margin-bottom: 4px;
+}
+
+.bk-sub {
+    font-size: 14px;
+    color: #999;
+}
+
+/* ── Прогресс ── */
+.bk-progress {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 4px;
+}
+
+.bk-progress .bp {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: #E0E4F0;
+}
+
+.bk-progress .bp.done   { background: #669CFF; }
+.bk-progress .bp.active { background: #3B4593; }
+
+.bk-progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: #bbb;
+    margin-bottom: 24px;
+    font-weight: 500;
+}
+
+.bk-progress-labels .active-lbl {
+    color: #3B4593;
+    font-weight: 700;
+}
+
+/* ── Секция (белая карточка) ── */
+.bk-section {
+    background: #fff;
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 10px rgba(59, 69, 147, .06);
+}
+
+.bk-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #3B4593;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bk-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: #EEF2FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+/* ── Поля ── */
+.f-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.f-row:last-child { margin-bottom: 0; }
+
+.f-group {
+    margin-bottom: 14px;
+}
+
+.f-group:last-child { margin-bottom: 0; }
+
+.f-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #3B4593;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.bk-section .form-control,
+.bk-section .form-select,
+.f-input {
+    width: 100%;
+    height: 42px;
+    border-radius: 8px;
+    border: 1.5px solid #D0D5E8 !important;
+    background: #F6F7F8 !important;
+    padding: 0 12px;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    outline: none;
+    transition: border-color .15s, background .15s;
+    box-shadow: none !important;
+}
+
+.bk-section .form-control:focus,
+.bk-section .form-select:focus,
+.f-input:focus {
+    border-color: #669CFF !important;
+    background: #fff !important;
+}
+
+.bk-section textarea.form-control {
+    height: auto;
+    padding: 10px 12px;
+    resize: vertical;
+}
+
+/* Убираем стандартные метки Yii2 — используем свои */
+.bk-section .form-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #3B4593;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    margin-bottom: 5px;
+}
+
+.bk-section .invalid-feedback {
+    font-size: 11px;
+    color: #dc3545;
+    margin-top: 3px;
+}
+
+/* ── Итого ── */
+.bk-total {
+    background: #EEF2FF;
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.bk-total-lbl  { font-size: 13px; color: #3B4593; font-weight: 600; }
+.bk-total-note { font-size: 11px; color: #999; margin-top: 2px; }
+.bk-total-price { font-size: 24px; font-weight: 800; color: #3B4593; text-align: right; }
+.bk-total-price small { font-size: 12px; font-weight: 500; color: #999; display: block; }
+
+/* ── Кнопка «Далее» ── */
+.btn-booking-next {
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    border: none;
+    background: #669CFF;
+    color: #fff !important;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    transition: background .15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.btn-booking-next:hover { background: #3B4593; }
+
+/* ================================================================
+   ШАГ 2 — ПРОГРАММЫ
+   ================================================================ */
+
+.guest-switcher {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.gs-btn {
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: 1.5px solid #D0D5E8;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 600;
+    color: #888;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    transition: all .15s;
+}
+
+.gs-btn.active {
+    background: #3B4593;
+    border-color: #3B4593;
+    color: #fff;
+}
+
+/* Сетка карточек программ — масштабируется при добавлении новых */
+.prog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+/* Скрытый radio — оформление через label-карточку */
+.prog-radio { display: none; }
+
+.prog-card {
+    border: 1.5px solid #E0E4F0;
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all .15s;
+    position: relative;
+    display: block;
+    user-select: none;
+}
+
+.prog-card:hover {
+    border-color: #669CFF;
+    background: #F8FAFF;
+}
+
+.prog-radio:checked + .prog-card {
+    border-color: #669CFF;
+    background: #EEF2FF;
+}
+
+.prog-radio:checked + .prog-card::after {
+    content: '✓';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #669CFF;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.prog-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 5px;
+    padding-right: 24px;
+}
+
+.prog-desc {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.prog-duration {
+    display: inline-block;
+    background: #F6F7F8;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #669CFF;
+}
+
+/* ================================================================
+   ШАГ 3 — ДАННЫЕ ГОСТЕЙ
+   ================================================================ */
+
+.guest-block {
+    background: #fff;
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 10px rgba(59, 69, 147, .06);
+}
+
+.guest-block-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.guest-num {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3B4593, #669CFF);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.guest-block-name   { font-size: 14px; font-weight: 700; color: #222; }
+.guest-block-prog   { font-size: 12px; color: #669CFF; font-weight: 600; margin-top: 2px; }
+
+.g-row-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+/* ================================================================
+   ШАГ 4 — ОПЛАТА
+   ================================================================ */
+
+.booking-summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    padding: 4px 0;
+}
+
+.booking-summary-row .lbl { color: #888; }
+.booking-summary-row .val { font-weight: 600; color: #222; }
+.booking-summary-divider  { height: 1px; background: #F0F2F8; margin: 8px 0; }
+
+.pay-options { display: flex; flex-direction: column; gap: 10px; }
+
+.pay-opt {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    border: 1.5px solid #E0E4F0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all .15s;
+    position: relative;
+}
+
+.pay-opt:hover { border-color: #669CFF; background: #F8FAFF; }
+
+/* скрытый select — стилизуем через CSS */
+.pay-opt input[type="radio"] { display: none; }
+
+.pay-opt input[type="radio"]:checked ~ .pay-opt-content {
+    color: #3B4593;
+}
+
+.pay-opt-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: #EEF2FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.pay-opt-content { flex: 1; }
+.pay-opt-name    { font-size: 14px; font-weight: 700; color: #222; }
+.pay-opt-desc    { font-size: 12px; color: #888; margin-top: 2px; }
+
+.pay-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #D0D5E8;
+    flex-shrink: 0;
+    transition: all .15s;
+}
+
+.pay-opt.pay-selected {
+    border-color: #669CFF;
+    background: #EEF2FF;
+}
+
+.pay-opt.pay-selected .pay-dot {
+    border-color: #669CFF;
+    background: #669CFF;
+}
+
+.pay-opt.pay-selected .pay-opt-icon { background: #3B4593; }
+
+/* ================================================================
+   АДАПТИВ
+   ================================================================ */
+
+@media (max-width: 600px) {
+    .bk-title { font-size: 22px; }
+
+    .f-row,
+    .g-row-3 {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .bk-section { padding: 18px 16px; }
+    .guest-block { padding: 18px 16px; }
+
+    .prog-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .bk-total-price { font-size: 20px; }
+
+    .booking-wrap { padding: 0 12px; }
+}

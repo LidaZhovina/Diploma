@@ -8,10 +8,7 @@ use yii\bootstrap5\Html;
 $this->title = 'Бронирование';
 
 ?>
-<div class="booking-create">
-
-    <h1 class="text-center"><?= Html::encode($this->title) ?></h1>
-
+<div class="booking-create">    
     <?= $this->render('step1', [
         'model' => $model,
         'room' => $room,

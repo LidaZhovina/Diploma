@@ -516,24 +516,45 @@ class AccountController extends Controller
         $userId = Yii::$app->user->id;
 
         // 2. Находим активное бронирование пользователя (ищем по user_id через Residents)
-        $resident = Resident::findOne(['user_id' => $userId]);
-        if (!$resident) {
-            Yii::$app->session->setFlash('error', 'Ваш профиль гостя не найден.');
-            return $this->redirect(['index']);
-        }
+        // $resident = Resident::find()
+        //     ->innerJoin('booking_user', 'resident.id = booking_user.resident_id')
+        //     ->innerJoin('booking', 'booking.id = booking_user.booking_id')
+        //     ->where(['resident.user_id' => $userId])
+        //     ->andWhere(['in', 'booking.status_booking_id', [Booking::getStatusId('new'), Booking::getStatusId('active')]])
+        //     ->one();
 
-        // 3. Находим бронирование, где этот гость является главным или просто связан
+        // if (!$resident) {
+        //     Yii::$app->session->setFlash('error', 'Ваш профиль гостя не найден.');
+        //     return $this->redirect(['index']);
+        // }
+
+        // 2. Находим самое последнее активное бронирование пользователя
         $booking = Booking::find()
             ->innerJoin('booking_user', 'booking.id = booking_user.booking_id')
-            ->where(['booking_user.resident_id' => $resident->id])
-            ->andWhere(['in', 'booking.status_booking_id', [Booking::getStatusId('new'), Booking::getStatusId('active')]])
+            ->innerJoin('resident', 'resident.id = booking_user.resident_id')
+            ->where(['resident.user_id' => $userId])
+            ->andWhere(['booking.status_booking_id' => Booking::getStatusId('active')])
+            ->orderBy(['booking.id' => SORT_DESC])
             ->one();
+
         if (!$booking) {
             Yii::$app->session->setFlash('error', 'Нет активного бронирования.');
             return $this->redirect(['index']);
         }
 
-        // 4. Все гости из этого бронирования
+        // Все гости из этого бронирования
+        $residents = [];
+        foreach ($booking->bookingUsers as $bu) {
+            $residents[] = $bu->resident;
+        }
+
+        // Все гости из этого бронирования
+        $residents = [];
+        foreach ($booking->bookingUsers as $bu) {
+            $residents[] = $bu->resident;
+        }
+
+        // 3. Все гости из этого бронирования
         $residents = [];
         foreach ($booking->bookingUsers as $bu) {
             $residents[] = $bu->resident;
@@ -584,7 +605,7 @@ class AccountController extends Controller
             return $this->redirect(['index']);
         }
 
-        // 5. Если гостей несколько — показываем форму выбора
+        // 4. Если гостей несколько — показываем форму выбора
         if (count($residents) > 1) {
             return $this->render('choose-guests', [
                 'route' => $route,
@@ -592,7 +613,7 @@ class AccountController extends Controller
             ]);
         }
 
-        // 6. Если гость один — пытаемся записать
+        // 5. Если гость один — пытаемся записать
         $currentCount = RouteResident::find()->where(['route_id' => $route->id])->count();
         if ($currentCount >= $route->number_participant) {
             Yii::$app->session->setFlash('error', 'Мест нет.');
