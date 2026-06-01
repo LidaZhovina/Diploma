@@ -80,7 +80,7 @@ class Review extends \yii\db\ActiveRecord
     }
 
     /** Должен быть заполнен ровно один из booking_id / route_id */
-    public function validateOneTarget(string $attribute, array $params): void
+    public function validateOneTarget(string $attribute, ?array $params = null): void
     {
         $hasBk = !empty($this->booking_id);
         $hasRt = !empty($this->route_id);

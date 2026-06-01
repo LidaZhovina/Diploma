@@ -28,7 +28,7 @@ $this->title = "Детали бронирования:";
                 'label' => 'Причина отмены',
                 'visible' => (bool)$model?->reason,
                 'format' => 'html',
-                'value' => $model?->reason ? nl2br($model->reason->comment): '',
+                'value' => $model?->reason ? nl2br($model->reason->comment) : '',
             ],
             [
                 'attribute' => 'room_id',
@@ -91,5 +91,17 @@ $this->title = "Детали бронирования:";
             ]
         ],
     ]) ?>
+
+    <?php if ($model->statusBooking->alias === 'past'): ?>
+        <?php if (!\app\models\Review::hasBookingReview(Yii::$app->user->id, $model->id)): ?>
+            <?= \yii\bootstrap5\Html::a(
+                '✏ Оставить отзыв',
+                ['account/add-review', 'id' => $model->id],
+                ['class' => 'btn-s-blue']
+            ) ?>
+        <?php else: ?>
+            <span class="review-already-left">✓ Отзыв оставлен</span>
+        <?php endif; ?>
+    <?php endif; ?>
 
 </div>

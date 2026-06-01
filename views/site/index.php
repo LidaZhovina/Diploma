@@ -187,7 +187,7 @@ $this->registerCssFile('@web/css/main.css');
     <?php endif; ?>
 
     <!-- ========== ОТЗЫВЫ ========== -->
-    <section class="reviews-section">
+    <!-- <section class="reviews-section">
         <div class="reviews-header">
             <div>
                 <div class="section-title" style="margin-bottom:0">
@@ -245,6 +245,63 @@ $this->registerCssFile('@web/css/main.css');
                 </p>
             </div>
         </div>
+    </section> -->
+    <section class="reviews-section">
+        <div class="reviews-header">
+            <div>
+                <div class="section-title" style="margin-bottom:0">
+                    Отзывы <em>гостей</em>
+                </div>
+            </div>
+        </div>
+
+        <?php if (empty($reviews)): ?>
+            <p style="color:#999; font-size:14px; text-align:center; padding:32px 0">
+                Пока нет отзывов. Станьте первым гостем!
+            </p>
+        <?php else: ?>
+            <div class="reviews-grid">
+                <?php foreach ($reviews as $review): ?>
+                    <?php
+                    /** @var app\models\Review $review */
+                    $user     = $review->user;
+                    $initials = mb_strtoupper(
+                        mb_substr($user->surname ?? '', 0, 1) . mb_substr($user->name ?? '', 0, 1)
+                    );
+                    ?>
+                    <div class="review-card">
+                        <div class="review-quote">"</div>
+                        <div class="review-header">
+                            <div class="review-avatar"><?= \yii\helpers\Html::encode($initials) ?></div>
+                            <div>
+                                <div class="review-name">
+                                    <?= \yii\helpers\Html::encode(($user->surname ?? '') . ' ' . ($user->name ?? '')) ?>
+                                </div>
+                                <div class="review-date">
+                                    <?= Yii::$app->formatter->asDate($review->created_at, 'php:d.m.Y') ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="review-stars-wrap">
+                            <?= \kartik\rating\StarRating::widget([
+                                'bsVersion'     => '5.x',
+                                'name'          => 'rs_' . $review->id,
+                                'value'         => $review->stars,
+                                'pluginOptions' => [
+                                    'size'        => 'xs',
+                                    'readonly'    => true,
+                                    'showClear'   => false,
+                                    'showCaption' => false,
+                                    'displayOnly' => true,
+                                ],
+                            ]) ?>
+                        </div>
+                        <p class="review-text"><?= \yii\helpers\Html::encode($review->comment) ?></p>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
     </section>
 
     <!-- ========== КАК ДОБРАТЬСЯ ========== -->

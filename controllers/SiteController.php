@@ -76,7 +76,14 @@ class SiteController extends Controller
             ->limit(3)
             ->orderBy(['id' => SORT_DESC])
             ->all();
-        return $this->render('index', ['rooms' => $rooms, 'routes' => $routes,]);
+
+        $reviews = \app\models\Review::find()
+            ->with('user')
+            ->orderBy(['created_at' => SORT_DESC])
+            ->limit(6)
+            ->all();
+
+        return $this->render('index', ['rooms' => $rooms, 'routes' => $routes, 'reviews' => $reviews,]);
     }
 
     /**
