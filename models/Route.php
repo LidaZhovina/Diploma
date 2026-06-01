@@ -23,6 +23,7 @@ use Yii;
  * @property string $created_at
  *
  * @property Level $level
+ * @property Raiting[] $raitings 
  * @property Review[] $reviews
  * @property RouteImage $routeImage
  * @property RouteResident[] $routeResidents 
@@ -99,6 +100,16 @@ class Route extends \yii\db\ActiveRecord
     public function getLevel()
     {
         return $this->hasOne(Level::class, ['id' => 'level_id']);
+    }
+
+    /**
+     * Gets query for [[Raitings]]. 
+     * 
+     * @return \yii\db\ActiveQuery 
+     */
+    public function getRaitings()
+    {
+        return $this->hasMany(Raiting::class, ['route_id' => 'id']);
     }
 
     /** 

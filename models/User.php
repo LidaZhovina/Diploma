@@ -19,6 +19,7 @@ use yii\web\IdentityInterface;
  * @property string $auth_key
  *
  * @property GuestProfile $guestProfile
+ * @property Raiting[] $raitings 
  * @property Review[] $reviews 
  * @property Resident[] $residents
  * @property Role $role
