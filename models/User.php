@@ -19,7 +19,7 @@ use yii\web\IdentityInterface;
  * @property string $auth_key
  *
  * @property GuestProfile $guestProfile
- * @property Raiting[] $raitings 
+ * @property Review[] $reviews 
  * @property Resident[] $residents
  * @property Role $role
  */
@@ -76,6 +76,16 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Gets query for [[Reviews]]. 
+     * 
+     * @return \yii\db\ActiveQuery 
+     */
+    public function getReviews()
+    {
+        return $this->hasMany(Review::class, ['user_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[Residents]].
      *
      * @return \yii\db\ActiveQuery
@@ -83,16 +93,6 @@ class User extends ActiveRecord implements IdentityInterface
     public function getResidents()
     {
         return $this->hasMany(Resident::class, ['user_id' => 'id']);
-    }
-
-    /** 
-     * Gets query for [[Raitings]]. 
-     * 
-     * @return \yii\db\ActiveQuery 
-     */
-    public function getRaitings()
-    {
-        return $this->hasMany(Raiting::class, ['user_id' => 'id']);
     }
 
     /**

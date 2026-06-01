@@ -2,18 +2,16 @@
 
 namespace app\controllers;
 
-use app\models\Booking;
-use app\models\AdminSearch;
-use app\models\StatusBooking;
-use Yii;
+use app\models\Review;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * AdminController implements the CRUD actions for Booking model.
+ * ReviewController implements the CRUD actions for Review model.
  */
-class AdminController extends Controller
+class ReviewController extends Controller
 {
     /**
      * @inheritDoc
@@ -34,37 +32,37 @@ class AdminController extends Controller
     }
 
     /**
-     * Lists all Booking models.
+     * Lists all Review models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new AdminSearch();
-        $searchModel->status_alias = Yii::$app->request->get('status', 'pending');
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => Review::find()
+                ->with(['user'])
+                ->where(['not', ['booking_id' => null]])  // только отзывы на бронирования
+                ->orderBy(['created_at' => SORT_DESC]),
+
+            'pagination' => [
+                'pageSize' => 9,
+            ],
+            /*
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
+            */
+        ]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
-    public function beforeAction($action)
-    {
-        if (!parent::beforeAction($action)) {
-            return false;
-        }
-        if (!Yii::$app->user->identity?->isAdmin) {
-            return $this->redirect('/');
-        }
-
-
-        return true;
-    }
-
     /**
-     * Displays a single Booking model.
+     * Displays a single Review model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -77,48 +75,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Creates a new Booking model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
-    public function actionCreate()
-    {
-        $model = new Booking();
-
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /* Смена статуса бронирования*/
-
-    public function actionChangeStatus($id, $alias)
-    {
-        $model = $this->findModel($id);
-
-        if ($this->request->isPost) {
-            $model->status_booking_id = StatusBooking::getStatusId($alias);
-
-            if ($model->save()) {
-                Yii::$app->session->setFlash('warning', 'Статус обновлён!');
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        }
-
-        return $this->redirect('/admin');
-    }
-
-
-    /**
-     * Updates an existing Booking model.
+     * Updates an existing Review model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -138,7 +95,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Deletes an existing Booking model.
+     * Deletes an existing Review model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -152,15 +109,15 @@ class AdminController extends Controller
     }
 
     /**
-     * Finds the Booking model based on its primary key value.
+     * Finds the Review model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Booking the loaded model
+     * @return Review the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Booking::findOne(['id' => $id])) !== null) {
+        if (($model = Review::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

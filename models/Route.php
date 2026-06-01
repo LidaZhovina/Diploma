@@ -19,12 +19,14 @@ use Yii;
  * @property int $level_id
  * @property int $price
  * @property float $stars 
+ * @property int $route_status
  * @property string $created_at
  *
  * @property Level $level
- * @property Raiting[] $raitings 
+ * @property Review[] $reviews
  * @property RouteImage $routeImage
  * @property RouteResident[] $routeResidents 
+ * @property RouteStatus $routeStatus
  */
 class Route extends \yii\db\ActiveRecord
 {
@@ -44,14 +46,15 @@ class Route extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'description', 'length', 'duration', 'outfit', 'date_start', 'time_start', 'number_participant', 'level_id', 'price'], 'required'],
+            [['name', 'description', 'length', 'duration', 'outfit', 'date_start', 'time_start', 'number_participant', 'level_id', 'price', 'route_status'], 'required'],
             [['description', 'outfit'], 'string'],
-            [['length', 'number_participant', 'level_id', 'price'], 'integer'],
+            [['length', 'number_participant', 'level_id', 'price', 'route_status'], 'integer'],
             [['date_start', 'time_start', 'created_at'], 'safe'],
             [['name'], 'string', 'max' => 255],
             [['stars'], 'number'],
             [['duration'], 'string', 'max' => 25],
             [['level_id'], 'exist', 'skipOnError' => true, 'targetClass' => Level::class, 'targetAttribute' => ['level_id' => 'id']],
+            [['route_status'], 'exist', 'skipOnError' => true, 'targetClass' => RouteStatus::class, 'targetAttribute' => ['route_status' => 'id']],
         ];
     }
 
@@ -74,6 +77,7 @@ class Route extends \yii\db\ActiveRecord
             'created_at' => 'Дата создания',
             'price' => 'Цена',
             'stars' => 'Рейтинг',
+            'route_status' => 'Статус',
         ];
     }
 
@@ -97,14 +101,14 @@ class Route extends \yii\db\ActiveRecord
         return $this->hasOne(Level::class, ['id' => 'level_id']);
     }
 
-    /**
-     * Gets query for [[Raitings]]. 
+    /** 
+     * Gets query for [[Reviews]]. 
      * 
      * @return \yii\db\ActiveQuery 
      */
-    public function getRaitings()
+    public function getReviews()
     {
-        return $this->hasMany(Raiting::class, ['route_id' => 'id']);
+        return $this->hasMany(Review::class, ['route_id' => 'id']);
     }
 
     /**
@@ -134,5 +138,15 @@ class Route extends \yii\db\ActiveRecord
     public function getRouteResidents()
     {
         return $this->hasMany(RouteResident::class, ['route_id' => 'id']);
+    }
+
+    /** 
+     * Gets query for [[RouteStatus]]. 
+     * 
+     * @return \yii\db\ActiveQuery 
+     */
+    public function getRouteStatus()
+    {
+        return $this->hasOne(RouteStatus::class, ['id' => 'route_status']);
     }
 }

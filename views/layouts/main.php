@@ -102,6 +102,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                     <a href="<?= Url::to(['/wellness-program/index']) ?>" class="list-group-item list-group-item-action">Оздоровительные программы</a>
                     <a href="<?= Url::to(['/route/index']) ?>" class="list-group-item list-group-item-action">Маршруты</a>
                     <a href="<?= Url::to(['/user/index']) ?>" class="list-group-item list-group-item-action">Пользователи</a>
+                    <a href="<?= Url::to(['/review']) ?>" class="list-group-item list-group-item-action">Отзывы</a>
                     <div class="dropdown-divider"></div>
                     <?= Html::beginForm(['/site/logout']) ?>
                     <?= Html::submitButton('Выход', ['class' => 'list-group-item list-group-item-action text-danger']) ?>

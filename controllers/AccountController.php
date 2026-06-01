@@ -8,6 +8,7 @@ use app\models\BookingGuestsForm;
 use app\models\BookingStep1Form;
 use app\models\PaymentStatus;
 use app\models\Resident;
+use app\models\Review;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -654,6 +655,50 @@ class AccountController extends Controller
         }
 
         return $this->redirect("/account");
+    }
+
+    /**
+     * Оставить отзыв на бронирование.
+     * Доступно только после завершения поездки (статус past).
+     *
+     * @param int $id  ID бронирования
+     */
+    public function actionAddReview(int $id)
+    {
+        $booking = Booking::findOne($id);
+        if (!$booking || $booking->status_booking_id !== Booking::getStatusId('past')) {
+            $error = $booking ? 'Отзыв можно оставить только после завершения поездки.' : 'Бронирование не найдено.';
+            throw new \yii\web\NotFoundHttpException($error);
+        }
+
+        $userId = Yii::$app->user->id;
+        $isOwner = Booking::find()
+            ->joinWith('bookingUsers.resident')
+            ->where(['booking.id' => $id, 'resident.user_id' => $userId, 'resident.is_main_guest' => 1])
+            ->exists();
+        if (!$isOwner) {
+            throw new \yii\web\ForbiddenHttpException('Нет доступа.');
+        }
+        // Уже оставлен отзыв?
+        if (Review::hasBookingReview($userId, $id)) {
+            Yii::$app->session->setFlash('info', 'Вы уже оставили отзыв на это бронирование.');
+            return $this->redirect(['view', 'id' => $id]);
+        }
+
+        $model = new Review();
+        $model->user_id    = $userId;
+        $model->booking_id = $id;
+        $model->stars      = 5; // значение по умолчанию
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Спасибо за отзыв!');
+            return $this->redirect(['view', 'id' => $id]);
+        }
+
+        return $this->render('add-review', [
+            'model'   => $model,
+            'booking' => $booking,
+        ]);
     }
 
     /**

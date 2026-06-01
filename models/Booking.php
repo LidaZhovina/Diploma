@@ -25,6 +25,7 @@ use yii\helpers\VarDumper;
  * @property PayType $payType 
  * @property PaymentStatus $paymentStatus
  * @property Reason $reason 
+ * @property Review[] $reviews
  * @property Room $room
  * @property StatusBooking $statusBooking
  */
@@ -154,6 +155,16 @@ class Booking extends \yii\db\ActiveRecord
     public function getStatusBooking()
     {
         return $this->hasOne(StatusBooking::class, ['id' => 'status_booking_id']);
+    }
+
+    /** 
+     * Gets query for [[Reviews]]. 
+     * 
+     * @return \yii\db\ActiveQuery 
+     */
+    public function getReviews()
+    {
+        return $this->hasMany(Review::class, ['booking_id' => 'id']);
     }
 
     // ------------------ Методы ------------------

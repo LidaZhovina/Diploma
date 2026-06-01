@@ -1,0 +1,237 @@
+/* ================================================================
+   СИНИЕ ЗВЁЗДЫ — kartik StarRating
+   Усиленная специфичность чтобы перебить стили библиотеки
+   ================================================================ */
+
+/* Закрашенные звёзды — синие */
+.rating-container .filled-stars,
+.krajee-default .filled-stars {
+    color: #669CFF !important;
+    text-shadow: none !important;
+}
+
+/* При наведении — тёмно-синие */
+.rating-container:not([data-readonly]) .stars-container:hover .filled-stars,
+.krajee-default:not([data-readonly]) .stars-container:hover .filled-stars {
+    color: #3B4593 !important;
+}
+
+/* Пустые звёзды — светло-серые */
+.rating-container .empty-stars,
+.krajee-default .empty-stars {
+    color: #D0D5E8 !important;
+}
+
+/* Активная (выбранная при клике) звезда */
+.rating-container .stars-container input:checked ~ .filled-stars {
+    color: #3B4593 !important;
+}
+
+/* Убираем дефолтное золотое/жёлтое свечение */
+.rating-container .filled-stars {
+    -webkit-text-stroke: 0 !important;
+    text-shadow: none !important;
+}
+
+/* ================================================================
+   РАЗМЕРЫ звёзд
+   ================================================================ */
+
+/* XS — карточки отзывов */
+.krajee-default.star-xs .stars-container,
+.rating-container.star-xs .stars-container {
+    font-size: 1rem !important;
+}
+
+/* SM — средний рейтинг маршрута */
+.krajee-default.star-sm .stars-container,
+.rating-container.star-sm .stars-container {
+    font-size: 1.4rem !important;
+}
+
+/* XL — форма добавления отзыва */
+.krajee-default.star-xl .stars-container,
+.rating-container.star-xl .stars-container {
+    font-size: 2.4rem !important;
+}
+
+/* ================================================================
+   ОБЁРТКА ЗВЁЗД ВНУТРИ КАРТОЧЕК
+   ================================================================ */
+
+.review-stars-wrap {
+    margin-bottom: 12px;
+}
+
+.review-stars-wrap .star-rating,
+.review-stars-wrap .rating-container {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* ================================================================
+   СТРАНИЦА ВСЕХ ОТЗЫВОВ (/review/index)
+   ================================================================ */
+
+.reviews-page {
+    padding: 48px 0 72px;
+}
+
+.reviews-page-header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.reviews-page-title {
+    font-size: 36px;
+    font-weight: 800;
+    color: #222;
+    margin-bottom: 8px;
+}
+
+.reviews-page-title em {
+    font-style: normal;
+    color: #3B4593;
+}
+
+.reviews-page-sub {
+    font-size: 15px;
+    color: #999;
+}
+
+.reviews-all-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.reviews-pager {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+.reviews-pager .pagination .page-link {
+    color: #669CFF;
+    border-color: #D0D5E8;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+}
+
+.reviews-pager .pagination .page-item.active .page-link {
+    background: #669CFF;
+    border-color: #669CFF;
+    color: #fff;
+}
+
+.reviews-pager .pagination .page-link:hover {
+    background: #EEF2FF;
+    color: #3B4593;
+}
+
+.reviews-empty {
+    text-align: center;
+    padding: 80px 0;
+    color: #999;
+}
+
+.reviews-empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+/* ================================================================
+   ФОРМА ДОБАВЛЕНИЯ ОТЗЫВА
+   (использует классы из form-booking.css + свои)
+   ================================================================ */
+
+.review-stars-block {
+    margin-bottom: 8px;
+}
+
+/* Поле textarea в форме — наследует стили из .bk-section form-booking.css */
+
+/* ================================================================
+   БЛОК ОТЗЫВОВ НА СТРАНИЦЕ МАРШРУТА
+   ================================================================ */
+
+.route-reviews-section {
+    padding-top: 48px;
+    border-top: 1px solid #E0E4F0;
+    margin-top: 48px;
+    /* Отступы по бокам совпадают с остальным контентом */
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.route-reviews-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.route-reviews-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #222;
+    margin: 0;
+}
+
+.route-reviews-empty {
+    background: #F6F7F8;
+    border-radius: 12px;
+    padding: 28px;
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+}
+
+/* Метка «уже оставил отзыв» */
+.review-already-left {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #28a745;
+    background: #e6f9f0;
+    border-radius: 20px;
+    padding: 6px 14px;
+}
+
+/* ================================================================
+   АДАПТИВ
+   ================================================================ */
+
+@media (max-width: 992px) {
+    .reviews-all-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .reviews-all-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .reviews-page-title {
+        font-size: 26px;
+    }
+
+    .route-reviews-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .krajee-default.star-xl .stars-container,
+    .rating-container.star-xl .stars-container {
+        font-size: 1.8rem !important;
+    }
+}

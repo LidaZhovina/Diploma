@@ -4,8 +4,11 @@ namespace app\controllers;
 
 use app\models\Level;
 use app\models\Raiting;
+use app\models\Review;
 use app\models\Route;
 use app\models\RouteImage;
+use app\models\RouteResident;
+use app\models\RouteStatus;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -63,7 +66,7 @@ class RouteController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-    
+
 
     /**
      * Displays a single Route model.
@@ -86,9 +89,34 @@ class RouteController extends Controller
                 ->select('stars')
                 ->scalar();
         }
+
+        // Отзывы из таблицы reviews 
+        $reviews = Review::find()
+            ->with('user')
+            ->where(['route_id' => $model->id])
+            ->orderBy(['created_at' => SORT_DESC])
+            ->all();
+
+        // Может ли текущий пользователь оставить отзыв?
+        $canReview = false;
+        if (!Yii::$app->user->isGuest && Yii::$app->user->identity->isClient) {
+            $wasParticipant = RouteResident::find()
+                ->joinWith('resident')
+                ->where([
+                    'route_resident.route_id' => $model->id,
+                    'resident.user_id'        => Yii::$app->user->id,
+                ])
+                ->exists();
+
+            $canReview = $wasParticipant
+                && !Review::hasRouteReview(Yii::$app->user->id, $model->id);
+        }
+
         return $this->render('view', [
             'model' => $model,
             'userRating' => $userRating,
+            'reviews'    => $reviews,
+            'canReview'  => $canReview,
         ]);
     }
 
@@ -99,8 +127,8 @@ class RouteController extends Controller
             return false;
         }
 
-        if ($action->id === 'view') {
-            // Если хотите только авторизованных:
+        // Эти действия доступны авторизованным пользователям (не только админу)
+        if (in_array($action->id, ['view', 'add-review'])) {
             if (Yii::$app->user->isGuest) {
                 return $this->redirect(['/site/login']);
             }
@@ -149,6 +177,24 @@ class RouteController extends Controller
         ]);
     }
 
+    /* Смена статуса маршрута*/
+
+    public function actionChangeStatus($id, $alias)
+    {
+        $model = $this->findModel($id);
+
+        if ($this->request->isPost) {
+            $model->route_status = RouteStatus::getStatusId($alias);
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('warning', 'Статус обновлён!');
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+
+        return $this->redirect('/admin');
+    }
+
     /**
      * Updates an existing Route model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -190,6 +236,54 @@ class RouteController extends Controller
             $routeImage->image = $folder . $fileName; // сохраняем путь 'img/routes/...'
             $routeImage->save();
         }
+    }
+
+    /**
+     * Оставить отзыв на маршрут.
+     * Доступно только участникам маршрута.
+     *
+     * @param int $id  ID маршрута
+     */
+    public function actionAddReview(int $id)
+    {
+        $route = $this->findModel($id);
+        $userId = Yii::$app->user->id;
+
+        // Только авторизованные клиенты
+        if (!Yii::$app->user->identity?->isClient) {
+            return $this->redirect(['/site/login']);
+        }
+
+        // Проверяем, был ли пользователь участником этого маршрута
+        // (через resident -> route_resident)
+        $wasParticipant = \app\models\RouteResident::find()
+            ->joinWith('resident')
+            ->where(['route_resident.route_id' => $id, 'resident.user_id' => $userId])
+            ->exists();
+        if (!$wasParticipant) {
+            Yii::$app->session->setFlash('error', 'Оставить отзыв могут только участники маршрута.');
+            return $this->redirect(['view', 'id' => $id]);
+        }
+
+        if (Review::hasRouteReview($userId, $id)) {
+            Yii::$app->session->setFlash('info', 'Вы уже оставили отзыв на этот маршрут.');
+            return $this->redirect(['view', 'id' => $id]);
+        }
+
+        $model = new Review();
+        $model->user_id  = $userId;
+        $model->route_id = $id;
+        $model->stars    = 5;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Спасибо за отзыв!');
+            return $this->redirect(['view', 'id' => $id]);
+        }
+
+        return $this->render('add-review', [
+            'model' => $model,
+            'route' => $route,
+        ]);
     }
 
     /**

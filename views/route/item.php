@@ -1,4 +1,5 @@
 <?php
+
 /** @var app\models\Route $model */
 
 use yii\helpers\Html;
@@ -14,7 +15,7 @@ use yii\helpers\Html;
     <div class="card-body">
         <h5 class="card-title"><?= $model->name ?></h5>
         <div>
-            <span class="fw-bold">Дата и время начала: </span> 
+            <span class="fw-bold">Дата и время начала: </span>
             <?= Yii::$app->formatter->asDate($model->date_start, 'php:d.m.Y') . ' ' . Yii::$app->formatter->asTime($model->time_start, 'php:H:i') ?>
         </div>
         <div>
@@ -28,7 +29,9 @@ use yii\helpers\Html;
         </div>
     </div>
     <div class="card-footer">
-        <!-- <?= Html::a('Записаться', ['index', 'id' => $model->id], ['class' => 'btn register']) ?> -->
         <?= Html::a('Подробнее', ['view', 'id' => $model->id], ['class' => 'btn register']) ?>
+        <?= $model->routeStatus->alias === 'new'
+            ? Html::a('Закончить маршрут', ['change-status', 'id' => $model->id, 'alias' => 'past'], ['class' => 'btn btn-outline-primary', 'data-method' => 'post'])
+            : '' ?>
     </div>
 </div>
