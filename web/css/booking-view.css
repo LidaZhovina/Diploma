@@ -1,0 +1,453 @@
+/* ================================================================
+   СТРАНИЦА ДЕТАЛЕЙ БРОНИРОВАНИЯ — booking-view.css
+   ================================================================ */
+
+.bv-page {
+    padding: 28px 0 60px;
+    background: #F6F7F8;
+    min-height: calc(100vh - 58px);
+}
+
+.bv-wrap {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+/* ── Кнопка назад ── */
+.bv-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #888;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition: color .15s;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.bv-back:hover {
+    color: #3B4593;
+}
+
+/* ── Карточка ── */
+.bv-card {
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(59, 69, 147, 0.10);
+}
+
+/* ── Шапка-герой ── */
+.bv-hero {
+    background: linear-gradient(135deg, #3B4593 0%, #669CFF 100%);
+    padding: 28px 28px 24px;
+}
+
+.bv-hero-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.30);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 14px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.bv-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.bv-hero-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.bv-hero-sub {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.bv-hero-dates {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.bv-date-pill {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
+    padding: 8px 18px;
+}
+
+.bv-date-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.65);
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    margin-bottom: 3px;
+}
+
+.bv-date-val {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.bv-arrow {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 18px;
+    font-weight: 400;
+}
+
+/* ── Секции ── */
+.bv-section {
+    padding: 20px 24px;
+    border-top: 1px solid #E0E4F0;
+}
+
+.bv-section:first-of-type {
+    border-top: none;
+}
+
+.bv-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #3B4593;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bv-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: #EEF2FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+/* ── Строки деталей ── */
+.bv-rows {
+    display: flex;
+    flex-direction: column;
+}
+
+.bv-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 9px 0;
+    border-bottom: 1px solid #F0F2F8;
+    gap: 16px;
+}
+
+.bv-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.bv-row-label {
+    font-size: 13px;
+    color: #888;
+    flex-shrink: 0;
+}
+
+.bv-row-val {
+    font-size: 13px;
+    font-weight: 600;
+    color: #222;
+    text-align: right;
+    max-width: 60%;
+}
+
+.bv-paid   { color: #1a7a45 !important; }
+.bv-unpaid { color: #92400E !important; }
+
+/* ── Карточки гостей ── */
+.bv-guests {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.bv-guest {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #F6F7F8;
+    border-radius: 10px;
+    border: 1px solid #E8ECF5;
+}
+
+.bv-guest-av {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #EEF2FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #3B4593;
+    flex-shrink: 0;
+}
+
+.bv-guest-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 2px;
+}
+
+.bv-guest-prog {
+    font-size: 12px;
+    color: #669CFF;
+    font-weight: 600;
+}
+
+/* ── Блок цены ── */
+.bv-price-block {
+    background: #EEF2FF;
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.bv-price-lbl {
+    font-size: 13px;
+    font-weight: 700;
+    color: #3B4593;
+    margin-bottom: 3px;
+}
+
+.bv-price-note {
+    font-size: 11px;
+    color: #888;
+}
+
+.bv-price-num {
+    font-size: 28px;
+    font-weight: 800;
+    color: #3B4593;
+    line-height: 1;
+}
+
+.bv-price-total {
+    font-size: 12px;
+    color: #999;
+    font-weight: 500;
+    display: block;
+    margin-top: 3px;
+}
+
+/* ── Кнопки действий ── */
+.bv-actions {
+    padding: 20px 24px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    border-top: 1px solid #E0E4F0;
+}
+
+/* Оставить отзыв — главная кнопка */
+.btn-bv-review {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 50px;
+    padding: 0 28px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #3B4593, #669CFF);
+    color: #fff !important;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none !important;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    transition: opacity .15s, transform .15s;
+    box-shadow: 0 4px 14px rgba(59, 69, 147, 0.30);
+    flex: 1;
+    min-width: 180px;
+}
+
+.btn-bv-review:hover {
+    opacity: .88;
+    transform: translateY(-1px);
+    color: #fff !important;
+}
+
+/* Отзыв уже оставлен */
+.btn-bv-review-done {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 50px;
+    padding: 0 28px;
+    border-radius: 12px;
+    background: #e6f9f0;
+    border: 1.5px solid #28a745;
+    color: #1a7a45;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    flex: 1;
+    min-width: 180px;
+}
+
+/* Оплатить */
+.btn-bv-pay {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    padding: 0 24px;
+    border-radius: 12px;
+    background: #3B4593;
+    color: #fff !important;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none !important;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    transition: background .15s;
+}
+
+.btn-bv-pay:hover {
+    background: #2a347a;
+    color: #fff !important;
+}
+
+/* Отменить */
+.btn-bv-cancel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    padding: 0 20px;
+    border-radius: 12px;
+    background: transparent;
+    border: 1.5px solid #E0E4F0;
+    color: #888;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none !important;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    transition: all .15s;
+}
+
+.btn-bv-cancel:hover {
+    border-color: #E24B4A;
+    color: #E24B4A;
+    background: #FFF5F5;
+}
+
+/* Назад */
+.btn-bv-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 50px;
+    padding: 0 20px;
+    border-radius: 12px;
+    background: transparent;
+    border: 1.5px solid #D0D5E8;
+    color: #888;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none !important;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    transition: all .15s;
+}
+
+.btn-bv-back:hover {
+    border-color: #669CFF;
+    color: #3B4593;
+    background: #EEF2FF;
+}
+
+/* ── Адаптив ── */
+@media (max-width: 600px) {
+    .bv-page {
+        padding: 16px 0 48px;
+    }
+
+    .bv-hero {
+        padding: 20px 16px 18px;
+    }
+
+    .bv-section {
+        padding: 16px 16px;
+    }
+
+    .bv-hero-title {
+        font-size: 20px;
+    }
+
+    .bv-hero-dates {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .bv-arrow {
+        display: none;
+    }
+
+    .bv-date-pill {
+        width: 100%;
+    }
+
+    .bv-actions {
+        flex-direction: column;
+        padding: 16px;
+    }
+
+    .btn-bv-review,
+    .btn-bv-review-done,
+    .btn-bv-pay,
+    .btn-bv-cancel,
+    .btn-bv-back {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .bv-price-num {
+        font-size: 22px;
+    }
+
+    .bv-row-val {
+        max-width: 55%;
+    }
+}

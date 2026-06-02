@@ -1,17 +1,57 @@
-/* ── Общий контейнер ── */
-.route-view-page { padding: 32px 0 72px; }
+/* ================================================================
+   СТРАНИЦА МАРШРУТА — route-view.css
+   ================================================================ */
+
+.rv-page {
+    padding: 28px 0 72px;
+    background: #F6F7F8;
+}
 
 /* ── Навигация ── */
 .rv-nav {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
 }
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #888;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color .15s;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.btn-back:hover { color: #3B4593; }
+
+.btn-rv-edit {
+    display: inline-flex;
+    align-items: center;
+    height: 34px;
+    padding: 0 16px;
+    border-radius: 8px;
+    background: #EEF2FF;
+    border: 1.5px solid #C8D8FF;
+    color: #3B4593;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all .15s;
+}
+
+.btn-rv-edit:hover { background: #D9E4FF; color: #3B4593; }
+
 .btn-rv-danger {
     display: inline-flex;
     align-items: center;
-    padding: 7px 16px;
+    height: 34px;
+    padding: 0 16px;
     border-radius: 8px;
     background: #fff;
     border: 1.5px solid #dc3545;
@@ -21,92 +61,80 @@
     text-decoration: none;
     transition: all .15s;
 }
+
 .btn-rv-danger:hover { background: #dc3545; color: #fff; }
 
-/* ── Заголовок ── */
-.rv-title-row { margin-bottom: 12px; }
+/* ── ГЕРОЙ: 2 колонки (инфо + фото) ── */
+.rv-hero {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 40px;
+    align-items: start;
+    background: #fff;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 2px 16px rgba(59, 69, 147, 0.08);
+    margin-bottom: 16px;
+}
+
+.rv-hero-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Бейдж уровня */
 .rv-level-badge {
     display: inline-block;
     background: #EEF2FF;
     color: #3B4593;
     border-radius: 20px;
-    padding: 4px 14px;
+    padding: 5px 16px;
     font-size: 12px;
     font-weight: 700;
-    margin-bottom: 10px;
+    width: fit-content;
 }
+
+/* Заголовок */
 .rv-title {
-    font-size: 34px;
+    font-size: 32px;
     font-weight: 800;
     color: #222;
     margin: 0;
     line-height: 1.2;
 }
 
-/* ── Рейтинг-строка ── */
+/* Рейтинг */
 .rv-rating-row {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 32px;
+    flex-wrap: wrap;
 }
+
 .rv-stars-val {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 800;
     color: #3B4593;
 }
+
 .rv-rating-count {
     font-size: 13px;
-    color: #999;
-    margin-left: 4px;
+    color: #aaa;
 }
+
 .rv-no-rating {
-    font-size: 14px;
-    color: #bbb;
+    font-size: 13px;
+    color: #ccc;
 }
 
-/* ── Сетка: фото + детали ── */
-.rv-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    align-items: start;
-    margin-bottom: 56px;
-}
-
-/* ── Фото ── */
-.rv-image-wrap {
-    border-radius: 20px;
-    overflow: hidden;
-    height: 400px;
-}
-.rv-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-.rv-image-placeholder {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #EEF2FF, #D9E4FF);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #999;
-    font-size: 14px;
-    gap: 8px;
-}
-.rv-image-placeholder span { font-size: 48px; }
-
-/* ── Пилюли-параметры ── */
+/* Пилюли */
 .rv-pills {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 10px;
-    margin-bottom: 20px;
 }
+
 .rv-pill {
     display: flex;
     align-items: center;
@@ -114,8 +142,19 @@
     background: #F6F7F8;
     border-radius: 12px;
     padding: 12px 14px;
+    border: 1px solid #E8ECF5;
 }
-.rv-pill-icon { font-size: 20px; flex-shrink: 0; }
+
+.rv-pill--accent {
+    background: #EEF2FF;
+    border-color: #C8D8FF;
+}
+
+.rv-pill-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
 .rv-pill-label {
     font-size: 10px;
     font-weight: 700;
@@ -124,67 +163,223 @@
     letter-spacing: .5px;
     margin-bottom: 2px;
 }
+
 .rv-pill-val {
     font-size: 14px;
     font-weight: 700;
     color: #222;
 }
-.rv-pill-val--red { color: #dc3545; }
 
-/* ── Цена ── */
-.rv-price-block {
-    background: #F6F7F8;
-    border-radius: 14px;
-    padding: 18px 20px;
-    margin-bottom: 20px;
-}
-.rv-price-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: #999;
-    text-transform: uppercase;
-    letter-spacing: .8px;
-    margin-bottom: 6px;
-}
-.rv-price {
-    font-size: 32px;
-    font-weight: 800;
-    color: #3B4593;
+.rv-pill-val--red   { color: #E24B4A; }
+.rv-pill-val--price { color: #3B4593; font-size: 16px; }
+
+/* Фото */
+.rv-image-wrap {
+    border-radius: 16px;
+    overflow: hidden;
+    height: 360px;
+    background: linear-gradient(135deg, #3B4593, #669CFF);
+    flex-shrink: 0;
 }
 
-/* ── Секции: описание, экипировка ── */
-.rv-section { margin-bottom: 20px; }
-.rv-section-title {
-    font-size: 11px;
+.rv-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.rv-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,.5);
+    gap: 8px;
+}
+
+.rv-image-placeholder span { font-size: 48px; }
+.rv-image-placeholder p    { font-size: 14px; }
+
+/* ── ТЕКСТОВЫЕ БЛОКИ (описание, экипировка) на всю ширину ── */
+.rv-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.rv-block {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px 28px;
+    box-shadow: 0 2px 12px rgba(59, 69, 147, 0.07);
+}
+
+/* Если блок один — растянуть на всю ширину */
+.rv-body .rv-block:only-child {
+    grid-column: 1 / -1;
+}
+
+.rv-block-title {
+    font-size: 13px;
     font-weight: 700;
     color: #3B4593;
     text-transform: uppercase;
     letter-spacing: .7px;
-    margin-bottom: 8px;
+    margin-bottom: 14px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
 }
-.rv-section-icon { font-size: 14px; }
+
+.rv-block-icon { font-size: 16px; }
+
 .rv-text {
     font-size: 14px;
     color: #555;
-    line-height: 1.7;
+    line-height: 1.8;
     margin: 0;
 }
 
-/* ── Адаптив ── */
-@media (max-width: 900px) {
-    .rv-layout { grid-template-columns: 1fr; gap: 24px; }
-    .rv-image-wrap { height: 260px; }
-    .rv-title { font-size: 26px; }
-}
-@media (max-width: 480px) {
-    .rv-pills { grid-template-columns: 1fr; }
-    .rv-title { font-size: 22px; }
+/* ── ОТЗЫВЫ ── */
+.rv-reviews {
+    background: #fff;
+    border-radius: 20px;
+    padding: 28px 32px;
+    box-shadow: 0 2px 12px rgba(59, 69, 147, 0.07);
+    margin-top: 4px;
 }
 
-/* ── СИНИЕ ЗВЁЗДЫ (виджет kartik) ── */
+.rv-reviews-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.rv-reviews-empty {
+    background: #F6F7F8;
+    border-radius: 12px;
+    padding: 28px;
+    text-align: center;
+    color: #aaa;
+    font-size: 14px;
+}
+
+/* Кнопка написать отзыв */
+.btn-rv-review {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 40px;
+    padding: 0 20px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #3B4593, #669CFF);
+    color: #fff !important;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none !important;
+    transition: opacity .15s;
+    font-family: 'Montserrat', sans-serif;
+    box-shadow: 0 3px 10px rgba(59, 69, 147, 0.25);
+}
+
+.btn-rv-review:hover { opacity: .88; }
+
+/* Метка «уже оставлен» */
+.review-already-left {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a7a45;
+    background: #e6f9f0;
+    border-radius: 20px;
+    padding: 6px 14px;
+}
+
+/* Сетка отзывов */
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+/* Синие звёзды */
 .star-rating .filled-stars { color: #669CFF !important; text-shadow: none !important; }
 .star-rating .empty-stars  { color: #D0D5E8 !important; }
-.star-rating .stars-container:not(.is-disabled):hover .filled-stars { color: #3B4593 !important; }
+
+/* ── АДАПТИВ ── */
+@media (max-width: 1024px) {
+    .rv-hero {
+        grid-template-columns: 1fr 340px;
+        gap: 28px;
+    }
+
+    .rv-pills {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .reviews-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .rv-hero {
+        grid-template-columns: 1fr;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    /* На мобильном фото идёт первым */
+    .rv-image-wrap {
+        order: -1;
+        height: 240px;
+    }
+
+    .rv-title {
+        font-size: 24px;
+    }
+
+    .rv-pills {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .rv-body {
+        grid-template-columns: 1fr;
+    }
+
+    .rv-block {
+        padding: 18px 20px;
+    }
+
+    .rv-reviews {
+        padding: 20px;
+    }
+
+    .reviews-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .rv-page {
+        padding: 16px 0 48px;
+    }
+
+    .rv-pills {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .rv-pill {
+        padding: 10px 12px;
+    }
+}

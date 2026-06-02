@@ -1,55 +1,154 @@
 <?php
-use yii\bootstrap5\Html;
-/** @var \app\models\RouteResident|\app\models\Route $model */
-$isBooked = $model instanceof \app\models\RouteResident;
 
-if ($isBooked) {
-    $route = $model->route;
-    $resident = $model->resident;
-} else {
+use yii\bootstrap5\Html;
+use yii\helpers\Url;
+
+/**
+ * Универсальная карточка маршрута.
+ *
+ * Режим "доступный маршрут" (из _route_item):
+ *   $model    — app\models\Route
+ *   $isBooked — false
+ *
+ * Режим "забронированный маршрут" (из _route_item2):
+ *   $route     — app\models\Route
+ *   $isBooked  — true
+ *   $residents — array [['id' => ..., 'name' => ...], ...]
+ */
+
+// Нормализуем переменные: поддерживаем оба способа передачи
+if (!isset($route) && isset($model)) {
     $route = $model;
 }
+$isBooked  = $isBooked ?? false;
+$residents = $residents ?? [];
+
+$freeSlots = $route->number_participant - $route->getRouteResidents()->count();
+$isFull    = $freeSlots <= 0;
 ?>
-<div class="card my-3 w-100">
-    <div class="card-header">
+
+<div class="rc-card <?= $isBooked ? 'rc-card--booked' : '' ?>">
+
+    <!-- Изображение -->
+    <div class="rc-img">
         <?php if ($route->imageUrl): ?>
-            <img src="<?= $route->imageUrl ?>" class="card-img-top" alt="<?= Html::encode($route->name) ?>" style="max-height: 300px; object-fit: cover;">
+            <img src="<?= Html::encode($route->imageUrl) ?>"
+                 alt="<?= Html::encode($route->name) ?>">
         <?php else: ?>
-            <img src="/web/img/no-image.jpg" class="card-img-top" alt="Нет изображения" style="max-height: 300px; object-fit: cover;">
+            <div class="rc-img-placeholder">🏔</div>
         <?php endif; ?>
-    </div>
-    <div class="card-body">
-        <h5 class="card-title text-center"><?= $route->name ?></h5>
-        <div>
-            <span class="fw-bold">Дата и время начала: </span> 
-            <?= Yii::$app->formatter->asDate($route->date_start, 'php:d.m.Y') . ' ' . Yii::$app->formatter->asTime($route->time_start, 'php:H:i') ?>
-        </div>
-        <div>
-            <span class="fw-bold">Сложность: </span> <?= $route->level->title ?>
-        </div>
-        <div>
-            <span class="fw-bold">Количество участников: </span> <?= $route->number_participant ?>
-        </div>
-        <div>
-            <span class="fw-bold">Свободных мест: </span> <?= $route->number_participant - $route->getRouteResidents()->count() ?>
+
+        <!-- Бейдж уровня сложности -->
+        <div class="rc-level-badge">
+            <?= Html::encode($route->level->title ?? '') ?>
         </div>
 
+        <!-- Бейдж "мест нет" -->
+        <?php if ($isFull && !$isBooked): ?>
+            <div class="rc-full-badge">Мест нет</div>
+        <?php endif; ?>
+
+        <!-- Бейдж "Записан" -->
         <?php if ($isBooked): ?>
-            <div class="mt-2">
-                <span class="fw-bold">Вы записаны как:</span> <?= Html::encode($resident->surname . ' ' . $resident->name) ?>
+            <div class="rc-booked-badge">✓ Записан</div>
+        <?php endif; ?>
+    </div>
+
+    <!-- Тело карточки -->
+    <div class="rc-body">
+        <div class="rc-body-top">
+            <div class="rc-name"><?= Html::encode($route->name) ?></div>
+
+            <!-- Мета-информация -->
+            <div class="rc-meta-row">
+                <div class="rc-meta">
+                    <span class="rc-meta-icon">📅</span>
+                    <div>
+                        <div class="rc-meta-label">Дата</div>
+                        <div class="rc-meta-val">
+                            <?= Yii::$app->formatter->asDate($route->date_start, 'php:d.m.Y') ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="rc-meta">
+                    <span class="rc-meta-icon">🕐</span>
+                    <div>
+                        <div class="rc-meta-label">Начало</div>
+                        <div class="rc-meta-val">
+                            <?= Yii::$app->formatter->asTime($route->time_start, 'php:H:i') ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="rc-meta">
+                    <span class="rc-meta-icon">⏱</span>
+                    <div>
+                        <div class="rc-meta-label">Длительность</div>
+                        <div class="rc-meta-val"><?= Html::encode($route->duration) ?></div>
+                    </div>
+                </div>
+                <?php if (!$isBooked): ?>
+                    <div class="rc-meta">
+                        <span class="rc-meta-icon">👥</span>
+                        <div>
+                            <div class="rc-meta-label">Свободно мест</div>
+                            <div class="rc-meta-val <?= $isFull ? 'rc-meta-val--red' : '' ?>">
+                                <?= $isFull ? 'Мест нет' : $freeSlots . ' из ' . $route->number_participant ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
-        <?php endif; ?>
+
+            <!-- Список участников (для забронированных) -->
+            <?php if ($isBooked && !empty($residents)): ?>
+                <div class="rc-residents">
+                    <div class="rc-residents-label">Участники</div>
+                    <?php foreach ($residents as $resident): ?>
+                        <div class="rc-resident-row">
+                            <div class="rc-resident-av">
+                                <?php
+                                $parts = explode(' ', $resident['name']);
+                                $initials = '';
+                                foreach (array_slice($parts, 0, 2) as $p) {
+                                    $initials .= mb_strtoupper(mb_substr($p, 0, 1));
+                                }
+                                echo Html::encode($initials);
+                                ?>
+                            </div>
+                            <span class="rc-resident-name"><?= Html::encode($resident['name']) ?></span>
+                            <?= Html::a(
+                                '<i class="ti ti-x" aria-hidden="true"></i>',
+                                ['account/cancel-route',
+                                    'route_id'    => $route->id,
+                                    'resident_id' => $resident['id']],
+                                [
+                                    'class'        => 'rc-cancel-btn',
+                                    'encode'       => false,
+                                    'data-method'  => 'post',
+                                    'data-confirm' => 'Отменить запись для этого гостя?',
+                                    'title'        => 'Отменить запись',
+                                ]
+                            ) ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+
+        <!-- Кнопки -->
+        <div class="rc-actions">
+            <?php if ($isBooked): ?>
+                <?= Html::a('Подробнее', ['route/view', 'id' => $route->id],
+                    ['class' => 'btn-rc-detail']) ?>
+            <?php else: ?>
+                <?php if (!$isFull): ?>
+                    <?= Html::a('Записаться', ['account/book-route', 'id' => $route->id],
+                        ['class' => 'btn-rc-book']) ?>
+                <?php endif; ?>
+                <?= Html::a('Подробнее', ['route/view', 'id' => $route->id],
+                    ['class' => 'btn-rc-detail']) ?>
+            <?php endif; ?>
+        </div>
     </div>
-    <div class="card-footer d-flex justify-content-between">
-        <?php if ($isBooked): ?>
-            <?= Html::a('Отменить запись', ['account/cancel-route', 'route_id' => $route->id, 'resident_id' => $resident->id], [
-                'class' => 'btn btn-danger',
-                'data-method' => 'post',
-                'data-confirm' => 'Отменить запись для этого гостя?'
-            ]) ?>
-        <?php else: ?>
-            <?= Html::a('Записаться', ['account/book-route', 'id' => $route->id], ['class' => 'btn btn-primary']) ?>
-        <?php endif; ?>
-        <?= Html::a('Подробнее', ['route/view', 'id' => $route->id], ['class' => 'btn btn-secondary']) ?>
-    </div>
+
 </div>

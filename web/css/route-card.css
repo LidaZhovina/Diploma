@@ -1,0 +1,340 @@
+/* ================================================================
+   КАРТОЧКИ МАРШРУТОВ — route-card.css
+   ================================================================ */
+
+/* ── Список ── */
+.rc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 8px;
+}
+
+.rc-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #3B4593;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    margin-bottom: 12px;
+    margin-top: 4px;
+}
+
+.rc-divider {
+    height: 1px;
+    background: #E0E4F0;
+    margin: 24px 0;
+}
+
+.rc-empty {
+    text-align: center;
+    padding: 48px 0;
+    color: #bbb;
+}
+
+.rc-empty-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.rc-empty p {
+    font-size: 14px;
+}
+
+/* ── Карточка ── */
+.rc-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 14px rgba(59, 69, 147, 0.08);
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    border: 1px solid #E8ECF5;
+    transition: box-shadow .2s, transform .15s;
+}
+
+.rc-card:hover {
+    box-shadow: 0 6px 24px rgba(59, 69, 147, 0.14);
+    transform: translateY(-2px);
+}
+
+/* Забронированная — чуть другой акцент */
+.rc-card--booked {
+    border-color: #C8D8FF;
+}
+
+/* ── Изображение ── */
+.rc-img {
+    position: relative;
+    background: linear-gradient(135deg, #3B4593, #669CFF);
+    min-height: 180px;
+    overflow: hidden;
+}
+
+.rc-img img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.rc-img-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    opacity: .5;
+}
+
+/* Бейджи на фото */
+.rc-level-badge,
+.rc-full-badge,
+.rc-booked-badge {
+    position: absolute;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    z-index: 2;
+    line-height: 1.5;
+}
+
+.rc-level-badge {
+    top: 10px;
+    left: 10px;
+    background: rgba(59, 69, 147, 0.85);
+    color: #fff;
+    backdrop-filter: blur(4px);
+}
+
+.rc-full-badge {
+    bottom: 10px;
+    left: 10px;
+    background: rgba(226, 75, 74, 0.9);
+    color: #fff;
+}
+
+.rc-booked-badge {
+    bottom: 10px;
+    left: 10px;
+    background: rgba(28, 160, 100, 0.90);
+    color: #fff;
+}
+
+/* ── Тело ── */
+.rc-body {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.rc-body-top {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.rc-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #222;
+    line-height: 1.3;
+}
+
+/* ── Мета-строка ── */
+.rc-meta-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.rc-meta {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    background: #F6F7F8;
+    border-radius: 8px;
+    padding: 8px 10px;
+}
+
+.rc-meta-icon {
+    font-size: 14px;
+    margin-top: 1px;
+    flex-shrink: 0;
+}
+
+.rc-meta-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 1px;
+}
+
+.rc-meta-val {
+    font-size: 13px;
+    font-weight: 600;
+    color: #222;
+}
+
+.rc-meta-val--red {
+    color: #E24B4A;
+}
+
+/* ── Участники (забронировано) ── */
+.rc-residents {
+    background: #F6F7F8;
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.rc-residents-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #3B4593;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    margin-bottom: 8px;
+}
+
+.rc-resident-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.rc-resident-row + .rc-resident-row {
+    border-top: 1px solid #E8ECF5;
+}
+
+.rc-resident-av {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #EEF2FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: #3B4593;
+    flex-shrink: 0;
+}
+
+.rc-resident-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    flex: 1;
+}
+
+.rc-cancel-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: transparent;
+    border: 1px solid #E0E4F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #bbb;
+    font-size: 13px;
+    text-decoration: none;
+    transition: all .15s;
+    flex-shrink: 0;
+}
+
+.rc-cancel-btn:hover {
+    border-color: #E24B4A;
+    color: #E24B4A;
+    background: #FFF5F5;
+}
+
+/* ── Кнопки ── */
+.rc-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-rc-book {
+    height: 38px;
+    padding: 0 20px;
+    border-radius: 9px;
+    background: #669CFF;
+    color: #fff !important;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none !important;
+    display: inline-flex;
+    align-items: center;
+    transition: background .15s;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.btn-rc-book:hover {
+    background: #3B4593;
+}
+
+.btn-rc-detail {
+    height: 38px;
+    padding: 0 18px;
+    border-radius: 9px;
+    background: transparent;
+    border: 1.5px solid #D0D5E8;
+    color: #555 !important;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none !important;
+    display: inline-flex;
+    align-items: center;
+    transition: all .15s;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.btn-rc-detail:hover {
+    border-color: #669CFF;
+    color: #3B4593 !important;
+    background: #EEF2FF;
+}
+
+/* ── Адаптив ── */
+@media (max-width: 600px) {
+    .rc-card {
+        grid-template-columns: 1fr;
+    }
+
+    .rc-img {
+        height: 180px;
+        min-height: unset;
+    }
+
+    .rc-img img {
+        position: static;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .rc-meta-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .rc-actions {
+        flex-direction: column;
+    }
+
+    .btn-rc-book,
+    .btn-rc-detail {
+        width: 100%;
+        justify-content: center;
+    }
+}
