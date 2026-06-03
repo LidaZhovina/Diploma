@@ -40,7 +40,7 @@ $this->registerJsFile('/js/payment.js', ['depends' => [\yii\web\JqueryAsset::cla
         <!-- Сумма -->
         <div class="bk-section">
             <div class="bk-section-title">
-                <div class="bk-icon">📋</div> Детали платежа
+                <div class="bk-icon"><i class="ti ti-receipt"></i></div> Детали платежа
             </div>
             <div class="booking-summary-row">
                 <span class="lbl">Сумма предоплаты (30%)</span>
@@ -84,7 +84,7 @@ $this->registerJsFile('/js/payment.js', ['depends' => [\yii\web\JqueryAsset::cla
         <!-- Форма -->
         <div class="bk-section">
             <div class="bk-section-title">
-                <div class="bk-icon">💳</div> Данные карты
+                <div class="bk-icon"><i class="ti ti-credit-card"></i></div> Данные карты
             </div>
 
             <?php $form = ActiveForm::begin([

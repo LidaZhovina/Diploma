@@ -103,7 +103,7 @@ if (!empty($guestPrograms)) {
         <!-- Итого -->
         <div class="bk-section">
             <div class="bk-section-title">
-                <div class="bk-icon">📋</div> Итоги бронирования
+                <div class="bk-icon"><i class="ti ti-clipboard-list"></i></div> Итоги бронирования
             </div>
             <div class="booking-summary-row">
                 <span class="lbl">Номер</span>
@@ -133,10 +133,9 @@ if (!empty($guestPrograms)) {
         </div>
 
         <!-- Способ оплаты -->
-        <!-- Способ оплаты -->
         <div class="bk-section">
             <div class="bk-section-title">
-                <div class="bk-icon">💳</div> Способ оплаты
+                <div class="bk-icon"><i class="ti ti-credit-card"></i></div> Способ оплаты
             </div>
             <div class="pay-options" id="payOptions">
 

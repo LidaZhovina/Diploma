@@ -75,10 +75,10 @@ $firstImage = $images[0] ?? null;
 
             <div class="room-meta-row">
                 <div class="room-meta-pill">
-                    <span>🏠</span> <?= Html::encode($model->roomType->name) ?>
+                    <span><i class="ti ti-home"></i></span> <?= Html::encode($model->roomType->name) ?>
                 </div>
                 <div class="room-meta-pill">
-                    <span>👥</span> <?= $model->number_guests ?> места
+                    <span><i class="ti ti-users"></i></span> <?= $model->number_guests ?> места
                 </div>
             </div>
 
@@ -89,12 +89,12 @@ $firstImage = $images[0] ?? null;
 
             <div class="room-amenities-title">Удобства</div>
             <div class="room-amenities">
-                <div class="amenity" data-tip="Wi-Fi">📶</div>
-                <div class="amenity" data-tip="Телевизор">📺</div>
-                <div class="amenity" data-tip="Кондиционер">❄️</div>
-                <div class="amenity" data-tip="Душ/ванна">🚿</div>
-                <div class="amenity" data-tip="Кровать">🛏️</div>
-                <div class="amenity" data-tip="Питание включено">🍽️</div>
+                <div class="amenity" data-tip="Wi-Fi"><i class="ti ti-wifi"></i></div>
+                <div class="amenity" data-tip="Телевизор"><i class="ti ti-device-tv"></i></div>
+                <div class="amenity" data-tip="Кондиционер"><i class="ti ti-air-conditioning"></i></div>
+                <div class="amenity" data-tip="Душ/ванна"><i class="ti ti-bath"></i></div>
+                <div class="amenity" data-tip="Кровать"><i class="ti ti-bed"></i></div>
+                <div class="amenity" data-tip="Питание включено"><i class="ti ti-tools-kitchen-2"></i></div>
             </div>
 
             <!-- Цена -->

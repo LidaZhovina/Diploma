@@ -47,7 +47,6 @@ $canReview = !empty($residentsCanReview);
             <?php endif; ?>
         </div>
 
-        <!-- ── ГЕРОЙ ── -->
         <div class="rv-hero">
 
             <div class="rv-hero-info">
@@ -77,7 +76,7 @@ $canReview = !empty($residentsCanReview);
 
                 <div class="rv-pills">
                     <div class="rv-pill">
-                        <span class="rv-pill-icon">📅</span>
+                        <span class="rv-pill-icon"><i class="ti ti-calendar-event"></i></span>
                         <div>
                             <div class="rv-pill-label">Дата</div>
                             <div class="rv-pill-val">
@@ -86,7 +85,7 @@ $canReview = !empty($residentsCanReview);
                         </div>
                     </div>
                     <div class="rv-pill">
-                        <span class="rv-pill-icon">🕐</span>
+                        <span class="rv-pill-icon"><i class="ti ti-clock"></i></span>
                         <div>
                             <div class="rv-pill-label">Начало</div>
                             <div class="rv-pill-val">
@@ -95,21 +94,21 @@ $canReview = !empty($residentsCanReview);
                         </div>
                     </div>
                     <div class="rv-pill">
-                        <span class="rv-pill-icon">⏱</span>
+                        <span class="rv-pill-icon"><i class="ti ti-hourglass"></i></span>
                         <div>
                             <div class="rv-pill-label">Длительность</div>
                             <div class="rv-pill-val"><?= Html::encode($model->duration) ?></div>
                         </div>
                     </div>
                     <div class="rv-pill">
-                        <span class="rv-pill-icon">📏</span>
+                        <span class="rv-pill-icon"><i class="ti ti-map-pin"></i></span>
                         <div>
                             <div class="rv-pill-label">Протяжённость</div>
                             <div class="rv-pill-val"><?= $model->length ?> км</div>
                         </div>
                     </div>
                     <div class="rv-pill">
-                        <span class="rv-pill-icon">👥</span>
+                        <span class="rv-pill-icon"><i class="ti ti-users"></i></span>
                         <div>
                             <div class="rv-pill-label">Свободных мест</div>
                             <div class="rv-pill-val <?= $isFull ? 'rv-pill-val--red' : '' ?>">
@@ -120,7 +119,7 @@ $canReview = !empty($residentsCanReview);
                         </div>
                     </div>
                     <div class="rv-pill rv-pill--accent">
-                        <span class="rv-pill-icon">💰</span>
+                        <span class="rv-pill-icon"><i class="ti ti-coin"></i></span>
                         <div>
                             <div class="rv-pill-label">Стоимость</div>
                             <div class="rv-pill-val rv-pill-val--price">
@@ -144,7 +143,7 @@ $canReview = !empty($residentsCanReview);
                 <?php endif; ?>
             </div>
 
-        </div><!-- /.rv-hero -->
+        </div>
 
         <!-- ── ТЕКСТОВЫЕ БЛОКИ ── -->
         <?php if ($model->description || $model->outfit): ?>
@@ -152,7 +151,7 @@ $canReview = !empty($residentsCanReview);
                 <?php if ($model->description): ?>
                     <div class="rv-block">
                         <div class="rv-block-title">
-                            <span class="rv-block-icon">📖</span> Описание маршрута
+                            <span class="rv-block-icon"><i class="ti ti-book"></i></span> Описание маршрута
                         </div>
                         <p class="rv-text"><?= nl2br(Html::encode($model->description)) ?></p>
                     </div>
@@ -160,7 +159,7 @@ $canReview = !empty($residentsCanReview);
                 <?php if ($model->outfit): ?>
                     <div class="rv-block">
                         <div class="rv-block-title">
-                            <span class="rv-block-icon">🎒</span> Рекомендуемая экипировка
+                            <span class="rv-block-icon"><i class="ti ti-backpack"></i></span> Рекомендуемая экипировка
                         </div>
                         <p class="rv-text"><?= nl2br(Html::encode($model->outfit)) ?></p>
                     </div>

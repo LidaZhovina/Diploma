@@ -79,7 +79,7 @@ $isPaid = $model->paymentStatus->title === 'paid';
             <!-- Детали бронирования -->
             <div class="bv-section">
                 <div class="bv-section-title">
-                    <div class="bv-icon">📋</div>
+                    <div class="bv-icon"><i class="ti ti-clipboard-list"></i></div>
                     Детали бронирования
                 </div>
                 <div class="bv-rows">
@@ -141,7 +141,7 @@ $isPaid = $model->paymentStatus->title === 'paid';
             <!-- Гости и программы -->
             <div class="bv-section">
                 <div class="bv-section-title">
-                    <div class="bv-icon">👥</div>
+                    <div class="bv-icon"><i class="ti ti-users"></i></div>
                     Гости и программы
                 </div>
                 <div class="bv-guests">
@@ -169,7 +169,7 @@ $isPaid = $model->paymentStatus->title === 'paid';
             <!-- Стоимость -->
             <div class="bv-section">
                 <div class="bv-section-title">
-                    <div class="bv-icon">💳</div>
+                    <div class="bv-icon"><i class="ti ti-credit-card"></i></div>
                     Стоимость
                 </div>
                 <div class="bv-price-block">

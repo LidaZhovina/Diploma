@@ -37,7 +37,7 @@ $this->registerCssFile('@web/css/cardPayment.css');
         <!-- Сумма -->
         <div class="bk-section">
             <div class="bk-section-title">
-                <div class="bk-icon">📋</div> Детали платежа
+                <div class="bk-icon"><i class="ti ti-receipt"></i></div> Детали платежа
             </div>
             <div class="booking-summary-row">
                 <span class="lbl">Сумма предоплаты (30%)</span>
@@ -54,7 +54,7 @@ $this->registerCssFile('@web/css/cardPayment.css');
         <!-- QR -->
         <div class="bk-section" style="text-align:center">
             <div class="bk-section-title" style="justify-content:center">
-                <div class="bk-icon">📱</div> Сканируйте камерой телефона
+                <div class="bk-icon"><i class="ti ti-qrcode"></i></div> Сканируйте камерой телефона
             </div>
 
             <div id="qrcode" class="d-flex justify-content-center mb-3"></div>

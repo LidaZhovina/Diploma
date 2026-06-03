@@ -1,6 +1,7 @@
 <?php
 
 use yii\bootstrap5\Html;
+$this->registerCssFile('@web/css/admin.css', ['depends' => [\yii\bootstrap5\BootstrapAsset::class]]);
 ?>
 <div class="card mb-3">
     <img src="/web/img/LK.jpg" class="lk-image" alt="...">
@@ -39,7 +40,7 @@ use yii\bootstrap5\Html;
             <?= Html::a('Подробнее', ['admin/view', 'id' => $model->id,], ['class' => 'btn btn-primary']) ?>
 
             <?= $model->statusBooking->alias === 'pending'
-                ? Html::a('Подтвердить поездку', ['change-status', 'id' => $model->id, 'alias' => 'new'], ['class' => 'btn btn-outline-primary', 'data-method' => 'post'])
+                ? Html::a('Подтвердить поездку', ['change-status', 'id' => $model->id, 'alias' => 'new'], ['class' => 'hdr-btn primary', 'data-method' => 'post'])
                 : '' ?>
         </div>
     </div>

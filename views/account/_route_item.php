@@ -3,19 +3,6 @@
 use yii\bootstrap5\Html;
 use yii\helpers\Url;
 
-/**
- * Универсальная карточка маршрута.
- *
- * Режим "доступный маршрут" (из _route_item):
- *   $model    — app\models\Route
- *   $isBooked — false
- *
- * Режим "забронированный маршрут" (из _route_item2):
- *   $route     — app\models\Route
- *   $isBooked  — true
- *   $residents — array [['id' => ..., 'name' => ...], ...]
- */
-
 // Нормализуем переменные: поддерживаем оба способа передачи
 if (!isset($route) && isset($model)) {
     $route = $model;
@@ -35,7 +22,7 @@ $isFull    = $freeSlots <= 0;
             <img src="<?= Html::encode($route->imageUrl) ?>"
                  alt="<?= Html::encode($route->name) ?>">
         <?php else: ?>
-            <div class="rc-img-placeholder">🏔</div>
+            <div class="rc-img-placeholder"><i class="ti ti-mountain" style="font-size:36px;"></i></div>
         <?php endif; ?>
 
         <!-- Бейдж уровня сложности -->
@@ -62,7 +49,7 @@ $isFull    = $freeSlots <= 0;
             <!-- Мета-информация -->
             <div class="rc-meta-row">
                 <div class="rc-meta">
-                    <span class="rc-meta-icon">📅</span>
+                    <span class="rc-meta-icon"><i class="ti ti-calendar-event"></i></span>
                     <div>
                         <div class="rc-meta-label">Дата</div>
                         <div class="rc-meta-val">
@@ -71,7 +58,7 @@ $isFull    = $freeSlots <= 0;
                     </div>
                 </div>
                 <div class="rc-meta">
-                    <span class="rc-meta-icon">🕐</span>
+                    <span class="rc-meta-icon"><i class="ti ti-clock"></i></span>
                     <div>
                         <div class="rc-meta-label">Начало</div>
                         <div class="rc-meta-val">
@@ -80,7 +67,7 @@ $isFull    = $freeSlots <= 0;
                     </div>
                 </div>
                 <div class="rc-meta">
-                    <span class="rc-meta-icon">⏱</span>
+                    <span class="rc-meta-icon"><i class="ti ti-hourglass"></i></span>
                     <div>
                         <div class="rc-meta-label">Длительность</div>
                         <div class="rc-meta-val"><?= Html::encode($route->duration) ?></div>
@@ -88,7 +75,7 @@ $isFull    = $freeSlots <= 0;
                 </div>
                 <?php if (!$isBooked): ?>
                     <div class="rc-meta">
-                        <span class="rc-meta-icon">👥</span>
+                        <span class="rc-meta-icon"><i class="ti ti-users"></i></span>
                         <div>
                             <div class="rc-meta-label">Свободно мест</div>
                             <div class="rc-meta-val <?= $isFull ? 'rc-meta-val--red' : '' ?>">
@@ -117,7 +104,7 @@ $isFull    = $freeSlots <= 0;
                             </div>
                             <span class="rc-resident-name"><?= Html::encode($resident['name']) ?></span>
                             <?= Html::a(
-                                '<i class="ti ti-x" aria-hidden="true">Отмена</i>',
+                                '<i class="ti ti-x"></i>',
                                 ['account/cancel-route',
                                     'route_id'    => $route->id,
                                     'resident_id' => $resident['id']],

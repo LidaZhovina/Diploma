@@ -45,7 +45,7 @@ $this->registerCssFile('@web/css/form-booking.css');
         <!-- Даты -->
         <div class="bk-section">
             <div class="bk-section-title">
-                <div class="bk-icon">📅</div> Даты проживания
+                <div class="bk-icon"><i class="ti ti-calendar"></i></div> Даты проживания
             </div>
             <div class="f-row">
                 <?= $form->field($model, 'arrival_date')
@@ -58,7 +58,7 @@ $this->registerCssFile('@web/css/form-booking.css');
         <!-- Контакт и гости -->
         <div class="bk-section">
             <div class="bk-section-title">
-                <div class="bk-icon">👥</div> Контакт и гости
+                <div class="bk-icon"><i class="ti ti-users"></i></div> Контакт и гости
             </div>
             <div class="f-row">
                 <?= $form->field($model, 'contact_phone')

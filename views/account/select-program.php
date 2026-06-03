@@ -38,7 +38,7 @@ $this->registerCssFile('@web/css/form-booking.css');
 
         <div class="bk-section">
             <div class="bk-section-title">
-                <div class="bk-icon">👤</div> Выберите гостя
+                <div class="bk-icon"><i class="ti ti-user"></i></div> Выберите гостя
             </div>
 
             <!-- Переключатель гостей -->
