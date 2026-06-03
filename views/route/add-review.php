@@ -9,7 +9,8 @@ use yii\bootstrap5\Html;
 /** @var app\models\Route $route */
 
 $this->title = 'Отзыв о маршруте';
-$this->registerCssFile('@web/css/reviews.css');
+$this->registerCssFile('@web/css/form-booking.css', ['depends' => [\yii\bootstrap5\BootstrapAsset::class]]);
+$this->registerCssFile('@web/css/rewiews.css');
 ?>
 
 <div class="review-form-page container">
