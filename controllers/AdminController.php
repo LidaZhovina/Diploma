@@ -4,7 +4,11 @@ namespace app\controllers;
 
 use app\models\Booking;
 use app\models\AdminSearch;
+use app\models\PaymentStatus;
+use app\models\Room;
+use app\models\RoomType;
 use app\models\StatusBooking;
+use app\models\User;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -33,23 +37,6 @@ class AdminController extends Controller
         );
     }
 
-    /**
-     * Lists all Booking models.
-     *
-     * @return string
-     */
-    public function actionIndex()
-    {
-        $searchModel = new AdminSearch();
-        $searchModel->status_alias = Yii::$app->request->get('status', 'pending');
-        $dataProvider = $searchModel->search($this->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
     public function beforeAction($action)
     {
         if (!parent::beforeAction($action)) {
@@ -61,6 +48,85 @@ class AdminController extends Controller
 
 
         return true;
+    }
+
+    /**
+     * Lists all Booking models.
+     *
+     * @return string
+     */
+    public function actionIndex()
+    {
+        $searchModel = new AdminSearch();
+        $searchModel->status_alias = Yii::$app->request->get('status', 'pending');
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        // Статистика по статусам
+        $stats = [];
+        $statuses = ['pending', 'new', 'active', 'past', 'cancelled'];
+        foreach ($statuses as $status) {
+            $id = Booking::getStatusId($status);
+            $stats[$status] = Booking::find()->where(['status_booking_id' => $id])->count();
+        }
+
+        // Выручка за текущий месяц (по оплаченным бронированиям)   
+        $monthRevenue = Booking::find()
+            ->where(['>=', 'arrival_date', date('Y-m-01')])
+            ->andWhere(['payment_status' => PaymentStatus::getStatusId('paid')])
+            ->sum('price') ?? 0;
+
+        $roomOccupation = [];
+        // Получаем все номера с группировкой по типу и количеству мест
+        $rooms = Room::find()
+            ->select(['room_type_id', 'number_guests', 'COUNT(*) as total'])
+            ->groupBy(['room_type_id', 'number_guests'])
+            ->asArray()
+            ->all();
+        // Получаем ID активных бронирований (status = 'active')
+        $activeBookingRoomIds = Booking::find()
+            ->select(['room_id'])
+            ->where(['status_booking_id' => Booking::getStatusId('active')])
+            ->distinct()
+            ->column();
+        // Подсчитываем количество занятых номеров по каждой группе
+        $occupiedCounts = [];
+        foreach ($activeBookingRoomIds as $roomId) {
+            $room = Room::findOne($roomId);
+            if ($room) {
+                $key = $room->room_type_id . '_' . $room->number_guests;
+                if (!isset($occupiedCounts[$key])) {
+                    $occupiedCounts[$key] = 0;
+                }
+                $occupiedCounts[$key]++;
+            }
+        }
+        // Формируем массив для вывода
+        foreach ($rooms as $room) {
+            $typeName = RoomType::findOne($room['room_type_id'])->name;
+            $guests = $room['number_guests'];
+            $total = $room['total'];
+            $key = $room['room_type_id'] . '_' . $guests;
+            $occupied = $occupiedCounts[$key] ?? 0;
+            $roomOccupation["{$typeName} {$guests}-местный"] = [
+                'total' => $total,
+                'occupied' => $occupied,
+            ];
+        }
+
+        // Последние пользователи 
+        $recentUsers = User::find()
+            ->orderBy(['id' => SORT_DESC])
+            ->limit(3)
+            ->all();
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'stats' => $stats,
+            'roomOccupation' => $roomOccupation,
+            'monthRevenue' => $monthRevenue,
+            'recentUsers' => $recentUsers,
+        ]);
     }
 
     /**

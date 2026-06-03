@@ -274,4 +274,14 @@ class Booking extends \yii\db\ActiveRecord
             ->setSubject('Предоплата по заказу')
             ->send();
     }
+
+    public function getMainResident()
+    {
+        foreach ($this->bookingUsers as $bu) {
+            if ($bu->resident->is_main_guest) {
+                return $bu->resident;
+            }
+        }
+        return null;
+    }
 }

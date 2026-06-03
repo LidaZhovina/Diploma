@@ -18,6 +18,9 @@ use Yii;
  * @property string $created_at
  *
  * @property BookingUser[] $bookingUsers
+ * @property Review[] $reviews 
+ * @property RouteResident[] $routeResidents 
+ * @property Route[] $routes 
  * @property User $user
  * @property WellnessProgram $wellnessProgram 
  */
@@ -61,7 +64,7 @@ class Resident extends \yii\db\ActiveRecord
             'name' => 'Name',
             'surname' => 'Surname',
             'patronymic' => 'Patronymic',
-            'wellness_program_id' => 'Wellness Program ID', 
+            'wellness_program_id' => 'Wellness Program ID',
             'birth_date' => 'Birth Date',
             'is_main_guest' => 'Is Main Guest',
             'created_at' => 'Created At',
@@ -79,14 +82,32 @@ class Resident extends \yii\db\ActiveRecord
     }
 
     /**
-    * Gets query for [[RouteResidents]]. 
-    * 
-    * @return \yii\db\ActiveQuery 
-    */ 
-   public function getRouteResidents() 
-   { 
-       return $this->hasMany(RouteResident::class, ['resident_id' => 'id']); 
-   } 
+     * Gets query for [[Reviews]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReviews()
+    {
+        return $this->hasMany(Review::class, ['resident_id' => 'id']);
+    }
+    /**
+     * Gets query for [[RouteResidents]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRouteResidents()
+    {
+        return $this->hasMany(RouteResident::class, ['resident_id' => 'id']);
+    }
+    /**
+     * Gets query for [[Routes]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRoutes()
+    {
+        return $this->hasMany(Route::class, ['id' => 'route_id'])->viaTable('review', ['resident_id' => 'id']);
+    }
 
     /**
      * Gets query for [[User]].
@@ -99,12 +120,12 @@ class Resident extends \yii\db\ActiveRecord
     }
 
     /** 
-    * Gets query for [[WellnessProgram]]. 
-    * 
-    * @return \yii\db\ActiveQuery 
-    */ 
-   public function getWellnessProgram() 
-   { 
-       return $this->hasOne(WellnessProgram::class, ['id' => 'wellness_program_id']); 
-   } 
+     * Gets query for [[WellnessProgram]]. 
+     * 
+     * @return \yii\db\ActiveQuery 
+     */
+    public function getWellnessProgram()
+    {
+        return $this->hasOne(WellnessProgram::class, ['id' => 'wellness_program_id']);
+    }
 }

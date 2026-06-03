@@ -109,7 +109,7 @@ class RouteController extends Controller
                 ->exists();
 
             $canReview = $wasParticipant
-                && !Review::hasRouteReview(Yii::$app->user->id, $model->id);
+                && !Review::hasResidentRouteReview(Yii::$app->user->id, $model->id);
         }
 
         return $this->render('view', [
@@ -246,7 +246,7 @@ class RouteController extends Controller
      */
     public function actionAddReview(int $id)
     {
-        $route = $this->findModel($id);
+        $route  = $this->findModel($id);
         $userId = Yii::$app->user->id;
 
         // Только авторизованные клиенты
@@ -254,35 +254,43 @@ class RouteController extends Controller
             return $this->redirect(['/site/login']);
         }
 
-        // Проверяем, был ли пользователь участником этого маршрута
-        // (через resident -> route_resident)
-        $wasParticipant = \app\models\RouteResident::find()
-            ->joinWith('resident')
-            ->where(['route_resident.route_id' => $id, 'resident.user_id' => $userId])
-            ->exists();
-        if (!$wasParticipant) {
-            Yii::$app->session->setFlash('error', 'Оставить отзыв могут только участники маршрута.');
+        // Резиденты, которые могут ещё оставить отзыв
+        $residentsCanReview = \app\models\Review::getResidentsCanReview($userId, $id);
+
+        if (empty($residentsCanReview)) {
+            Yii::$app->session->setFlash('info', 'Все ваши гости уже оставили отзыв на этот маршрут.');
             return $this->redirect(['view', 'id' => $id]);
         }
 
-        if (Review::hasRouteReview($userId, $id)) {
-            Yii::$app->session->setFlash('info', 'Вы уже оставили отзыв на этот маршрут.');
-            return $this->redirect(['view', 'id' => $id]);
-        }
-
-        $model = new Review();
+        $model = new \app\models\Review();
         $model->user_id  = $userId;
         $model->route_id = $id;
         $model->stars    = 5;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', 'Спасибо за отзыв!');
-            return $this->redirect(['view', 'id' => $id]);
+        if ($model->load(Yii::$app->request->post())) {
+            // Проверяем, что выбранный resident_id принадлежит текущему пользователю
+            // и действительно участвовал в этом маршруте
+            $validIds = array_map(fn($r) => $r->id, $residentsCanReview);
+            if (!in_array((int)$model->resident_id, $validIds)) {
+                Yii::$app->session->setFlash('error', 'Некорректный гость.');
+                return $this->redirect(['view', 'id' => $id]);
+            }
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Спасибо за отзыв!');
+                // Если ещё остались гости без отзыва — остаёмся на странице
+                $remaining = \app\models\Review::getResidentsCanReview($userId, $id);
+                if (!empty($remaining)) {
+                    return $this->redirect(['add-review', 'id' => $id]);
+                }
+                return $this->redirect(['view', 'id' => $id]);
+            }
         }
 
         return $this->render('add-review', [
-            'model' => $model,
-            'route' => $route,
+            'model'              => $model,
+            'route'              => $route,
+            'residentsCanReview' => array_values($residentsCanReview),
         ]);
     }
 

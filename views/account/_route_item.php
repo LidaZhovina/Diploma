@@ -117,7 +117,7 @@ $isFull    = $freeSlots <= 0;
                             </div>
                             <span class="rc-resident-name"><?= Html::encode($resident['name']) ?></span>
                             <?= Html::a(
-                                '<i class="ti ti-x" aria-hidden="true"></i>',
+                                '<i class="ti ti-x" aria-hidden="true">Отмена</i>',
                                 ['account/cancel-route',
                                     'route_id'    => $route->id,
                                     'resident_id' => $resident['id']],

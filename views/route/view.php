@@ -12,13 +12,20 @@ use yii\helpers\Url;
 
 $this->title = $model->name;
 \yii\web\YiiAsset::register($this);
-$this->registerCssFile('@web/css/route-view.css',  ['depends' => [\yii\bootstrap5\BootstrapAsset::class]]);
-$this->registerCssFile('@web/css/rewiews.css',     ['depends' => [\yii\bootstrap5\BootstrapAsset::class]]);
+$this->registerCssFile('@web/css/route-view.css');
+$this->registerCssFile('@web/css/rewiews.css');
 
 $avgRating = Review::find()->where(['route_id' => $model->id])->average('stars');
 $avgRating = $avgRating ? round((float)$avgRating, 1) : 0;
 $freeSlots = $model->number_participant - $model->getRouteResidents()->count();
 $isFull    = $freeSlots <= 0;
+
+// Резиденты текущего пользователя, которые могут оставить отзыв
+$residentsCanReview = [];
+if (!Yii::$app->user->isGuest && Yii::$app->user->identity->isClient) {
+    $residentsCanReview = Review::getResidentsCanReview(Yii::$app->user->id, $model->id);
+}
+$canReview = !empty($residentsCanReview);
 ?>
 
 <div class="rv-page">
@@ -40,7 +47,7 @@ $isFull    = $freeSlots <= 0;
             <?php endif; ?>
         </div>
 
-        <!-- ── ГЕРОЙ: заголовок слева, фото справа ── -->
+        <!-- ── ГЕРОЙ ── -->
         <div class="rv-hero">
 
             <div class="rv-hero-info">
@@ -127,8 +134,8 @@ $isFull    = $freeSlots <= 0;
             <div class="rv-image-wrap">
                 <?php if ($model->routeImage && $model->routeImage->image): ?>
                     <img src="<?= Html::encode($model->imageUrl) ?>"
-                         alt="<?= Html::encode($model->name) ?>"
-                         class="rv-image">
+                        alt="<?= Html::encode($model->name) ?>"
+                        class="rv-image">
                 <?php else: ?>
                     <div class="rv-image-placeholder">
                         <span>🏔</span>
@@ -139,10 +146,9 @@ $isFull    = $freeSlots <= 0;
 
         </div><!-- /.rv-hero -->
 
-        <!-- ── ТЕКСТОВЫЕ БЛОКИ на всю ширину ── -->
+        <!-- ── ТЕКСТОВЫЕ БЛОКИ ── -->
         <?php if ($model->description || $model->outfit): ?>
             <div class="rv-body">
-
                 <?php if ($model->description): ?>
                     <div class="rv-block">
                         <div class="rv-block-title">
@@ -151,7 +157,6 @@ $isFull    = $freeSlots <= 0;
                         <p class="rv-text"><?= nl2br(Html::encode($model->description)) ?></p>
                     </div>
                 <?php endif; ?>
-
                 <?php if ($model->outfit): ?>
                     <div class="rv-block">
                         <div class="rv-block-title">
@@ -160,7 +165,6 @@ $isFull    = $freeSlots <= 0;
                         <p class="rv-text"><?= nl2br(Html::encode($model->outfit)) ?></p>
                     </div>
                 <?php endif; ?>
-
             </div>
         <?php endif; ?>
 
@@ -172,18 +176,33 @@ $isFull    = $freeSlots <= 0;
                     Отзывы <em>участников</em>
                 </div>
                 <div>
-                    <?php if ($canReview ?? false): ?>
+                    <?php if ($canReview): ?>
                         <?= Html::a(
                             '✏ Написать отзыв',
                             ['add-review', 'id' => $model->id],
                             ['class' => 'btn-rv-review']
                         ) ?>
+                        <?php if (count($residentsCanReview) > 1): ?>
+                            <div style="font-size:12px;color:#999;margin-top:4px;text-align:right">
+                                Ещё <?= count($residentsCanReview) ?> гостя без отзыва
+                            </div>
+                        <?php endif; ?>
                     <?php elseif (
                         !Yii::$app->user->isGuest
                         && Yii::$app->user->identity->isClient
-                        && Review::hasRouteReview(Yii::$app->user->id, $model->id)
                     ): ?>
-                        <span class="review-already-left">✓ Вы уже оставили отзыв</span>
+                        <?php
+                        // Проверяем: участвовал ли хоть один резидент?
+                        $wasParticipant = \app\models\RouteResident::find()
+                            ->joinWith('resident')
+                            ->where([
+                                'route_resident.route_id' => $model->id,
+                                'resident.user_id'        => Yii::$app->user->id,
+                            ])->exists();
+                        ?>
+                        <?php if ($wasParticipant): ?>
+                            <span class="review-already-left">✓ Все отзывы оставлены</span>
+                        <?php endif; ?>
                     <?php endif; ?>
                 </div>
             </div>
@@ -196,9 +215,14 @@ $isFull    = $freeSlots <= 0;
                 <div class="reviews-grid">
                     <?php foreach ($reviews as $review): ?>
                         <?php
-                        $u        = $review->user;
+                        // Показываем резидента если есть, иначе — пользователя
+                        $reviewer = $review->resident ?? $review->user;
                         $initials = mb_strtoupper(
-                            mb_substr($u->surname ?? '', 0, 1) . mb_substr($u->name ?? '', 0, 1)
+                            mb_substr($reviewer->surname ?? '', 0, 1)
+                                . mb_substr($reviewer->name ?? '', 0, 1)
+                        );
+                        $reviewerName = trim(
+                            ($reviewer->surname ?? '') . ' ' . ($reviewer->name ?? '')
                         );
                         ?>
                         <div class="review-card">
@@ -206,9 +230,7 @@ $isFull    = $freeSlots <= 0;
                             <div class="review-header">
                                 <div class="review-avatar"><?= Html::encode($initials) ?></div>
                                 <div>
-                                    <div class="review-name">
-                                        <?= Html::encode(trim(($u->surname ?? '') . ' ' . ($u->name ?? ''))) ?>
-                                    </div>
+                                    <div class="review-name"><?= Html::encode($reviewerName) ?></div>
                                     <div class="review-date">
                                         <?= Yii::$app->formatter->asDate($review->created_at, 'php:d.m.Y') ?>
                                     </div>
