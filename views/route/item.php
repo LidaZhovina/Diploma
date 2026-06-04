@@ -1,37 +1,137 @@
 <?php
 
-/** @var app\models\Route $model */
+use yii\bootstrap5\Html;
+use yii\helpers\Url;
 
-use yii\helpers\Html;
+// Нормализуем переменные: поддерживаем оба способа передачи
+if (!isset($route) && isset($model)) {
+    $route = $model;
+}
+$isBooked  = $isBooked ?? false;
+$residents = $residents ?? [];
+
+$freeSlots = $route->number_participant - $route->getRouteResidents()->count();
+$isFull    = $freeSlots <= 0;
 ?>
-<div class="card my-3 w-100">
-    <div class="card-header">
-        <?php if ($model->imageUrl): ?>
-            <img src="<?= $model->imageUrl ?>" class="card-img-top" alt="<?= Html::encode($model->name) ?>" style="max-height: 300px; object-fit: cover;">
+
+<div class="rc-card <?= $isBooked ? 'rc-card--booked' : '' ?>">
+
+    <!-- Изображение -->
+    <div class="rc-img">
+        <?php if ($route->imageUrl): ?>
+            <img src="<?= Html::encode($route->imageUrl) ?>"
+                 alt="<?= Html::encode($route->name) ?>">
         <?php else: ?>
-            <img src="/web/img/no-image.jpg" class="card-img-top" alt="Нет изображения" style="max-height: 300px; object-fit: cover;">
+            <div class="rc-img-placeholder"><i class="ti ti-mountain" style="font-size:36px;"></i></div>
+        <?php endif; ?>
+
+        <!-- Бейдж уровня сложности -->
+        <div class="rc-level-badge">
+            <?= Html::encode($route->level->title ?? '') ?>
+        </div>
+
+        <!-- Бейдж "мест нет" -->
+        <?php if ($isFull && !$isBooked): ?>
+            <div class="rc-full-badge">Мест нет</div>
+        <?php endif; ?>
+
+        <!-- Бейдж "Записан" -->
+        <?php if ($isBooked): ?>
+            <div class="rc-booked-badge">✓ Записан</div>
         <?php endif; ?>
     </div>
-    <div class="card-body">
-        <h5 class="card-title"><?= $model->name ?></h5>
-        <div>
-            <span class="fw-bold">Дата и время начала: </span>
-            <?= Yii::$app->formatter->asDate($model->date_start, 'php:d.m.Y') . ' ' . Yii::$app->formatter->asTime($model->time_start, 'php:H:i') ?>
+
+    <!-- Тело карточки -->
+    <div class="rc-body">
+        <div class="rc-body-top">
+            <div class="rc-name"><?= Html::encode($route->name) ?></div>
+
+            <!-- Мета-информация -->
+            <div class="rc-meta-row">
+                <div class="rc-meta">
+                    <span class="rc-meta-icon"><i class="ti ti-calendar-event"></i></span>
+                    <div>
+                        <div class="rc-meta-label">Дата</div>
+                        <div class="rc-meta-val">
+                            <?= Yii::$app->formatter->asDate($route->date_start, 'php:d.m.Y') ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="rc-meta">
+                    <span class="rc-meta-icon"><i class="ti ti-clock"></i></span>
+                    <div>
+                        <div class="rc-meta-label">Начало</div>
+                        <div class="rc-meta-val">
+                            <?= Yii::$app->formatter->asTime($route->time_start, 'php:H:i') ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="rc-meta">
+                    <span class="rc-meta-icon"><i class="ti ti-hourglass"></i></span>
+                    <div>
+                        <div class="rc-meta-label">Длительность</div>
+                        <div class="rc-meta-val"><?= Html::encode($route->duration) ?></div>
+                    </div>
+                </div>
+                <?php if (!$isBooked): ?>
+                    <div class="rc-meta">
+                        <span class="rc-meta-icon"><i class="ti ti-users"></i></span>
+                        <div>
+                            <div class="rc-meta-label">Свободно мест</div>
+                            <div class="rc-meta-val <?= $isFull ? 'rc-meta-val--red' : '' ?>">
+                                <?= $isFull ? 'Мест нет' : $freeSlots . ' из ' . $route->number_participant ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <!-- Список участников (для забронированных) -->
+            <?php if ($isBooked && !empty($residents)): ?>
+                <div class="rc-residents">
+                    <div class="rc-residents-label">Участники</div>
+                    <?php foreach ($residents as $resident): ?>
+                        <div class="rc-resident-row">
+                            <div class="rc-resident-av">
+                                <?php
+                                $parts = explode(' ', $resident['name']);
+                                $initials = '';
+                                foreach (array_slice($parts, 0, 2) as $p) {
+                                    $initials .= mb_strtoupper(mb_substr($p, 0, 1));
+                                }
+                                echo Html::encode($initials);
+                                ?>
+                            </div>
+                            <span class="rc-resident-name"><?= Html::encode($resident['name']) ?></span>
+                            <?= Html::a(
+                                '<i class="ti ti-x"></i>',
+                                ['account/cancel-route',
+                                    'route_id'    => $route->id,
+                                    'resident_id' => $resident['id']],
+                                [
+                                    'class'        => 'rc-cancel-btn',
+                                    'encode'       => false,
+                                    'data-method'  => 'post',
+                                    'data-confirm' => 'Отменить запись для этого гостя?',
+                                    'title'        => 'Отменить запись',
+                                ]
+                            ) ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </div>
-        <div>
-            <span class="fw-bold">Сложность: </span> <?= $model->level->title ?>
-        </div>
-        <div>
-            <span class="fw-bold">Количество участников: </span> <?= $model->number_participant ?>
-        </div>
-        <div>
-            <span class="fw-bold">Свободных мест: </span> <?= $model->number_participant - $model->getRouteResidents()->count() ?>
+
+        <!-- Кнопки -->
+        <div class="rc-actions">
+            <?php if ($isBooked): ?>
+                <?= Html::a('Подробнее', ['route/view', 'id' => $route->id],
+                    ['class' => 'btn-rc-detail']) ?>
+            <?php else: ?>
+                <?= Html::a('Подробнее', ['route/view', 'id' => $route->id],
+                    ['class' => 'btn-rc-detail']) ?>
+            <?php endif; ?>
         </div>
     </div>
-    <div class="card-footer">
-        <?= Html::a('Подробнее', ['view', 'id' => $model->id], ['class' => 'btn register']) ?>
-        <?= $model->routeStatus->alias === 'new'
-            ? Html::a('Закончить маршрут', ['change-status', 'id' => $model->id, 'alias' => 'past'], ['class' => 'btn btn-outline-primary', 'data-method' => 'post'])
-            : '' ?>
-    </div>
+
 </div>

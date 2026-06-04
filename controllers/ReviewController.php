@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Review;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -31,6 +32,17 @@ class ReviewController extends Controller
         );
     }
 
+    public function beforeAction($action)
+    {
+        if (!parent::beforeAction($action)) {
+            return false;
+        }
+        if (!Yii::$app->user->identity?->isAdmin) {
+            return $this->redirect('/');
+        }
+        return true;
+    }
+
     /**
      * Lists all Review models.
      *
@@ -38,26 +50,30 @@ class ReviewController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
+        // Отзывы на бронирования
+        $bookingReviews = new ActiveDataProvider([
             'query' => Review::find()
                 ->with(['user'])
-                ->where(['not', ['booking_id' => null]])  // только отзывы на бронирования
+                ->where(['not', ['booking_id' => null]])
+                ->andWhere(['route_id' => null])
                 ->orderBy(['created_at' => SORT_DESC]),
+            'pagination' => ['pageSize' => 2],
+            'id' => 'booking-reviews',
+        ]);
 
-            'pagination' => [
-                'pageSize' => 9,
-            ],
-            /*
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
+        // Отзывы на маршруты
+        $routeReviews = new ActiveDataProvider([
+            'query' => Review::find()
+                ->with(['user', 'route'])
+                ->where(['not', ['route_id' => null]])
+                ->orderBy(['created_at' => SORT_DESC]),
+            'pagination' => ['pageSize' => 2],
+            'id' => 'route-reviews',
         ]);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            'bookingReviews' => $bookingReviews,
+            'routeReviews'   => $routeReviews,
         ]);
     }
 

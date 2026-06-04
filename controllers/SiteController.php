@@ -80,7 +80,7 @@ class SiteController extends Controller
         $reviews = \app\models\Review::find()
             ->with('user')
             ->orderBy(['created_at' => SORT_DESC])
-            ->limit(6)
+            ->limit(3)
             ->all();
 
         return $this->render('index', ['rooms' => $rooms, 'routes' => $routes, 'reviews' => $reviews,]);

@@ -17,6 +17,8 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .page-title {
@@ -28,6 +30,7 @@
 .hdr-btns {
     display: flex;
     gap: 8px;
+    flex-wrap: wrap;
 }
 
 .hdr-btn {
@@ -103,6 +106,7 @@
     border-radius: 12px;
     padding: 5px;
     border: 1px solid #E0E4F0;
+    flex-wrap: wrap;
 }
 
 /* Убираем оформление ссылки у элементов вкладок */
@@ -126,6 +130,7 @@
     gap: 6px;
     background: transparent;
     border: none;
+    white-space: nowrap;
 }
 
 .stab.active {
@@ -242,6 +247,7 @@
     display: flex;
     gap: 8px;
     margin-top: 8px;
+    flex-wrap: wrap;
 }
 .bbtn {
     padding: 5px 13px;
@@ -250,6 +256,9 @@
     cursor: pointer;
     font-weight: 600;
     border: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
 }
 .bb-ghost {
     background: #EEF2FF;
@@ -347,6 +356,7 @@
     padding: 2px 8px;
     border-radius: 10px;
     font-weight: 700;
+    flex-shrink: 0;
 }
 .role-c { background: #E3F5EA; color: #1b6834; }
 .role-m { background: #FFF4D9; color: #8a6200; }
@@ -373,6 +383,8 @@
     margin-right: auto;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 .ft-copy {
     font-size: 12px;
@@ -385,7 +397,11 @@
     text-align: right;
 }
 
-/* Адаптив */
+/* ================================================================
+   АДАПТИВ
+   ================================================================ */
+
+/* Планшет */
 @media (max-width: 900px) {
     .two-col {
         grid-template-columns: 1fr;
@@ -395,5 +411,151 @@
     }
     .ap-main {
         padding: 20px;
+    }
+    .side-panel {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+    }
+}
+
+/* Мобильный */
+@media (max-width: 600px) {
+    .ap-main {
+        padding: 12px;
+    }
+
+    .page-hdr {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .hdr-btns {
+        width: 100%;
+    }
+
+    .hdr-btn {
+        flex: 1;
+        text-align: center;
+        font-size: 11px;
+        padding: 6px 8px;
+    }
+
+    /* Статистика — 2 колонки */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .stat-card {
+        padding: 12px 14px;
+    }
+
+    .stat-val {
+        font-size: 20px;
+    }
+
+    /* Вкладки статусов — скролл по горизонтали */
+    .status-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 5px 6px;
+        border-radius: 10px;
+    }
+
+    .status-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .stab {
+        padding: 6px 12px;
+        font-size: 11px;
+        flex-shrink: 0;
+    }
+
+    /* Карточка бронирования — убираем левую колонку на совсем маленьких */
+    .bk-card {
+        grid-template-columns: 80px 1fr;
+    }
+
+    .bk-thumb {
+        min-height: 80px;
+        padding: 8px;
+    }
+
+    .bk-dates {
+        font-size: 10px;
+    }
+
+    .bk-nights {
+        font-size: 9px;
+    }
+
+    .bk-body {
+        padding: 10px 12px;
+    }
+
+    .bk-room {
+        font-size: 12px;
+    }
+
+    /* Сайдбар — одна колонка */
+    .side-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    /* Пользователи — убираем email, показываем только имя */
+    .ur-mail {
+        display: none;
+    }
+
+    .ur-ava {
+        width: 26px;
+        height: 26px;
+        font-size: 9px;
+    }
+
+    .ur-name {
+        font-size: 11px;
+    }
+
+    .ur-role {
+        font-size: 9px;
+        padding: 2px 6px;
+    }
+
+    /* Футер */
+    .ap-footer {
+        padding: 12px 16px;
+        flex-direction: column;
+    }
+
+    .ft-note {
+        text-align: left;
+        max-width: 100%;
+    }
+}
+
+/* Очень узкие экраны (320px) */
+@media (max-width: 360px) {
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .bk-card {
+        grid-template-columns: 70px 1fr;
+    }
+
+    .hdr-btns {
+        gap: 6px;
+    }
+
+    .hdr-btn {
+        font-size: 10px;
+        padding: 5px 6px;
     }
 }

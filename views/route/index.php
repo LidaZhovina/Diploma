@@ -10,6 +10,7 @@ use yii\widgets\ListView;
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Маршруты';
+$this->registerCssFile('@web/css/route-card.css', ['depends' => [\yii\bootstrap5\BootstrapAsset::class]]);
 ?>
 <div class="route-index">
     <div class="row justify-content-center">
