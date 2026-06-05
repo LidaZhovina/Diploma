@@ -70,7 +70,9 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [],
+            'rules' => [
+                'routes' => 'route-catalog/index',
+            ],
         ],
 
     ],

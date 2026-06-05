@@ -176,7 +176,7 @@ $this->registerCssFile('@web/css/main.css');
                     <?php else: ?>
                         <div class="route-placeholder route-card-medium">Скоро появится</div>
                     <?php endif; ?>
-                    <a href="<?= Yii::$app->user->isGuest ? Url::to(['site/login']) : Url::to(['account/index', '#' => 'routes']) ?>" class="route-more-btn">
+                    <a href="<?= Url::to(['/route-catalog/index', '#' => 'routes']) ?>" class="route-more-btn">
                         Узнать больше
                         <div class="route-more-arrow">→</div>
                     </a>

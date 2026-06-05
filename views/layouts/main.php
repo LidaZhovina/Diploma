@@ -46,6 +46,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             'items'   => [
                 ['label' => 'Номера',                  'url' => ['/catalog']],
                 ['label' => 'Оздоровительные программы', 'url' => ['/wellness-catalog']],
+                ['label' => 'Маршруты', 'url' => ['/route-catalog']],
             ],
         ]);
 
@@ -123,15 +124,42 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         <?= $content ?>
     </main>
 
-    <footer id="footer" class="mt-auto py-3">
-        <div class="container">
-            <div class="row text-muted">
-                <div class="col-md-6 text-center text-md-start">&copy; Сайт <?= date('Y') ?></div>
-                <div class="col-md-6 text-center text-md-start">
-                    Информация, размещенная на сайте, носит справочный характер
-                    (не может использоваться для постановки диагноза, не заменяет приём врача)
-                    и не является публичной офертой, определяемой положениями Статьи 437 ГК РФ. </div>
+    <footer style="background: #deeaff; padding: 28px 48px;">
+        <div class="container d-flex justify-content-between align-items-center gap-4 mb-3">
+            <a href="/" class="d-flex align-items-center gap-2 text-decoration-none">
+                <div style="width:30px; height:30px; border-radius:8px; background:#3B4593; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:500; color:#fff; flex-shrink:0;">
+                    Т
+                </div>
+                <span style="font-size:15px; font-weight:500; color:#3B4593;">Санаторий Танхой</span>
+            </a>
+
+            <div class="d-flex gap-4">
+                <a href="/catalog" style="font-size:13px; color:#4a559e; text-decoration:none;">Номера</a>
+                <a href="/wellness-catalog" style="font-size:13px; color:#4a559e; text-decoration:none;">Программы</a>
+                <a href="/route-catalog" style="font-size:13px; color:#4a559e; text-decoration:none;">Маршруты</a>
             </div>
+
+            <div class="d-flex gap-2">
+                <a href="https://vk.com/?ysclid=mq199hmk8y369894912" title="ВКонтакте" aria-label="ВКонтакте"
+                    style="width:34px; height:34px; border-radius:8px; background:rgba(59,69,147,0.12); display:flex; align-items:center; justify-content:center; color:#3B4593; text-decoration:none; font-size:17px;">
+                    <i class="ti ti-brand-vk" aria-hidden="true"></i>
+                </a>
+                <a href="https://web.max.ru/" title="MAX" aria-label="MAX"
+                    style="width:34px; height:34px; border-radius:8px; background:rgba(59,69,147,0.12); display:flex; align-items:center; justify-content:center; color:#3B4593; text-decoration:none; font-size:17px;">
+                    <i class="ti ti-brand-telegram" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="container" style="height:0.5px; background:rgba(59,69,147,0.15); margin-bottom:14px;"></div>
+
+        <div class="container d-flex justify-content-between gap-4">
+            <p style="font-size:12px; color:#5a67b0; margin:0; white-space:nowrap;">
+                &copy; Танхой <?= date('Y') ?>
+            </p>
+            <p style="font-size:11px; color:#7d88c2; margin:0; line-height:1.55;">
+                Информация на сайте носит справочный характер, не заменяет приём врача и не является публичной офертой по ст. 437 ГК РФ.
+            </p>
         </div>
     </footer>
 

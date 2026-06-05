@@ -129,9 +129,9 @@ class RouteController extends Controller
 
         // Эти действия доступны авторизованным пользователям (не только админу)
         if (in_array($action->id, ['view', 'add-review'])) {
-            if (Yii::$app->user->isGuest) {
-                return $this->redirect(['/site/login']);
-            }
+            // if (Yii::$app->user->isGuest) {
+            //     return $this->redirect(['/site/login']);
+            // }
             return true;
         }
 
