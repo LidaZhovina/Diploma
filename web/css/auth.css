@@ -249,3 +249,55 @@
         padding: 28px 24px;
     }
 }
+
+/* ================================================================
+   СТРАНИЦА РЕГИСТРАЦИИ — широкая форма
+   ================================================================ */
+
+.register-page .auth-wrap {
+    max-width: 1000px;
+    grid-template-columns: 1fr 2.5fr;
+}
+
+.register-page .auth-right {
+    padding: 40px 48px;
+}
+
+/* Email + пароль — 2 колонки */
+.register-page .auth-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 20px;
+}
+
+/* ФИО — 3 колонки */
+.register-page .auth-row-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0 20px;
+}
+
+/* Фиксируем высоту полей в новых строках */
+.register-page .auth-row-2 .field-registerform-email,
+.register-page .auth-row-2 .field-registerform-password,
+.register-page .auth-row-3 .field-registerform-surname,
+.register-page .auth-row-3 .field-registerform-name,
+.register-page .auth-row-3 .field-registerform-patronymic {
+    min-height: 72px;
+}
+
+/* Адаптив — на маленьких экранах всё в одну колонку */
+@media (max-width: 768px) {
+    .register-page .auth-wrap {
+        grid-template-columns: 1fr;
+    }
+
+    .register-page .auth-row-2,
+    .register-page .auth-row-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .register-page .auth-right {
+        padding: 28px 24px;
+    }
+}

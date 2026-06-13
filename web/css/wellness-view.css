@@ -1,0 +1,439 @@
+/* ================================================================
+   СТРАНИЦА ПРОСМОТРА ОЗДОРОВИТЕЛЬНОЙ ПРОГРАММЫ — wellness-view.css
+   ================================================================ */
+.container {
+    padding: 0 0 0 !important;
+}
+
+.wv-page {
+    padding: 28px 0 60px;
+}
+
+/* ── Кнопка «назад» над карточкой ── */
+.wv-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #888;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition: color .15s;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.wv-back:hover {
+    color: #3B4593;
+}
+
+/* ── Основная карточка ── */
+.wv-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(59, 69, 147, 0.09);
+    border: none;
+}
+
+/* ── Шапка ── */
+.wv-header {
+    background: #EEF2FF;
+    padding: 22px 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 3px solid #669CFF;
+}
+
+.wv-header-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid #D0DCFF;
+}
+
+.wv-header-icon i {
+    font-size: 26px;
+    color: #3B4593;
+}
+
+.wv-header-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.wv-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #3B4593;
+    margin-bottom: 3px;
+    line-height: 1.2;
+}
+
+.wv-subtitle {
+    font-size: 12px;
+    color: #669CFF;
+    margin: 0;
+}
+
+.wv-dur-pill {
+    flex-shrink: 0;
+    background: #3B4593;
+    color: #EEF2FF;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 16px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+/* ── Враппер иконки и текста в шапке ── */
+.wv-header-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+}
+
+/* ── Обёртка инфокарточек (десктоп: стопка, мобилка: сетка 2×2) ── */
+.wv-info-card-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Нижняя кнопка — только для мобилки, на десктопе скрыта */
+.wv-card > .wv-cta {
+    display: none;
+}
+
+/* ── Тело: две колонки ── */
+.wv-body {
+    display: grid;
+    grid-template-columns: 1fr 240px;
+}
+
+/* ── Левая колонка ── */
+.wv-main {
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    border-right: 1px solid #E0E4F0;
+}
+
+.wv-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #3B4593;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.wv-section-title i {
+    font-size: 15px;
+}
+
+.wv-desc {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.8;
+    margin: 0;
+}
+
+.wv-checks {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.wv-check {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13px;
+    color: #555;
+}
+
+.wv-check i {
+    font-size: 16px;
+    color: #669CFF;
+    flex-shrink: 0;
+}
+
+/* ── Правая панель ── */
+.wv-side {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #F6F7F8;
+}
+
+/* Фото */
+.wv-photo {
+    border-radius: 12px;
+    overflow: hidden;
+    height: 160px;
+    flex-shrink: 0;
+}
+
+.wv-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.wv-photo-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #B5D4F8, #EEF2FF);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wv-photo-placeholder i {
+    font-size: 56px;
+    color: #3B4593;
+    opacity: .25;
+}
+
+/* Инфокарточки */
+.wv-info-card {
+    background: #fff;
+    border: 1px solid #E0E4F0;
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.wv-info-card i {
+    font-size: 20px;
+    color: #669CFF;
+    flex-shrink: 0;
+}
+
+.wv-info-label {
+    font-size: 11px;
+    color: #999;
+    margin-bottom: 1px;
+}
+
+.wv-info-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: #222;
+}
+
+/* Кнопка */
+.wv-cta {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid #E0E4F0;
+}
+
+.wv-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 9px 0;
+    background: transparent;
+    color: #669CFF;
+    border: 1.5px solid #669CFF;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all .15s;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.wv-btn-outline:hover {
+    background: #EEF2FF;
+    color: #3B4593;
+    border-color: #3B4593;
+}
+
+/* ================================================================
+   АДАПТИВ
+   ================================================================ */
+
+@media (max-width: 768px) {
+
+    /* Тело — одна колонка, правая панель идёт первой */
+    .wv-body {
+        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Правая панель поднимается наверх */
+    .wv-side {
+        order: -1;
+        padding: 0;
+        background: transparent;
+        gap: 0;
+    }
+
+    /* Левая колонка — убираем правую границу */
+    .wv-main {
+        border-right: none;
+        border-top: 1px solid #E0E4F0;
+    }
+}
+
+/* ── 390px — основной мобильный брейкпоинт ── */
+@media (max-width: 480px) {
+
+    .wv-page {
+        padding: 16px 0 40px;
+    }
+
+    .wv-back {
+        margin-bottom: 14px;
+        font-size: 13px;
+    }
+
+    /* Шапка: иконка + заголовок в строку, пилюля под ними */
+    .wv-header {
+        padding: 14px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .wv-header-top {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Нужен враппер для иконки и текста — добавляется через структуру */
+    .wv-header-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        flex-shrink: 0;
+    }
+
+    .wv-header-icon i {
+        font-size: 22px;
+    }
+
+    .wv-title {
+        font-size: 16px;
+    }
+
+    .wv-subtitle {
+        font-size: 11px;
+    }
+
+    .wv-dur-pill {
+        font-size: 11px;
+        padding: 5px 13px;
+        margin-left: 0;
+    }
+
+    /* Фото — на всю ширину, без скруглений и отступов */
+    .wv-photo {
+        height: 200px;
+        border-radius: 0;
+    }
+
+    .wv-photo-placeholder i {
+        font-size: 72px;
+    }
+
+    /* Инфокарточки — сетка 2×2 */
+    .wv-info-card-wrap {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        padding: 12px;
+        background: #F6F7F8;
+        border-bottom: 1px solid #E0E4F0;
+        flex-direction: unset;
+    }
+
+    .wv-info-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        padding: 10px 12px;
+    }
+
+    .wv-info-card i {
+        font-size: 18px;
+        margin-bottom: 2px;
+    }
+
+    .wv-info-label {
+        font-size: 10px;
+    }
+
+    .wv-info-value {
+        font-size: 12px;
+    }
+
+    /* Кнопка в правой панели — скрываем на мобилке */
+    .wv-side .wv-cta {
+        display: none;
+    }
+
+    /* Нижняя кнопка карточки — показываем только на мобилке */
+    .wv-card > .wv-cta {
+        display: block;
+    }
+
+    /* Основной контент */
+    .wv-main {
+        padding: 16px;
+        gap: 18px;
+    }
+
+    .wv-section-title {
+        font-size: 11px;
+        margin-bottom: 10px;
+    }
+
+    .wv-desc {
+        font-size: 13px;
+        line-height: 1.75;
+    }
+
+    .wv-check {
+        font-size: 13px;
+        gap: 8px;
+    }
+
+    /* Кнопка внизу */
+    .wv-cta {
+        padding: 12px 14px;
+    }
+
+    .wv-btn-outline {
+        padding: 11px 0;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+}

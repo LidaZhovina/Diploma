@@ -7,9 +7,6 @@
     background-color: #4c58b6;
     
 }
-#footer {
-    background-color: #deeaff;
-}
 
 .logo {
     border-radius: 150px;
@@ -76,17 +73,6 @@
     color: white;
     opacity: 0.75;
 }
-
-/* .cssLog {
-    color: white;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-}
-.cssLog:hover {
-    color: white;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-} */
 
 .pay {
     background-color: #6ab0de ;

@@ -11,7 +11,7 @@ use yii\web\JqueryAsset;
 $this->title = 'Регистрация';
 $this->registerCssFile('@web/css/auth.css')
 ?>
-<div class="auth-page">
+<div class="auth-page register-page">
     <div class="auth-wrap">
 
         <div class="auth-left">
@@ -23,16 +23,22 @@ $this->registerCssFile('@web/css/auth.css')
         </div>
 
         <div class="auth-right">
-            <h1 class="auth-title"><?= Html::encode($this->title)?></h1>
+            <h1 class="auth-title"><?= Html::encode($this->title) ?></h1>
             <div class="auth-subtitle">Заполните данные для создания аккаунта</div>
 
             <?php $form = ActiveForm::begin(['id' => 'register-form']); ?>
 
-            <?= $form->field($model, 'email')->textInput(['autofocus' => true, 'placeholder' => 'example@mail.ru']) ?>
-            <?= $form->field($model, 'password')->passwordInput(['placeholder' => '••••••••']) ?>
-            <?= $form->field($model, 'surname')->textInput(['placeholder' => 'Иванов']) ?>
-            <?= $form->field($model, 'name')->textInput(['placeholder' => 'Иван']) ?>
-            <?= $form->field($model, 'patronymic')->textInput(['placeholder' => 'Иванович']) ?>
+            <div class="auth-row-2">
+                <?= $form->field($model, 'email')->textInput(['autofocus' => true, 'placeholder' => 'example@mail.ru']) ?>
+                <?= $form->field($model, 'password')->passwordInput(['placeholder' => '••••••••']) ?>
+            </div>
+
+            <div class="auth-row-3">
+                <?= $form->field($model, 'surname')->textInput(['placeholder' => 'Иванов']) ?>
+                <?= $form->field($model, 'name')->textInput(['placeholder' => 'Иван']) ?>
+                <?= $form->field($model, 'patronymic')->textInput(['placeholder' => 'Иванович']) ?>
+            </div>
+
             <?= $form->field($model, 'rules')->checkbox([
                 'class'    => 'form-check-input',
                 'template' => "<div class=\"form-check\">{input} {label}\n{error}</div>",

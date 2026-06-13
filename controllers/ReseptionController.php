@@ -43,12 +43,44 @@ class ReseptionController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new ReseptionSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $activeTab = Yii::$app->request->get('tab', 'new');
+
+        $searchModel  = new ReseptionSearch();
+        $dataProvider = $searchModel->search(
+            Yii::$app->request->queryParams,
+            $activeTab
+        );
+
+        // Счётчики по вкладкам
+        $aliases   = ['new', 'active', 'past', 'cancelled'];
+        $tabCounts = [];
+        foreach ($aliases as $alias) {
+            $tabCounts[$alias] = Booking::find()
+                ->joinWith(['statusBooking'])
+                ->where(['status_booking.alias' => $alias])
+                ->count();
+        }
+
+        // Выезды сегодня
+        $todayCheckouts = Booking::find()
+            ->joinWith(['statusBooking'])
+            ->where(['status_booking.alias' => 'active'])
+            ->andWhere(['booking.departure_date' => date('Y-m-d')])
+            ->all();
+
+        // Активные брони — для сайдбара берём сами брони, а не резидентов
+        $activeBookings = Booking::find()
+            ->joinWith(['statusBooking'])
+            ->where(['status_booking.alias' => 'active'])
+            ->all();
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'searchModel'    => $searchModel,
+            'dataProvider'   => $dataProvider,
+            'activeTab'      => $activeTab,
+            'tabCounts'      => $tabCounts,
+            'todayCheckouts' => $todayCheckouts,
+            'activeBookings' => $activeBookings,
         ]);
     }
 

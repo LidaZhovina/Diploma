@@ -50,41 +50,36 @@ class ReseptionSearch extends Booking
      *
      * @return ActiveDataProvider
      */
-    public function search($params, $formName = null)
+    public function search($params, $activeTab = 'new')
     {
         $query = Booking::find()
             ->joinWith(['bookingUsers.resident'])
-            ->groupBy('booking.id')
-            ->where(['in', 'booking.status_booking_id', [
-                Booking::getStatusId('new'),
-                Booking::getStatusId('active'),
-            ]]);
+            ->groupBy('booking.id');
 
-        // add conditions that should always apply here
+        // Фильтр по вкладке
+        $statusId = Booking::getStatusId($activeTab);
+        if ($statusId !== null) {
+            $query->where(['booking.status_booking_id' => $statusId]);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => [
-                'pageSize' => 3,
-            ],
+            'pagination' => ['pageSize' => 3],
             'sort' => ['defaultOrder' => ['arrival_date' => SORT_ASC]],
         ]);
 
-        $this->load($params, $formName);
+        $this->load($params, $formName ?? null);
 
         if (!$this->validate()) {
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'room_id' => $this->room_id,
-            'arrival_date' => $this->arrival_date,
-            'departure_date' => $this->departure_date,
-            'price' => $this->price,
-            'status_booking_id' => $this->status_booking_id,
-            // 'route_id' => $this->route_id,
+            'id'               => $this->id,
+            'room_id'          => $this->room_id,
+            'arrival_date'     => $this->arrival_date,
+            'departure_date'   => $this->departure_date,
+            'price'            => $this->price,
             'amount_residents' => $this->amount_residents,
         ]);
 
