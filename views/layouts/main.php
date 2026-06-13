@@ -18,7 +18,7 @@ $this->registerMetaTag(['charset' => Yii::$app->charset], 'charset');
 $this->registerMetaTag(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1, shrink-to-fit=no']);
 $this->registerMetaTag(['name' => 'description', 'content' => $this->params['meta_description'] ?? '']);
 $this->registerMetaTag(['name' => 'keywords', 'content' => $this->params['meta_keywords'] ?? '']);
-$this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii::getAlias('@web/favicon.ico')]);
+$this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii::getAlias('@web/faviconLogo.ico')]);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -36,7 +36,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     <header id="header">
         <?php
         NavBar::begin([
-            'brandLabel' => '<img src=/img/logo.jpg alt=logo class="logo"> Танхой',
+            'brandLabel' => '<img src=/img/LOGO.png alt=logo class="logo"> Танхой',
             'brandUrl'   => Yii::$app->homeUrl,
             'options'    => ['class' => 'navbar-expand-md navbar-site navbar-light fixed-top'],
         ]);
@@ -144,7 +144,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                     style="width:34px; height:34px; border-radius:8px; background:rgba(59,69,147,0.12); display:flex; align-items:center; justify-content:center; color:#3B4593; text-decoration:none; font-size:17px;">
                     <i class="ti ti-brand-vk" aria-hidden="true"></i>
                 </a>
-                <a href="https://web.max.ru/" title="Telegram" aria-label="Telegram"
+                <a href="https://web.max.ru/" title="МАХ" aria-label="Telegram"
                     style="width:34px; height:34px; border-radius:8px; background:rgba(59,69,147,0.12); display:flex; align-items:center; justify-content:center; color:#3B4593; text-decoration:none; font-size:17px;">
                     <i class="ti ti-brand-telegram" aria-hidden="true"></i>
                 </a>

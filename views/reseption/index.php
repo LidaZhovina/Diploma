@@ -111,8 +111,8 @@ $tabs = [
                 ]); ?>
                 <?= Html::input(
                     'text',
-                    'ReseptionSearch[query]',
-                    $searchModel->query ?? '',
+                    'ReseptionSearch[fullname]',
+                    $searchModel->fullname ?? '',
                     [
                         'class'       => 'reception-search-input',
                         'placeholder' => 'Поиск по фамилии гостя или номеру бронирования...',
