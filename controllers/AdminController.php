@@ -174,7 +174,7 @@ class AdminController extends Controller
             $model->status_booking_id = StatusBooking::getStatusId($alias);
 
             if ($model->save()) {
-                Yii::$app->session->setFlash('warning', 'Статус обновлён!');
+                Yii::$app->session->setFlash('toast', ['type' => 'info', 'message' => 'Статус обновлён!']);
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }

@@ -559,3 +559,352 @@
         padding: 5px 6px;
     }
 }
+
+/* ========== СТРАНИЦА ПОЛЬЗОВАТЕЛЕЙ ========== */
+
+.user-index {
+    padding: 28px 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.user-page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.page-sub {
+    font-size: 13px;
+    color: #888;
+    margin-top: 2px;
+    font-weight: 400;
+}
+
+.btn-create {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #669CFF;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.btn-create:hover {
+    background: #3B4593;
+    color: #fff;
+    text-decoration: none;
+}
+
+.user-search-form {
+    margin-bottom: 0;
+}
+
+.search-bar {
+    background: #fff;
+    border: 0.5px solid #D0D5E8;
+    border-radius: 12px;
+    padding: 11px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.search-bar i {
+    color: #669CFF;
+    font-size: 17px;
+}
+
+.search-input {
+    border: none;
+    background: none;
+    font-size: 14px;
+    color: #222;
+    flex: 1;
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.search-input::placeholder {
+    color: #aaa;
+}
+
+.empty-text {
+    font-size: 14px;
+    color: #888;
+    text-align: center;
+    padding: 40px 0;
+}
+
+/* Сетка карточек */
+.users-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+}
+
+/* Карточка пользователя */
+.user-card {
+    background: #fff;
+    border: 0.5px solid #E0E4F0;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.user-card:hover {
+    border-color: #669CFF;
+}
+
+.user-card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.av-admin      { background: #3B4593; color: #fff; }
+.av-reception  { background: #EEF2FF; color: #3B4593; border: 1.5px solid #669CFF; }
+.av-client     { background: #F6F7F8; color: #3B4593; border: 1px solid #D0D5E8; }
+
+.user-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
+    line-height: 1.3;
+}
+
+.user-email {
+    font-size: 12px;
+    color: #669CFF;
+    margin-top: 3px;
+}
+
+.role-badge {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+.badge-admin      { background: #3B4593; color: #fff; }
+.badge-reception  { background: #EEF2FF; color: #3B4593; border: 0.5px solid #669CFF; }
+.badge-client     { background: #F6F7F8; color: #3B4593; border: 0.5px solid #D0D5E8; }
+
+.user-card-divider {
+    border: none;
+    border-top: 0.5px solid #E0E4F0;
+    margin: 0;
+}
+
+.user-card-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-action {
+    flex: 1;
+    padding: 7px 0;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 0.5px solid #E0E4F0;
+    background: none;
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.btn-action:hover {
+    background: #EEF2FF;
+    color: #3B4593;
+    border-color: #669CFF;
+    text-decoration: none;
+}
+
+.btn-del { color: #c0392b; border-color: #f5c6c6; }
+.btn-del:hover { background: #fff0f0; color: #c0392b; border-color: #f5c6c6; }
+
+.btn-search {
+    padding: 6px 14px;
+    background: #669CFF;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Montserrat', sans-serif;
+    white-space: nowrap;
+}
+
+.btn-search:hover {
+    background: #3B4593;
+}
+
+@media (max-width: 600px) {
+    .user-index { padding: 12px; }
+    .users-grid { grid-template-columns: 1fr; }
+    .user-page-header { flex-direction: column; }
+}
+
+/* ========== ПРОСМОТР ПОЛЬЗОВАТЕЛЯ ========== */
+
+.user-view {
+    max-width: 600px;
+}
+
+.uv-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 0.5px solid #E0E4F0;
+    overflow: hidden;
+}
+
+.uv-top {
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 0.5px solid #E0E4F0;
+}
+
+.uv-ava {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #EEF2FF;
+    border: 2px solid #669CFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    font-weight: 700;
+    color: #3B4593;
+    flex-shrink: 0;
+}
+
+.uv-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #222;
+}
+
+.uv-email {
+    font-size: 12px;
+    color: #669CFF;
+    margin-top: 2px;
+}
+
+.uv-role {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    background: #3B4593;
+    color: #fff;
+    margin-top: 5px;
+}
+
+.uv-rows {
+    padding: 8px 0;
+}
+
+.uv-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    align-items: center;
+    padding: 10px 24px;
+    border-left: 3px solid transparent;
+}
+
+.uv-row:hover {
+    background: #F6F7F8;
+    border-left-color: #669CFF;
+}
+
+.uv-rlbl {
+    font-size: 11px;
+    color: #888;
+    font-weight: 600;
+}
+
+.uv-rval {
+    font-size: 13px;
+    color: #222;
+    font-weight: 500;
+}
+
+.uv-rval-email {
+    color: #669CFF;
+}
+
+.uv-actions {
+    padding: 16px 24px;
+    border-top: 0.5px solid #E0E4F0;
+    display: flex;
+    gap: 8px;
+}
+
+.uv-btn {
+    flex: 1;
+    padding: 9px 0;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 0.5px solid #E0E4F0;
+    background: none;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.uv-btn:hover {
+    background: #EEF2FF;
+    color: #3B4593;
+    border-color: #669CFF;
+    text-decoration: none;
+}
+
+.uv-btn-del { color: #c0392b; border-color: #f5c6c6; }
+.uv-btn-del:hover { background: #fff0f0; color: #c0392b; border-color: #f5c6c6; }

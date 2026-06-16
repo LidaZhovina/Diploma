@@ -11,6 +11,8 @@ use app\models\User;
  */
 class UserSearch extends User
 {
+    public $fio;
+
     /**
      * {@inheritdoc}
      */
@@ -18,7 +20,7 @@ class UserSearch extends User
     {
         return [
             [['id', 'role_id'], 'integer'],
-            [['email', 'password', 'surname', 'name', 'patronymic', 'auth_key'], 'safe'],
+            [['email', 'password', 'surname', 'name', 'patronymic', 'fio', 'auth_key'], 'safe'],
         ];
     }
 
@@ -39,39 +41,27 @@ class UserSearch extends User
      *
      * @return ActiveDataProvider
      */
-    public function search($params, $formName = null)
+    public function search($params): ActiveDataProvider
     {
-        $query = User::find();
-
-        // add conditions that should always apply here
+        $query = User::find()->with('role');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => [
-                'pageSize' => 5,
-            ],
+            'sort'  => ['defaultOrder' => ['surname' => SORT_ASC]],
         ]);
 
-        $this->load($params, $formName);
+        $this->load($params);
 
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
+        $query->andFilterWhere(['role_id' => $this->role_id ?: null]);
+
+        if ($this->fio) {
+            $query->andWhere([
+                'or',
+                ['like', 'surname', $this->fio],
+                ['like', 'name',    $this->fio],
+                ['like', 'email',   $this->fio],
+            ]);
         }
-
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'role_id' => $this->role_id,
-        ]);
-
-        $query->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'password', $this->password])
-            ->andFilterWhere(['like', 'surname', $this->surname])
-            ->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'patronymic', $this->patronymic])
-            ->andFilterWhere(['like', 'auth_key', $this->auth_key]);
 
         return $dataProvider;
     }

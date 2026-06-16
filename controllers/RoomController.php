@@ -116,10 +116,10 @@ class RoomController extends Controller
                     $uploadedFiles = UploadedFile::getInstancesByName('imageFiles');
                     $this->saveImages($model->id, $uploadedFiles);
 
-                    Yii::$app->session->setFlash('success', 'Номер создан!');
+                    Yii::$app->session->setFlash('toast', ['type' => 'success', 'message' => 'Номер создан!']);
                     return $this->redirect(['view', 'id' => $model->id]);
                 } else {
-                    Yii::$app->session->setFlash('error', 'Ошибка создания!');
+                    Yii::$app->session->setFlash('toast', ['type' => 'error', 'message' => 'Ошибка создания!']);
                     return $this->redirect(['create']);
                     // VarDumper::dump($model->errors);
                     // die;
@@ -150,7 +150,7 @@ class RoomController extends Controller
             $uploadedFiles = UploadedFile::getInstancesByName('imageFiles');
             $this->saveImages($model->id, $uploadedFiles);
 
-            Yii::$app->session->setFlash('success', 'Номер обновлён!');
+            Yii::$app->session->setFlash('toast', ['type' => 'success', 'message' => 'Номер обновлён!']);
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -194,7 +194,7 @@ class RoomController extends Controller
         }
 
         if (!empty($errors)) {
-            Yii::$app->session->setFlash('warning', 'Проблемы с загрузкой изображений: ' . implode(' ', $errors));
+            Yii::$app->session->setFlash('toast', ['type' => 'warning', 'message' => 'Проблемы с загрузкой: ' . implode(' ', $errors)]);
         }
     }
 

@@ -157,7 +157,7 @@ class AccountController extends Controller
         if ($model->load($this->request->post()) && $model->validate()) {
             //Проверка доступности номера через метод в модели Booking
             if (!Booking::isAvailable($room->id, $model->arrival_date, $model->departure_date)) {
-                Yii::$app->session->setFlash('error', 'Номер уже забронирован на выбранные даты.');
+                Yii::$app->session->setFlash('toast', ['type' => 'error', 'message' => 'Номер уже забронирован на эти даты']);
                 return $this->render('create', [
                     'model' => $model,
                     'room' => $room,
@@ -208,27 +208,6 @@ class AccountController extends Controller
             'programs' => WellnessProgram::find()->all(),
         ]);
     }
-
-    /**
-     * Шаг 2б: Сохраняем ID выбранной программы в сессию и переходим к форме гостей
-     * @param int $id ID программы
-     */
-    /* public function actionSetProgram($id)
-    {
-        $step1 = Yii::$app->session->get('booking_step1');
-        if (!$step1) {
-            return $this->redirect(['catalog/index']);
-        }
-
-        $program = WellnessProgram::findOne($id);
-        if (!$program) {
-            throw new NotFoundHttpException('Программа не найдена.');
-        }
-
-        Yii::$app->session->set('wellness_program_id', $id);
-        return $this->redirect(['account/guests-data']);
-    }
-    */
 
 
     public function actionGuestsData()
@@ -445,7 +424,7 @@ class AccountController extends Controller
         Booking::sendMail($mailData);
 
         Yii::$app->session->remove('booking_id');
-        Yii::$app->session->setFlash('success', 'Оплата прошла успешно!');
+        Yii::$app->session->setFlash('toast', ['type' => 'success', 'message' => 'Оплата прошла успешно!']);
         // Yii::$app->session->setFlash('success', 'Бронирование создано.');
         return $this->redirect(['account/view', 'id' => $booking->id]);
     }
@@ -496,7 +475,7 @@ class AccountController extends Controller
             $model->status_booking_id = StatusBooking::getStatusId($alias);
 
             if ($model->save()) {
-                Yii::$app->session->setFlash('warning', 'Статус обновлён!');
+                Yii::$app->session->setFlash('toast', ['type' => 'info', 'message' => 'Статус обновлён!']);
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }

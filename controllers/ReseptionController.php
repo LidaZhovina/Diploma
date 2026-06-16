@@ -169,11 +169,11 @@ class ReseptionController extends Controller
                     $room->status_room_id = StatusRoom::getStatusId('occupied');
                     $room->save(false);
                     $transaction->commit();
-                    Yii::$app->session->setFlash('success', 'Гости заселены.');
+                    Yii::$app->session->setFlash('toast', ['type' => 'success', 'message' => 'Гости заселены']);
                     return $this->redirect(['index']);
                 } catch (\Exception $e) {
                     $transaction->rollBack();
-                    Yii::$app->session->setFlash('error', 'Ошибка при заселении: ' . $e->getMessage());
+                    Yii::$app->session->setFlash('toast', ['type' => 'error', 'message' => 'Ошибка при выселении' . $e->getMessage()]);
                 }
             } else {
                 Yii::$app->session->setFlash('error', 'Пожалуйста, исправьте ошибки в форме.');

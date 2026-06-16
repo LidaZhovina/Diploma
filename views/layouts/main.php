@@ -120,8 +120,10 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
             </div>
         <?php endif ?>
-        <?= Alert::widget() ?>
         <?= $content ?>
+
+        <div id="toast-container"></div>
+
     </main>
 
     <footer style="background: #deeaff; padding: 28px 48px;">

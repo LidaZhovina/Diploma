@@ -187,7 +187,7 @@ class RouteController extends Controller
             $model->route_status = RouteStatus::getStatusId($alias);
 
             if ($model->save()) {
-                Yii::$app->session->setFlash('warning', 'Статус обновлён!');
+                Yii::$app->session->setFlash('toast', ['type' => 'info', 'message' => 'Статус обновлён!']);
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
@@ -258,7 +258,7 @@ class RouteController extends Controller
         $residentsCanReview = \app\models\Review::getResidentsCanReview($userId, $id);
 
         if (empty($residentsCanReview)) {
-            Yii::$app->session->setFlash('info', 'Все ваши гости уже оставили отзыв на этот маршрут.');
+            Yii::$app->session->setFlash('toast', ['type' => 'info', 'message' => 'Все ваши гости уже оставили отзыв на данный маршрут']);
             return $this->redirect(['view', 'id' => $id]);
         }
 

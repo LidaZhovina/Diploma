@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "role".
@@ -54,14 +55,21 @@ class Role extends \yii\db\ActiveRecord
         return $this->hasMany(User::class, ['role_id' => 'id']);
     }
 
-    public static function getItems(): array {
+    public static function getItems(): array
+    {
         return self::find()
-        ->select('alias')
-        ->indexBy('id')
-        ->column();
+            ->select('alias')
+            ->indexBy('id')
+            ->column();
     }
 
-    public static function getRoleId(string $title): int {
+    public static function getRoleId(string $title): int
+    {
         return static::findOne(['title' => $title])->id;
+    }
+
+    public static function getRoleOptions(): array
+    {
+        return ArrayHelper::map(self::find()->all(), 'id', 'alias');
     }
 }

@@ -23,10 +23,13 @@ class AppAsset extends AssetBundle
         'css/site.css',
         'css/style.css',
         'css/main.css',
+        'css/toast.css',
     ];
     public $js = [
         'js/register.js',
         'js/room.js',
+        'web/js/toast.js',
+        
     ];
     public $depends = [
         'yii\web\YiiAsset',

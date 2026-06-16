@@ -101,10 +101,10 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post())) {
 
             if ($model->login()) {
-                Yii::$app->session->setFlash('success', 'Вы успешно авторизовались!');
+                Yii::$app->session->setFlash('toast', ['type' => 'success', 'message' => 'Вы успешно авторизовались!']);
                 return $this->goBack();
             } else {
-                Yii::$app->session->setFlash('error', 'Неккоректные почта или пароль');
+                Yii::$app->session->setFlash('toast', ['type' => 'error', 'message' => 'Неккоректные почта или пароль!']);
                 return $this->redirect(['login']);
             }
         }
@@ -123,7 +123,7 @@ class SiteController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-        Yii::$app->session->setFlash('success', 'Вы вышли из аккаунта');
+        Yii::$app->session->setFlash('toast', ['type' => 'info', 'message' => 'Вы вышли из аккаунта']);
         return $this->goHome();
     }
 
@@ -143,7 +143,7 @@ class SiteController extends Controller
             $user = $model->register(true);
 
             if ($user != null) {
-                Yii::$app->session->setFlash('success', 'Вы успешно зарегестрировались!');
+                Yii::$app->session->setFlash('toast', ['type' => 'success', 'message' => 'Вы успешно зарегистрировались!']);
                 Yii::$app->user->login($user, 3600 * 24 * 30);
                 return $this->goHome();
             } else {
@@ -162,7 +162,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $user = $model->register(false);
             if ($user != null) {
-                Yii::$app->session->setFlash('success', 'Ресепшн успешно зарегестрирован!');
+                Yii::$app->session->setFlash('toast', ['type' => 'success', 'message' => 'Ресепшн успешно зарегистрирован!']);
                 return $this->render('register', ['model' => new RegisterForm()]);
             }
         }
@@ -179,5 +179,12 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    public function actionGetFlash()
+    {
+        return $this->asJson(
+            Yii::$app->session->getFlash('toast', null)
+        );
     }
 }
